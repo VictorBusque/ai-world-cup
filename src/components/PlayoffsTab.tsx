@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Team, AIModel, PlayoffRound, ModelPlayoffPrediction } from "../types";
+import { Team, AIModel, PlayoffRound, ModelPlayoffPrediction, BRACKET_ORDER } from "../types";
 import { Trophy, ChevronLeft, ChevronRight, Users, Medal } from "lucide-react";
 
 interface PlayoffsTabProps {
@@ -72,12 +72,11 @@ function buildModelBrackets(
       const roundData = mpp.rounds[roundKey];
       if (!roundData) continue;
 
-      // Sort matches by numeric match ID for correct bracket ordering
-      const sortedMatchIds = Object.keys(roundData).sort((a, b) => {
-        const numA = parseInt(a.replace("m", ""), 10);
-        const numB = parseInt(b.replace("m", ""), 10);
-        return numA - numB;
-      });
+      // Sort matches by bracket topology order so adjacent pairs feed into the next round
+      const order = BRACKET_ORDER[roundKey] ?? [];
+      const sortedMatchIds = Object.keys(roundData).sort(
+        (a, b) => order.indexOf(a) - order.indexOf(b)
+      );
 
       for (const matchId of sortedMatchIds) {
         const m = roundData[matchId];

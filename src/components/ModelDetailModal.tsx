@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { motion } from "motion/react";
-import { Match, AIModel, Team, ModelPlayoffPrediction } from "../types";
+import { Match, AIModel, Team, ModelPlayoffPrediction, BRACKET_ORDER } from "../types";
 import { X, Award, Target, Sparkles, BookOpen, Clock, Activity, AlertCircle, Trophy } from "lucide-react";
 
 const ROUND_META: Record<string, { label: string; short: string }> = {
@@ -177,35 +177,42 @@ export default function ModelDetailModal({ model, matches, teams, modelPlayoffPr
                 return (
                   <div
                     key={match.id}
-                    className="bg-zinc-900 p-3 rounded-none border border-zinc-800 flex items-center justify-between gap-4 text-xs font-sans"
+                    className="bg-zinc-900 p-3 rounded-none border border-zinc-800"
                   >
-                    <div className="flex flex-col gap-0.5 min-w-[100px]">
-                      <span className="text-[9px] font-mono text-zinc-550 uppercase tracking-wide">{match.group} {isCompleted ? "" : "• Upcoming"}</span>
-                      <div className="font-bold text-white uppercase text-xs">
-                        {match.teamA.flag} {match.teamA.code} vs {match.teamB.flag} {match.teamB.code}
+                    <div className="flex items-center justify-between gap-4 text-xs font-sans">
+                      <div className="flex flex-col gap-0.5 min-w-[100px]">
+                        <span className="text-[9px] font-mono text-zinc-550 uppercase tracking-wide">{match.group} {isCompleted ? "" : "• Upcoming"}</span>
+                        <div className="font-bold text-white uppercase text-xs">
+                          {match.teamA.flag} {match.teamA.code} vs {match.teamB.flag} {match.teamB.code}
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Scores Comparison Block */}
-                    <div className="flex items-center gap-4">
-                      {/* Prediction score bubble */}
-                      <div className="text-center">
-                        <span className="text-[9px] text-zinc-500 block uppercase font-mono">Forecast</span>
+                      {/* Scores Comparison Block */}
+                      <div className="flex items-center gap-4">
+                        {/* Prediction score bubble */}
+                        <div className="text-center">
+                          <span className="text-[9px] text-zinc-500 block uppercase font-mono">Forecast</span>
                         <span className="font-mono font-bold text-yellow-450 bg-black border border-zinc-800 px-2.5 py-0.5 rounded-none block">
-                          {pred.teamAScore} - {pred.teamBScore}
-                        </span>
-                      </div>
+                            {pred.teamAScore} - {pred.teamBScore}
+                          </span>
+                        </div>
 
-                      {/* Actual Score bubble */}
-                      <div className="text-center">
-                        <span className="text-[9px] text-zinc-500 block uppercase font-mono">Actual</span>
+                        {/* Actual Score bubble */}
+                        <div className="text-center">
+                          <span className="text-[9px] text-zinc-500 block uppercase font-mono">Actual</span>
                         <span className="font-mono font-black text-zinc-400 bg-black/60 border border-zinc-850 px-2.5 py-0.5 rounded-none block">
-                          {isCompleted ? `${match.actualScore!.teamA}-${match.actualScore!.teamB}` : "—"}
-                        </span>
+                            {isCompleted ? `${match.actualScore!.teamA}-${match.actualScore!.teamB}` : "—"}
+                          </span>
+                        </div>
                       </div>
-                    </div>
 
-                    {evaluationBadge}
+                      {evaluationBadge}
+                    </div>
+                    {pred.summary && (
+                      <div className="mt-2 text-[10px] text-zinc-400 leading-relaxed italic border-t border-zinc-800 pt-2 font-sans">
+                        {pred.summary}
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -305,11 +312,10 @@ function PlayoffPredictionsSection({
           if (!roundData || Object.keys(roundData).length === 0) return null;
           const meta = ROUND_META[roundKey];
 
-          const sortedMatchIds = Object.keys(roundData).sort((a, b) => {
-            const numA = parseInt(a.replace("m", ""), 10);
-            const numB = parseInt(b.replace("m", ""), 10);
-            return numA - numB;
-          });
+          const order = BRACKET_ORDER[roundKey] ?? [];
+          const sortedMatchIds = Object.keys(roundData).sort(
+            (a, b) => order.indexOf(a) - order.indexOf(b)
+          );
 
           return (
             <div key={roundKey}>
@@ -326,32 +332,39 @@ function PlayoffPredictionsSection({
                   return (
                     <div
                       key={matchId}
-                      className="bg-zinc-900 p-2.5 border border-zinc-800 flex items-center justify-between gap-3 text-xs font-sans"
+                      className="bg-zinc-900 p-2.5 border border-zinc-800"
                     >
-                      <div className="flex items-center gap-3 flex-1 min-w-0">
-                        {/* Team A */}
-                        <div className={`flex items-center gap-1.5 ${winnerIsA ? "text-emerald-400" : "text-white"}`}>
-                          <span className="text-sm">{teamA?.flag ?? "🏳️"}</span>
-                          <span className="font-bold uppercase text-[11px] tracking-wider">{teamA?.code ?? m.teamA}</span>
-                          {winnerIsA && <span className="text-[8px] font-mono">✓</span>}
+                      <div className="flex items-center justify-between gap-3 text-xs font-sans">
+                        <div className="flex items-center gap-3 flex-1 min-w-0">
+                          {/* Team A */}
+                          <div className={`flex items-center gap-1.5 ${winnerIsA ? "text-emerald-400" : "text-white"}`}>
+                            <span className="text-sm">{teamA?.flag ?? "🏳️"}</span>
+                            <span className="font-bold uppercase text-[11px] tracking-wider">{teamA?.code ?? m.teamA}</span>
+                            {winnerIsA && <span className="text-[8px] font-mono">✓</span>}
+                          </div>
+
+                          {/* Score */}
+                          <span className="font-mono font-bold text-yellow-450 bg-black border border-zinc-800 px-2 py-0.5 text-[11px]">
+                            {m.teamAScore} - {m.teamBScore}
+                          </span>
+
+                          {/* Team B */}
+                          <div className={`flex items-center gap-1.5 ${!winnerIsA ? "text-emerald-400" : "text-white"}`}>
+                            <span className="text-sm">{teamB?.flag ?? "🏳️"}</span>
+                            <span className="font-bold uppercase text-[11px] tracking-wider">{teamB?.code ?? m.teamB}</span>
+                            {!winnerIsA && <span className="text-[8px] font-mono">✓</span>}
+                          </div>
                         </div>
 
-                        {/* Score */}
-                        <span className="font-mono font-bold text-yellow-450 bg-black border border-zinc-800 px-2 py-0.5 text-[11px]">
-                          {m.teamAScore} - {m.teamBScore}
+                        <span className="px-2 py-1 text-[9px] uppercase font-black font-mono bg-zinc-800 text-zinc-400 border border-zinc-700 shrink-0">
+                          Predicted
                         </span>
-
-                        {/* Team B */}
-                        <div className={`flex items-center gap-1.5 ${!winnerIsA ? "text-emerald-400" : "text-white"}`}>
-                          <span className="text-sm">{teamB?.flag ?? "🏳️"}</span>
-                          <span className="font-bold uppercase text-[11px] tracking-wider">{teamB?.code ?? m.teamB}</span>
-                          {!winnerIsA && <span className="text-[8px] font-mono">✓</span>}
-                        </div>
                       </div>
-
-                      <span className="px-2 py-1 text-[9px] uppercase font-black font-mono bg-zinc-800 text-zinc-400 border border-zinc-700 shrink-0">
-                        Predicted
-                      </span>
+                      {m.summary && (
+                        <div className="mt-1.5 text-[10px] text-zinc-500 leading-relaxed italic border-t border-zinc-800 pt-1.5 font-sans">
+                          {m.summary}
+                        </div>
+                      )}
                     </div>
                   );
                 })}

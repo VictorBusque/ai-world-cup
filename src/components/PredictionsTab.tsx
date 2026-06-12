@@ -101,6 +101,12 @@ export default function PredictionsTab({ teams, models, modelPlayoffPredictions 
   const consensusChampion = championVotes[0];
   const maxVotes = championVotes[0]?.count || 1;
 
+  // The other finalist: team with most finalist appearances that is NOT the consensus champion
+  const otherFinalist = useMemo(
+    () => finalistVotes.find(fv => !consensusChampion || fv.team.id !== consensusChampion.team.id) ?? null,
+    [finalistVotes, consensusChampion]
+  );
+
   if (modelPredictions.length === 0) {
     return (
       <div className="bg-zinc-900 border-4 border-zinc-800 p-12 text-center">
@@ -299,7 +305,7 @@ export default function PredictionsTab({ teams, models, modelPlayoffPredictions 
       </div>
 
       {/* Predicted Final Visualization */}
-      {consensusChampion && finalistVotes[1] && (
+      {consensusChampion && otherFinalist && (
         <div className="bg-gradient-to-br from-zinc-900 via-zinc-900 to-yellow-400/5 border-2 border-zinc-700 p-6">
           <div className="flex items-center gap-2 mb-6">
             <TrendingUp className="h-4 w-4 text-yellow-400" />
@@ -318,12 +324,12 @@ export default function PredictionsTab({ teams, models, modelPlayoffPredictions 
               <span className="text-[10px] font-mono text-zinc-600 uppercase tracking-widest">Predicted Final</span>
             </div>
             <div className="text-center">
-              <span className="text-6xl block mb-2">{finalistVotes[1] ? finalistVotes[1].team.flag : "⚽"}</span>
+              <span className="text-6xl block mb-2">{otherFinalist.team.flag}</span>
               <div className="font-display text-2xl uppercase tracking-tight text-zinc-300">
-                {finalistVotes[1] ? finalistVotes[1].team.name : "TBD"}
+                {otherFinalist.team.name}
               </div>
               <div className="text-[10px] uppercase font-mono text-zinc-400 tracking-widest mt-1">
-                Finalist ({finalistVotes[1]?.count || 0} finalist appearances)
+                Finalist ({otherFinalist.count} finalist appearances)
               </div>
             </div>
           </div>

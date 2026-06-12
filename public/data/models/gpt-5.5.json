@@ -1,438 +1,522 @@
 {
-  "model": "gpt-5.5",
-  "name": "gpt-5.5",
-  "provider": "openai",
-  "color": "from-green-500 to-teal-600",
-  "predictions": {
-    "g_a_1": {
-      "MEX": 2,
-      "RSA": 0
-    },
-    "g_a_2": {
-      "KOR": 1,
-      "CZE": 1
-    },
-    "g_a_3": {
-      "MEX": 2,
-      "KOR": 1
-    },
-    "g_a_4": {
-      "RSA": 0,
-      "CZE": 2
-    },
-    "g_a_5": {
-      "MEX": 1,
-      "CZE": 1
-    },
-    "g_a_6": {
-      "RSA": 1,
-      "KOR": 1
-    },
-    "g_b_1": {
-      "CAN": 1,
-      "SUI": 1
-    },
-    "g_b_2": {
-      "QAT": 1,
-      "BIH": 2
-    },
-    "g_b_3": {
-      "CAN": 2,
-      "QAT": 0
-    },
-    "g_b_4": {
-      "SUI": 2,
-      "BIH": 1
-    },
-    "g_b_5": {
-      "CAN": 1,
-      "BIH": 1
-    },
-    "g_b_6": {
-      "SUI": 2,
-      "QAT": 0
-    },
-    "g_c_1": {
-      "BRA": 3,
-      "MAR": 1
-    },
-    "g_c_2": {
-      "HAI": 0,
-      "SCO": 2
-    },
-    "g_c_3": {
-      "BRA": 4,
-      "HAI": 0
-    },
-    "g_c_4": {
-      "MAR": 1,
-      "SCO": 1
-    },
-    "g_c_5": {
-      "BRA": 2,
-      "SCO": 1
-    },
-    "g_c_6": {
-      "MAR": 2,
-      "HAI": 0
-    },
-    "g_d_1": {
-      "USA": 2,
-      "PAR": 1
-    },
-    "g_d_2": {
-      "AUS": 1,
-      "TUR": 1
-    },
-    "g_d_3": {
-      "USA": 2,
-      "AUS": 1
-    },
-    "g_d_4": {
-      "PAR": 1,
-      "TUR": 1
-    },
-    "g_d_5": {
-      "USA": 1,
-      "TUR": 1
-    },
-    "g_d_6": {
-      "PAR": 2,
-      "AUS": 1
-    },
-    "g_e_1": {
-      "GER": 3,
-      "CUW": 0
-    },
-    "g_e_2": {
-      "CIV": 1,
-      "ECU": 1
-    },
-    "g_e_3": {
-      "GER": 2,
-      "CIV": 0
-    },
-    "g_e_4": {
-      "CUW": 0,
-      "ECU": 2
-    },
-    "g_e_5": {
-      "GER": 2,
-      "ECU": 1
-    },
-    "g_e_6": {
-      "CUW": 1,
-      "CIV": 2
-    },
-    "g_f_1": {
-      "NED": 2,
-      "JPN": 1
-    },
-    "g_f_2": {
-      "SWE": 2,
-      "TUN": 0
-    },
-    "g_f_3": {
-      "NED": 1,
-      "SWE": 1
-    },
-    "g_f_4": {
-      "JPN": 2,
-      "TUN": 0
-    },
-    "g_f_5": {
-      "NED": 3,
-      "TUN": 0
-    },
-    "g_f_6": {
-      "JPN": 1,
-      "SWE": 1
-    },
-    "g_g_1": {
-      "BEL": 2,
-      "EGY": 0
-    },
-    "g_g_2": {
-      "IRN": 1,
-      "NZL": 0
-    },
-    "g_g_3": {
-      "BEL": 2,
-      "IRN": 1
-    },
-    "g_g_4": {
-      "EGY": 2,
-      "NZL": 0
-    },
-    "g_g_5": {
-      "BEL": 3,
-      "NZL": 0
-    },
-    "g_g_6": {
-      "EGY": 1,
-      "IRN": 1
-    },
-    "g_h_1": {
-      "ESP": 3,
-      "CPV": 0
-    },
-    "g_h_2": {
-      "KSA": 0,
-      "URU": 2
-    },
-    "g_h_3": {
-      "ESP": 2,
-      "KSA": 0
-    },
-    "g_h_4": {
-      "CPV": 1,
-      "URU": 2
-    },
-    "g_h_5": {
-      "ESP": 1,
-      "URU": 1
-    },
-    "g_h_6": {
-      "CPV": 1,
-      "KSA": 1
-    },
-    "g_i_1": {
-      "FRA": 2,
-      "SEN": 1
-    },
-    "g_i_2": {
-      "NOR": 2,
-      "IRQ": 0
-    },
-    "g_i_3": {
-      "FRA": 2,
-      "NOR": 1
-    },
-    "g_i_4": {
-      "SEN": 2,
-      "IRQ": 0
-    },
-    "g_i_5": {
-      "FRA": 3,
-      "IRQ": 0
-    },
-    "g_i_6": {
-      "SEN": 1,
-      "NOR": 1
-    },
-    "g_j_1": {
-      "ARG": 2,
-      "ALG": 0
-    },
-    "g_j_2": {
-      "AUT": 2,
-      "JOR": 0
-    },
-    "g_j_3": {
-      "ARG": 2,
-      "AUT": 1
-    },
-    "g_j_4": {
-      "ALG": 1,
-      "JOR": 0
-    },
-    "g_j_5": {
-      "ARG": 3,
-      "JOR": 0
-    },
-    "g_j_6": {
-      "ALG": 1,
-      "AUT": 1
-    },
-    "g_k_1": {
-      "POR": 2,
-      "COD": 0
-    },
-    "g_k_2": {
-      "UZB": 1,
-      "COL": 2
-    },
-    "g_k_3": {
-      "POR": 3,
-      "UZB": 1
-    },
-    "g_k_4": {
-      "COD": 0,
-      "COL": 2
-    },
-    "g_k_5": {
-      "POR": 1,
-      "COL": 1
-    },
-    "g_k_6": {
-      "COD": 1,
-      "UZB": 1
-    },
-    "g_l_1": {
-      "ENG": 2,
-      "CRO": 1
-    },
-    "g_l_2": {
-      "GHA": 2,
-      "PAN": 1
-    },
-    "g_l_3": {
-      "ENG": 3,
-      "GHA": 1
-    },
-    "g_l_4": {
-      "CRO": 2,
-      "PAN": 0
-    },
-    "g_l_5": {
-      "ENG": 2,
-      "PAN": 0
-    },
-    "g_l_6": {
-      "CRO": 1,
-      "GHA": 1
-    }
+  "g_l_1": {
+    "ENG": 2,
+    "CRO": 1,
+    "summary": "England's greater attacking depth and set-piece threat should edge a tight game against an experienced but aging Croatia midfield."
   },
-  "playoffs": {
-    "r32": {
-      "m73": {
-        "CZE": 2,
-        "CAN": 1
-      },
-      "m74": {
-        "GER": 3,
-        "BIH": 1
-      },
-      "m75": {
-        "NED": 2,
-        "SCO": 1
-      },
-      "m76": {
-        "BRA": 2,
-        "SWE": 0
-      },
-      "m77": {
-        "FRA": 3,
-        "EGY": 1
-      },
-      "m78": {
-        "ECU": 1,
-        "NOR": 2
-      },
-      "m79": {
-        "MEX": 2,
-        "JPN": 1
-      },
-      "m80": {
-        "ENG": 2,
-        "ALG": 0
-      },
-      "m81": {
-        "USA": 2,
-        "AUT": 1
-      },
-      "m82": {
-        "BEL": 2,
-        "GHA": 1
-      },
-      "m83": {
-        "COL": 2,
-        "CRO": 1
-      },
-      "m84": {
-        "ESP": 2,
-        "AUT": 0
-      },
-      "m85": {
-        "SUI": 2,
-        "SEN": 1
-      },
-      "m86": {
-        "ARG": 2,
-        "URU": 1
-      },
-      "m87": {
-        "POR": 2,
-        "PAR": 0
-      },
-      "m88": {
-        "PAR": 1,
-        "IRN": 0
-      }
-    },
-    "r16": {
-      "m89": {
-        "GER": 1,
-        "FRA": 2
-      },
-      "m90": {
-        "CZE": 1,
-        "NED": 2
-      },
-      "m91": {
-        "BRA": 2,
-        "NOR": 0
-      },
-      "m92": {
-        "MEX": 1,
-        "ENG": 2
-      },
-      "m93": {
-        "COL": 1,
-        "ESP": 2
-      },
-      "m94": {
-        "USA": 1,
-        "BEL": 2
-      },
-      "m95": {
-        "ARG": 2,
-        "PAR": 0
-      },
-      "m96": {
-        "SUI": 1,
-        "POR": 2
-      }
-    },
-    "qf": {
-      "m97": {
-        "FRA": 2,
-        "NED": 1
-      },
-      "m98": {
-        "ESP": 2,
-        "BEL": 1
-      },
-      "m99": {
-        "BRA": 2,
-        "ENG": 1
-      },
-      "m100": {
-        "ARG": 1,
-        "POR": 2
-      }
-    },
-    "sf": {
-      "m101": {
-        "FRA": 2,
-        "ESP": 1
-      },
-      "m102": {
-        "BRA": 2,
-        "POR": 1
-      }
-    },
-    "bronze": {
-      "m103": {
-        "ESP": 2,
-        "POR": 1
-      }
-    },
-    "final": {
-      "m104": {
-        "FRA": 1,
-        "BRA": 2
-      }
-    }
+  "g_l_2": {
+    "GHA": 2,
+    "PAN": 0,
+    "summary": "Ghana's superior athleticism and individual quality in transition should prove too much for a disciplined but limited Panama side."
+  },
+  "g_l_3": {
+    "ENG": 3,
+    "GHA": 1,
+    "summary": "England's control in possession and stronger finishing quality should wear down Ghana despite Ghana's pace on the break."
+  },
+  "g_l_4": {
+    "PAN": 0,
+    "CRO": 1,
+    "summary": "Croatia's midfield composure and tournament know-how should be enough to break down Panama in a low-scoring match."
+  },
+  "g_l_5": {
+    "PAN": 0,
+    "ENG": 2,
+    "summary": "England should dominate territory and chances against Panama, whose defensive shape may keep the score respectable for long spells."
+  },
+  "g_l_6": {
+    "CRO": 1,
+    "GHA": 1,
+    "summary": "Croatia's experience and ball retention balance Ghana's physicality and direct threat, making a draw the most likely outcome."
+  },
+  "g_i_1": {
+    "FRA": 2,
+    "SEN": 1,
+    "summary": "France's superior depth and individual quality should edge a competitive Senegal side that has the athleticism to keep it close."
+  },
+  "g_i_2": {
+    "IRQ": 0,
+    "NOR": 2,
+    "summary": "Norway's greater attacking threat, led by a higher-end frontline, should break down Iraq's disciplined but limited attack."
+  },
+  "g_i_3": {
+    "FRA": 3,
+    "NOR": 1,
+    "summary": "France's midfield control and defensive structure should limit Norway's service enough for their elite forwards to make the difference."
+  },
+  "g_i_4": {
+    "SEN": 2,
+    "IRQ": 0,
+    "summary": "Senegal's pace, physicality, and stronger transition game should prove too much for Iraq over ninety minutes."
+  },
+  "g_i_5": {
+    "FRA": 3,
+    "IRQ": 0,
+    "summary": "France should dominate possession and create repeated high-quality chances against an Iraq side likely pinned back for long stretches."
+  },
+  "g_i_6": {
+    "SEN": 1,
+    "NOR": 1,
+    "summary": "Senegal's athletic pressing and Norway's direct threat look well matched, making a draw the most realistic outcome in a tight battle for qualification."
+  },
+  "g_c_1": {
+    "BRA": 2,
+    "MAR": 0,
+    "summary": "Brazil's superior individual quality and attacking depth should eventually break down Morocco's disciplined defense in a controlled opener."
+  },
+  "g_c_2": {
+    "HAI": 0,
+    "SCO": 1,
+    "summary": "Scotland's stronger structure, set-piece threat, and greater tournament-level organization give them the edge in a tight match."
+  },
+  "g_c_3": {
+    "BRA": 3,
+    "HAI": 0,
+    "summary": "Brazil should dominate possession and create too many chances for Haiti to withstand over ninety minutes."
+  },
+  "g_c_4": {
+    "MAR": 1,
+    "SCO": 0,
+    "summary": "Morocco's compact shape and pace on the counter make them slightly better equipped to punish Scotland in a low-scoring contest."
+  },
+  "g_c_5": {
+    "SCO": 0,
+    "BRA": 2,
+    "summary": "Brazil's technical superiority and ability to control midfield should neutralize Scotland's intensity and produce another professional win."
+  },
+  "g_c_6": {
+    "MAR": 2,
+    "HAI": 0,
+    "summary": "Morocco's defensive solidity and sharper attacking transitions should be enough to secure a comfortable victory over Haiti."
+  },
+  "g_a_1": {
+    "MEX": 2,
+    "RSA": 0,
+    "summary": "Mexico's superior squad depth and strong home-continent support should give them control against a South Africa side that can compete physically but lacks enough attacking punch."
+  },
+  "g_a_2": {
+    "KOR": 1,
+    "CZE": 1,
+    "summary": "South Korea's energy and pressing are likely to be balanced by Czechia's technical structure in a tight, evenly matched opener."
+  },
+  "g_a_3": {
+    "MEX": 1,
+    "KOR": 1,
+    "summary": "Korea's disciplined organization and transition threat can frustrate Mexico, though the hosts should still find enough quality to earn a point."
+  },
+  "g_a_4": {
+    "RSA": 0,
+    "CZE": 1,
+    "summary": "Czechia's cleaner buildup and greater composure in both boxes make them slight favorites in what should be a low-scoring contest."
+  },
+  "g_a_5": {
+    "CZE": 1,
+    "MEX": 2,
+    "summary": "Mexico's greater individual quality and tournament experience should edge a competitive match against a well-drilled Czech side."
+  },
+  "g_a_6": {
+    "RSA": 1,
+    "KOR": 2,
+    "summary": "South Korea's pace and relentless work rate should create the better chances against South Africa, even if RSA stay in the game for long stretches."
+  },
+  "g_h_1": {
+    "ESP": 3,
+    "CPV": 0,
+    "summary": "Spain's superior technical quality and sustained possession should pin Cape Verde deep and create enough chances for a comfortable opening win."
+  },
+  "g_h_2": {
+    "KSA": 0,
+    "URU": 2,
+    "summary": "Uruguay's defensive steel and greater attacking edge make them clear favorites against a Saudi side likely to struggle for sustained threat."
+  },
+  "g_h_3": {
+    "ESP": 2,
+    "KSA": 0,
+    "summary": "Spain's control in midfield and patient buildup should wear down Saudi Arabia and limit transitions the other way."
+  },
+  "g_h_4": {
+    "URU": 2,
+    "CPV": 0,
+    "summary": "Uruguay's physicality, tournament experience, and organized back line should be enough to manage Cape Verde and strike efficiently."
+  },
+  "g_h_5": {
+    "ESP": 1,
+    "URU": 1,
+    "summary": "This projects as a tight clash between Spain's ball dominance and Uruguay's compact defending, with neither side doing quite enough to win."
+  },
+  "g_h_6": {
+    "CPV": 1,
+    "KSA": 1,
+    "summary": "Cape Verde and Saudi Arabia look closely matched at this level, so a balanced game with few clear chances points toward a draw."
+  },
+  "g_e_1": {
+    "GER": 3,
+    "CUW": 0,
+    "summary": "Germany's superior depth, pressing structure, and tournament experience should overwhelm a limited Cura\u00e7ao side from the outset."
+  },
+  "g_e_2": {
+    "CIV": 1,
+    "ECU": 1,
+    "summary": "Ivory Coast's physicality and Ecuador's organized, energetic midfield look well matched, making a draw the most realistic outcome."
+  },
+  "g_e_3": {
+    "GER": 2,
+    "CIV": 0,
+    "summary": "Germany should control possession and create the clearer chances against an athletic Ivory Coast team that may struggle to sustain pressure for 90 minutes."
+  },
+  "g_e_4": {
+    "ECU": 2,
+    "CUW": 0,
+    "summary": "Ecuador's pace, defensive balance, and stronger collective level should be enough to break down Cura\u00e7ao without major drama."
+  },
+  "g_e_5": {
+    "GER": 1,
+    "ECU": 0,
+    "summary": "Ecuador can keep this tight with their compact shape, but Germany's extra quality in the final third gives them the edge."
+  },
+  "g_e_6": {
+    "CUW": 0,
+    "CIV": 2,
+    "summary": "Ivory Coast's greater athleticism and attacking threat should eventually tell against a Cura\u00e7ao team likely to spend long stretches defending."
+  },
+  "g_g_1": {
+    "BEL": 2,
+    "EGY": 0,
+    "summary": "Belgium's superior individual quality and deeper attacking options should break down an Egypt side that often relies on moments rather than sustained pressure."
+  },
+  "g_g_2": {
+    "IRN": 1,
+    "NZL": 0,
+    "summary": "Iran's compact defensive structure and stronger technical level give them the edge in what should be a tight, physical match against New Zealand."
+  },
+  "g_g_3": {
+    "BEL": 2,
+    "IRN": 1,
+    "summary": "Iran can trouble Belgium with discipline and set pieces, but Belgium's greater creativity in the final third should prove decisive."
+  },
+  "g_g_4": {
+    "NZL": 0,
+    "EGY": 1,
+    "summary": "Egypt's extra pace and attacking quality, especially in transition, make them slight favorites over a hardworking but limited New Zealand side."
+  },
+  "g_g_5": {
+    "BEL": 3,
+    "NZL": 0,
+    "summary": "Belgium should control possession and create enough chances to win comfortably against a New Zealand team likely to spend long stretches defending."
+  },
+  "g_g_6": {
+    "EGY": 1,
+    "IRN": 1,
+    "summary": "Both teams are organized and cautious by nature, so a low-scoring draw is the most realistic outcome in a match with little margin for error."
+  },
+  "g_k_1": {
+    "POR": 2,
+    "COD": 0,
+    "summary": "Portugal's superior technical quality, midfield control, and tournament experience should be enough to break down DR Congo while limiting transitions."
+  },
+  "g_k_2": {
+    "UZB": 1,
+    "COL": 2,
+    "summary": "Colombia's greater attacking craft and big-match composure give them the edge, though Uzbekistan's organization should keep it competitive."
+  },
+  "g_k_3": {
+    "POR": 2,
+    "UZB": 1,
+    "summary": "Uzbekistan are disciplined and improving, but Portugal's deeper squad and individual quality in the final third should decide a tight match."
+  },
+  "g_k_4": {
+    "COL": 2,
+    "COD": 1,
+    "summary": "DR Congo's physicality can cause problems, yet Colombia's balance between defensive structure and creative attackers makes them favorites."
+  },
+  "g_k_5": {
+    "COL": 1,
+    "POR": 1,
+    "summary": "Both sides are well organized and talented, so a draw feels likely in a matchup where Portugal's control and Colombia's counter threat largely cancel out."
+  },
+  "g_k_6": {
+    "COD": 1,
+    "UZB": 1,
+    "summary": "This looks like an evenly matched contest, with DR Congo's athleticism and Uzbekistan's discipline likely producing a hard-fought draw."
+  },
+  "g_f_1": {
+    "NED": 2,
+    "JPN": 1,
+    "summary": "The Netherlands' superior depth and aerial threat should edge a disciplined Japan side in a tight, high-quality opener."
+  },
+  "g_f_2": {
+    "SWE": 1,
+    "TUN": 0,
+    "summary": "Sweden's physicality and set-piece strength give them a narrow advantage over Tunisia's stubborn but limited attack."
+  },
+  "g_f_3": {
+    "NED": 1,
+    "SWE": 0,
+    "summary": "Dutch control in possession and greater individual quality should be enough to break down Sweden in a cagey contest."
+  },
+  "g_f_4": {
+    "TUN": 0,
+    "JPN": 1,
+    "summary": "Japan's sharper movement and cleaner buildup play make them slight favorites against Tunisia's compact defensive block."
+  },
+  "g_f_5": {
+    "NED": 2,
+    "TUN": 0,
+    "summary": "The Netherlands should have too much attacking variety and defensive composure for Tunisia over ninety minutes."
+  },
+  "g_f_6": {
+    "JPN": 1,
+    "SWE": 1,
+    "summary": "Japan's technical tempo and Sweden's organization look well matched, making a draw the most realistic outcome."
+  },
+  "g_j_1": {
+    "ARG": 3,
+    "ALG": 0,
+    "summary": "Argentina's superior depth, control in possession, and big-match experience should overwhelm an Algeria side that can compete technically but struggles to contain elite attacks for 90 minutes."
+  },
+  "g_j_2": {
+    "AUT": 2,
+    "JOR": 0,
+    "summary": "Austria's stronger structure, pressing, and higher overall squad quality should give them the edge against a disciplined but less threatening Jordan team."
+  },
+  "g_j_3": {
+    "ARG": 2,
+    "AUT": 0,
+    "summary": "Austria are organized enough to keep this respectable, but Argentina's sharper attacking talent and tournament composure should decide the match."
+  },
+  "g_j_4": {
+    "JOR": 1,
+    "ALG": 1,
+    "summary": "Jordan's compact defending can frustrate Algeria, whose technical quality should still create enough chances to salvage a draw in a tight tactical contest."
+  },
+  "g_j_5": {
+    "ARG": 3,
+    "JOR": 0,
+    "summary": "Argentina should dominate territory and chances throughout, with Jordan's work rate unlikely to offset the gulf in individual quality."
+  },
+  "g_j_6": {
+    "ALG": 1,
+    "AUT": 1,
+    "summary": "Algeria's flair and Austria's organization look well matched, making a balanced draw likely as neither side consistently controls the game."
+  },
+  "g_d_1": {
+    "USA": 1,
+    "PAR": 0,
+    "summary": "Home-continent support and the USA's greater attacking depth should be enough to edge a typically stubborn Paraguay side in a tight opener."
+  },
+  "g_d_2": {
+    "AUS": 1,
+    "TUR": 2,
+    "summary": "T\u00fcrkiye's superior technical quality and more varied final-third play give them the edge over Australia's physical but limited attack."
+  },
+  "g_d_3": {
+    "USA": 2,
+    "AUS": 0,
+    "summary": "The USA's pace out wide and stronger midfield control should expose Australia more than Paraguay did."
+  },
+  "g_d_4": {
+    "TUR": 1,
+    "PAR": 1,
+    "summary": "Paraguay's compact defensive shape can frustrate T\u00fcrkiye enough to force a draw despite T\u00fcrkiye seeing more of the ball."
+  },
+  "g_d_5": {
+    "TUR": 1,
+    "USA": 1,
+    "summary": "This looks like a balanced matchup where T\u00fcrkiye's technique and the USA's athletic pressing cancel each other out."
+  },
+  "g_d_6": {
+    "PAR": 1,
+    "AUS": 0,
+    "summary": "Paraguay's defensive organization and efficiency on transitions make them slight favorites against an Australian side that often struggles to break compact teams down."
+  },
+  "g_b_1": {
+    "CAN": 1,
+    "SUI": 1,
+    "summary": "Canada's home-continent energy and pace should be balanced by Switzerland's structure and tournament savvy in a tight opener."
+  },
+  "g_b_2": {
+    "QAT": 1,
+    "BIH": 1,
+    "summary": "Bosnia's individual quality is likely to be offset by Qatar's improving cohesion and cautious approach, leading to a draw."
+  },
+  "g_b_3": {
+    "CAN": 2,
+    "QAT": 0,
+    "summary": "Canada's athletic front line and stronger transition game should overwhelm a Qatar side that struggles when forced to defend deep for long spells."
+  },
+  "g_b_4": {
+    "SUI": 2,
+    "BIH": 0,
+    "summary": "Switzerland's disciplined defense and superior midfield control should limit Bosnia's inconsistency and create enough chances for a clear win."
+  },
+  "g_b_5": {
+    "CAN": 2,
+    "BIH": 1,
+    "summary": "Canada's speed, pressing, and likely crowd support should give them the edge over a Bosnia side capable of scoring but vulnerable defensively."
+  },
+  "g_b_6": {
+    "SUI": 1,
+    "QAT": 0,
+    "summary": "Switzerland's compact shape and efficiency in key moments should be enough to break down a stubborn but limited Qatar team."
+  },
+  "m73": {
+    "KOR": 1,
+    "SUI": 2,
+    "summary": "Switzerland's superior tournament organization and defensive discipline should edge a competitive South Korea side in a tight match."
+  },
+  "m74": {
+    "GER": 3,
+    "CZE": 1,
+    "summary": "Germany's greater depth, sharper attacking quality, and knockout-round pedigree make them clear favorites against a spirited Czechia team."
+  },
+  "m75": {
+    "NED": 1,
+    "MAR": 0,
+    "summary": "The Netherlands should control enough of the ball to eventually break down Morocco's stubborn defense in a low-margin contest."
+  },
+  "m76": {
+    "BRA": 2,
+    "JPN": 0,
+    "summary": "Brazil's individual brilliance and attacking variety give them the edge over a disciplined Japan side that will compete well but struggle to create enough chances."
+  },
+  "m77": {
+    "FRA": 3,
+    "PAR": 0,
+    "summary": "France's superior depth, pace in transition, and attacking quality should overwhelm a disciplined Paraguay side that may struggle to create enough chances."
+  },
+  "m78": {
+    "ECU": 1,
+    "SEN": 2,
+    "summary": "Senegal's athleticism, big-game experience, and stronger front line give them the edge in what should be a competitive and physical knockout match."
+  },
+  "m79": {
+    "MEX": 2,
+    "NOR": 1,
+    "summary": "Backed by strong regional support and greater tournament know-how, Mexico should narrowly contain Norway despite the constant threat posed by Haaland."
+  },
+  "m80": {
+    "ENG": 2,
+    "CIV": 0,
+    "summary": "England's control in midfield and deeper attacking options should prove decisive against an Ivory Coast team capable of competing physically but less polished in possession."
+  },
+  "m81": {
+    "USA": 2,
+    "SWE": 1,
+    "summary": "The United States' athletic front line and strong home-continent support should give them the edge over a disciplined but limited Sweden side."
+  },
+  "m82": {
+    "BEL": 2,
+    "NOR": 1,
+    "summary": "Belgium's superior midfield control and deeper attacking options should outweigh Norway's Haaland-led threat in a competitive match."
+  },
+  "m83": {
+    "COL": 1,
+    "GHA": 0,
+    "summary": "Colombia's greater composure in possession and tournament experience make them slight favorites against an energetic but inconsistent Ghana team."
+  },
+  "m84": {
+    "ESP": 2,
+    "AUT": 0,
+    "summary": "Spain's technical dominance and ability to pin opponents back should gradually break down Austria's organized defensive shape."
+  },
+  "m85": {
+    "CAN": 2,
+    "EGY": 1,
+    "summary": "Canada's pace and home-continent support should give them the edge against an Egypt side that is disciplined but less dynamic in open play."
+  },
+  "m86": {
+    "ARG": 2,
+    "URU": 1,
+    "summary": "Argentina's superior attacking depth and big-match composure make them slight favorites in what should be a fierce, tightly contested South American derby."
+  },
+  "m87": {
+    "POR": 2,
+    "CRO": 1,
+    "summary": "Portugal's deeper squad and greater attacking variety should prove decisive against a Croatia team whose experience keeps the match close."
+  },
+  "m88": {
+    "TUR": 1,
+    "IRN": 0,
+    "summary": "T\u00fcrkiye's sharper attacking threat and momentum give them a narrow advantage over an Iran side likely to keep the game tense and low-scoring."
+  },
+  "m89": {
+    "GER": 1,
+    "FRA": 2,
+    "summary": "France's greater attacking explosiveness and depth in transition should edge a strong Germany side in a high-quality match decided by fine margins."
+  },
+  "m90": {
+    "SUI": 0,
+    "NED": 1,
+    "summary": "The Netherlands' superior technical quality and control of possession should eventually break down Switzerland's disciplined defensive block in a tight contest."
+  },
+  "m91": {
+    "BRA": 2,
+    "SEN": 0,
+    "summary": "Brazil's individual flair, deeper attacking options, and ability to punish defensive lapses make them clear favorites against a competitive Senegal side."
+  },
+  "m92": {
+    "MEX": 1,
+    "ENG": 2,
+    "summary": "England's stronger squad depth and greater quality in the final third should overcome Mexico's home-region energy in a closely fought knockout match."
+  },
+  "m93": {
+    "COL": 0,
+    "ESP": 2,
+    "summary": "Spain's superior control of possession and cleaner chance creation should gradually wear down a competitive Colombia side that may struggle to sustain pressure without the ball."
+  },
+  "m94": {
+    "USA": 1,
+    "BEL": 2,
+    "summary": "Belgium's greater individual quality in the final third should edge a spirited United States team despite strong home-continent support and athletic intensity."
+  },
+  "m95": {
+    "ARG": 2,
+    "TUR": 0,
+    "summary": "Argentina's big-match composure, midfield control, and deeper attacking class should prove too much for a disciplined T\u00fcrkiye side likely to defend stubbornly."
+  },
+  "m96": {
+    "CAN": 1,
+    "POR": 2,
+    "summary": "Portugal's superior technical quality and experience in tight knockout matches should overcome Canada's pace and energy in a competitive contest."
+  },
+  "m97": {
+    "FRA": 2,
+    "NED": 1,
+    "summary": "France's greater attacking depth and ability to accelerate in transition should give them the edge over a well-organized Netherlands side in a tight quarter-final."
+  },
+  "m98": {
+    "ESP": 2,
+    "BEL": 0,
+    "summary": "Spain's control of possession and sharper collective structure should limit Belgium's aging core and gradually create the openings needed to win."
+  },
+  "m99": {
+    "BRA": 1,
+    "ENG": 2,
+    "summary": "England's balance between defensive solidity and elite attacking talent should allow them to edge Brazil in a high-level match decided by efficiency in key moments."
+  },
+  "m100": {
+    "ARG": 1,
+    "POR": 0,
+    "summary": "Argentina's superior midfield control, knockout composure, and defensive organization should be enough to squeeze past Portugal in a tense, low-scoring contest."
+  },
+  "m101": {
+    "FRA": 2,
+    "ESP": 1,
+    "summary": "France's superior pace and individual match-winners in transition should punish Spain's high-possession approach in a semi-final likely decided by a few decisive breaks."
+  },
+  "m102": {
+    "ENG": 1,
+    "ARG": 2,
+    "summary": "Argentina's greater knockout-game control and ability to manage tense moments should help them edge an evenly matched England side in a cagey semi-final."
+  },
+  "m103": {
+    "ESP": 2,
+    "ENG": 1,
+    "summary": "Spain's midfield control and cleaner ball retention should help them respond better after semi-final disappointment, edging an England side likely to rotate slightly and fade in a tight third-place match."
+  },
+  "m104": {
+    "FRA": 1,
+    "ARG": 2,
+    "summary": "Argentina's tournament savvy, midfield balance, and knack for managing high-pressure knockout moments should give them a narrow edge over France in a final likely decided by fine margins."
   }
 }

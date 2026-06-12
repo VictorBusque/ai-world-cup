@@ -1,438 +1,522 @@
 {
-  "model": "claude-sonnet-4-6",
-  "name": "claude-sonnet-4-6",
-  "provider": "anthropic",
-  "color": "from-orange-400 to-amber-600",
-  "predictions": {
-    "g_a_1": {
-      "MEX": 2,
-      "RSA": 0
-    },
-    "g_a_2": {
-      "KOR": 1,
-      "CZE": 1
-    },
-    "g_a_3": {
-      "MEX": 1,
-      "KOR": 1
-    },
-    "g_a_4": {
-      "RSA": 0,
-      "CZE": 2
-    },
-    "g_a_5": {
-      "MEX": 3,
-      "CZE": 1
-    },
-    "g_a_6": {
-      "RSA": 1,
-      "KOR": 2
-    },
-    "g_b_1": {
-      "CAN": 2,
-      "SUI": 1
-    },
-    "g_b_2": {
-      "QAT": 0,
-      "BIH": 1
-    },
-    "g_b_3": {
-      "CAN": 2,
-      "QAT": 0
-    },
-    "g_b_4": {
-      "SUI": 2,
-      "BIH": 0
-    },
-    "g_b_5": {
-      "CAN": 1,
-      "BIH": 0
-    },
-    "g_b_6": {
-      "SUI": 2,
-      "QAT": 0
-    },
-    "g_c_1": {
-      "BRA": 2,
-      "MAR": 1
-    },
-    "g_c_2": {
-      "HAI": 0,
-      "SCO": 2
-    },
-    "g_c_3": {
-      "BRA": 3,
-      "HAI": 0
-    },
-    "g_c_4": {
-      "MAR": 2,
-      "SCO": 1
-    },
-    "g_c_5": {
-      "BRA": 2,
-      "SCO": 0
-    },
-    "g_c_6": {
-      "MAR": 3,
-      "HAI": 0
-    },
-    "g_d_1": {
-      "USA": 2,
-      "PAR": 0
-    },
-    "g_d_2": {
-      "AUS": 1,
-      "TUR": 1
-    },
-    "g_d_3": {
-      "USA": 2,
-      "AUS": 1
-    },
-    "g_d_4": {
-      "PAR": 1,
-      "TUR": 2
-    },
-    "g_d_5": {
-      "USA": 1,
-      "TUR": 0
-    },
-    "g_d_6": {
-      "PAR": 2,
-      "AUS": 1
-    },
-    "g_e_1": {
-      "GER": 3,
-      "CUW": 0
-    },
-    "g_e_2": {
-      "CIV": 1,
-      "ECU": 1
-    },
-    "g_e_3": {
-      "GER": 2,
-      "CIV": 1
-    },
-    "g_e_4": {
-      "CUW": 0,
-      "ECU": 2
-    },
-    "g_e_5": {
-      "GER": 2,
-      "ECU": 0
-    },
-    "g_e_6": {
-      "CUW": 0,
-      "CIV": 2
-    },
-    "g_f_1": {
-      "NED": 2,
-      "JPN": 1
-    },
-    "g_f_2": {
-      "SWE": 1,
-      "TUN": 0
-    },
-    "g_f_3": {
-      "NED": 2,
-      "SWE": 1
-    },
-    "g_f_4": {
-      "JPN": 2,
-      "TUN": 0
-    },
-    "g_f_5": {
-      "NED": 1,
-      "TUN": 0
-    },
-    "g_f_6": {
-      "JPN": 2,
-      "SWE": 1
-    },
-    "g_g_1": {
-      "BEL": 2,
-      "EGY": 0
-    },
-    "g_g_2": {
-      "IRN": 0,
-      "NZL": 1
-    },
-    "g_g_3": {
-      "BEL": 1,
-      "IRN": 0
-    },
-    "g_g_4": {
-      "EGY": 2,
-      "NZL": 1
-    },
-    "g_g_5": {
-      "BEL": 2,
-      "NZL": 0
-    },
-    "g_g_6": {
-      "EGY": 1,
-      "IRN": 0
-    },
-    "g_h_1": {
-      "ESP": 3,
-      "CPV": 0
-    },
-    "g_h_2": {
-      "KSA": 1,
-      "URU": 2
-    },
-    "g_h_3": {
-      "ESP": 2,
-      "KSA": 0
-    },
-    "g_h_4": {
-      "CPV": 1,
-      "URU": 2
-    },
-    "g_h_5": {
-      "ESP": 1,
-      "URU": 0
-    },
-    "g_h_6": {
-      "CPV": 2,
-      "KSA": 1
-    },
-    "g_i_1": {
-      "FRA": 2,
-      "SEN": 1
-    },
-    "g_i_2": {
-      "NOR": 2,
-      "IRQ": 0
-    },
-    "g_i_3": {
-      "FRA": 2,
-      "NOR": 1
-    },
-    "g_i_4": {
-      "SEN": 2,
-      "IRQ": 0
-    },
-    "g_i_5": {
-      "FRA": 3,
-      "IRQ": 0
-    },
-    "g_i_6": {
-      "SEN": 1,
-      "NOR": 2
-    },
-    "g_j_1": {
-      "ARG": 3,
-      "ALG": 0
-    },
-    "g_j_2": {
-      "AUT": 1,
-      "JOR": 0
-    },
-    "g_j_3": {
-      "ARG": 2,
-      "AUT": 0
-    },
-    "g_j_4": {
-      "ALG": 2,
-      "JOR": 1
-    },
-    "g_j_5": {
-      "ARG": 2,
-      "JOR": 0
-    },
-    "g_j_6": {
-      "ALG": 1,
-      "AUT": 2
-    },
-    "g_k_1": {
-      "POR": 3,
-      "COD": 0
-    },
-    "g_k_2": {
-      "UZB": 0,
-      "COL": 2
-    },
-    "g_k_3": {
-      "POR": 2,
-      "UZB": 0
-    },
-    "g_k_4": {
-      "COD": 1,
-      "COL": 2
-    },
-    "g_k_5": {
-      "POR": 1,
-      "COL": 1
-    },
-    "g_k_6": {
-      "COD": 1,
-      "UZB": 0
-    },
-    "g_l_1": {
-      "ENG": 2,
-      "CRO": 0
-    },
-    "g_l_2": {
-      "GHA": 1,
-      "PAN": 0
-    },
-    "g_l_3": {
-      "ENG": 2,
-      "GHA": 1
-    },
-    "g_l_4": {
-      "CRO": 2,
-      "PAN": 0
-    },
-    "g_l_5": {
-      "ENG": 2,
-      "PAN": 0
-    },
-    "g_l_6": {
-      "CRO": 1,
-      "GHA": 1
-    }
+  "g_f_1": {
+    "NED": 2,
+    "JPN": 1,
+    "summary": "Netherlands' superior squad depth and physicality edges out a disciplined Japan side in a competitive opener."
   },
-  "playoffs": {
-    "r32": {
-      "m73": {
-        "SUI": 1,
-        "KOR": 2
-      },
-      "m74": {
-        "GER": 2,
-        "MAR": 1
-      },
-      "m75": {
-        "NED": 2,
-        "MAR": 1
-      },
-      "m76": {
-        "BRA": 2,
-        "JPN": 0
-      },
-      "m77": {
-        "FRA": 2,
-        "EGY": 0
-      },
-      "m78": {
-        "CIV": 1,
-        "NOR": 2
-      },
-      "m79": {
-        "MEX": 2,
-        "URU": 1
-      },
-      "m80": {
-        "ENG": 2,
-        "SEN": 1
-      },
-      "m81": {
-        "USA": 2,
-        "AUT": 0
-      },
-      "m82": {
-        "BEL": 2,
-        "PAR": 0
-      },
-      "m83": {
-        "COL": 2,
-        "CRO": 1
-      },
-      "m84": {
-        "ESP": 2,
-        "ALG": 0
-      },
-      "m85": {
-        "CAN": 1,
-        "ECU": 2
-      },
-      "m86": {
-        "ARG": 3,
-        "CPV": 0
-      },
-      "m87": {
-        "POR": 2,
-        "GHA": 0
-      },
-      "m88": {
-        "TUR": 1,
-        "BEL": 0
-      }
-    },
-    "r16": {
-      "m89": {
-        "GER": 2,
-        "FRA": 1
-      },
-      "m90": {
-        "KOR": 0,
-        "NED": 2
-      },
-      "m91": {
-        "BRA": 2,
-        "NOR": 0
-      },
-      "m92": {
-        "MEX": 1,
-        "ENG": 2
-      },
-      "m93": {
-        "COL": 1,
-        "ESP": 2
-      },
-      "m94": {
-        "USA": 1,
-        "BEL": 2
-      },
-      "m95": {
-        "ARG": 2,
-        "TUR": 0
-      },
-      "m96": {
-        "ECU": 0,
-        "POR": 2
-      }
-    },
-    "qf": {
-      "m97": {
-        "GER": 2,
-        "NED": 1
-      },
-      "m98": {
-        "ESP": 1,
-        "BEL": 2
-      },
-      "m99": {
-        "BRA": 2,
-        "ENG": 1
-      },
-      "m100": {
-        "ARG": 2,
-        "POR": 1
-      }
-    },
-    "sf": {
-      "m101": {
-        "GER": 1,
-        "BEL": 2
-      },
-      "m102": {
-        "BRA": 2,
-        "ARG": 1
-      }
-    },
-    "bronze": {
-      "m103": {
-        "GER": 2,
-        "ARG": 1
-      }
-    },
-    "final": {
-      "m104": {
-        "BEL": 1,
-        "BRA": 2
-      }
-    }
+  "g_f_2": {
+    "SWE": 2,
+    "TUN": 0,
+    "summary": "Sweden's organized structure and physical presence proves too much for a defensively stubborn but limited Tunisia attack."
+  },
+  "g_f_3": {
+    "NED": 2,
+    "SWE": 1,
+    "summary": "Netherlands' individual quality and tactical flexibility gives them the edge over a well-organized Swedish side."
+  },
+  "g_f_4": {
+    "TUN": 0,
+    "JPN": 2,
+    "summary": "Japan's technical precision and disciplined pressing dismantles a Tunisia side that struggles to create meaningful chances."
+  },
+  "g_f_5": {
+    "NED": 3,
+    "TUN": 0,
+    "summary": "Netherlands comfortably dispatches Tunisia with clinical finishing as they secure top spot in the group."
+  },
+  "g_f_6": {
+    "JPN": 2,
+    "SWE": 1,
+    "summary": "Japan's energetic pressing and quick transitions earn a crucial victory over Sweden to secure second place in Group F."
+  },
+  "g_g_1": {
+    "BEL": 3,
+    "EGY": 0,
+    "summary": "Belgium's aging but quality golden generation proves too strong for Egypt, with De Bruyne orchestrating a comfortable victory."
+  },
+  "g_g_2": {
+    "IRN": 1,
+    "NZL": 0,
+    "summary": "Iran's disciplined defensive structure and set-piece threat edges out a spirited but limited New Zealand side."
+  },
+  "g_g_3": {
+    "BEL": 2,
+    "IRN": 0,
+    "summary": "Belgium's superior squad quality and attacking firepower overwhelms Iran's defensive setup in a controlled performance."
+  },
+  "g_g_4": {
+    "NZL": 1,
+    "EGY": 1,
+    "summary": "A hard-fought draw between two evenly matched sides as New Zealand's physicality cancels out Egypt's technical quality."
+  },
+  "g_g_5": {
+    "BEL": 2,
+    "NZL": 0,
+    "summary": "Belgium wraps up group stage with a professional win over New Zealand, rotating some players but still showing class."
+  },
+  "g_g_6": {
+    "EGY": 2,
+    "IRN": 1,
+    "summary": "Egypt secures second place with a narrow victory over Iran, with Salah's influence proving decisive in a tense encounter."
+  },
+  "g_j_1": {
+    "ARG": 3,
+    "ALG": 0,
+    "summary": "Argentina's world-class squad, led by Messi and a deep attacking roster, overwhelms Algeria's organized but outmatched defense."
+  },
+  "g_j_2": {
+    "AUT": 2,
+    "JOR": 0,
+    "summary": "Austria's superior European pedigree and physical intensity prove too much for a disciplined but limited Jordanian side."
+  },
+  "g_j_3": {
+    "ARG": 2,
+    "AUT": 1,
+    "summary": "Argentina's individual brilliance edges out a competitive Austria side that makes life difficult but ultimately cannot match the defending champions' quality."
+  },
+  "g_j_4": {
+    "JOR": 1,
+    "ALG": 1,
+    "summary": "Two evenly matched sides cancel each other out in a tight, tactical encounter with both teams desperate for points."
+  },
+  "g_j_5": {
+    "ARG": 4,
+    "JOR": 0,
+    "summary": "Argentina rotate but still have too much quality for Jordan, securing top spot in the group with a comfortable victory."
+  },
+  "g_j_6": {
+    "ALG": 2,
+    "AUT": 1,
+    "summary": "Algeria's technical flair and North African passion secure a crucial victory over Austria, clinching second place in Group J."
+  },
+  "g_i_1": {
+    "FRA": 2,
+    "SEN": 1,
+    "summary": "France's superior squad depth and Mbapp\u00e9's individual brilliance edge out a resilient Senegal side in a competitive opener."
+  },
+  "g_i_2": {
+    "IRQ": 0,
+    "NOR": 2,
+    "summary": "Haaland leads Norway to a comfortable victory over Iraq, whose defensive frailties are exposed by Norway's direct, physical attacking play."
+  },
+  "g_i_3": {
+    "FRA": 2,
+    "NOR": 1,
+    "summary": "France's world-class midfield and clinical finishing prove too much for Norway despite Haaland's lone goal keeping the match tense until late."
+  },
+  "g_i_4": {
+    "SEN": 3,
+    "IRQ": 0,
+    "summary": "Senegal's pace, physicality, and African championship pedigree overwhelm an outclassed Iraq side in a dominant group stage performance."
+  },
+  "g_i_5": {
+    "FRA": 3,
+    "IRQ": 0,
+    "summary": "France rotate but still have too much quality for Iraq, with their attacking depth ensuring a comfortable win to seal top spot in Group I."
+  },
+  "g_i_6": {
+    "SEN": 1,
+    "NOR": 1,
+    "summary": "A hard-fought draw sees both Senegal and Norway secure enough points to advance, with Haaland's equalizer canceling out Senegal's first-half lead."
+  },
+  "g_l_1": {
+    "ENG": 2,
+    "CRO": 0,
+    "summary": "England's superior squad depth and attacking firepower overwhelm an aging Croatian side that has lost its midfield dominance."
+  },
+  "g_l_2": {
+    "GHA": 2,
+    "PAN": 1,
+    "summary": "Ghana's athleticism and unpredictable attacking play edge out a disciplined but limited Panamanian side."
+  },
+  "g_l_3": {
+    "ENG": 3,
+    "GHA": 1,
+    "summary": "England's class proves too much for Ghana as their star-studded attack exploits defensive gaps in the second half."
+  },
+  "g_l_4": {
+    "PAN": 0,
+    "CRO": 2,
+    "summary": "Croatia's experienced midfield controls the tempo and their clinical finishing punishes a defensively-minded Panama side."
+  },
+  "g_l_5": {
+    "PAN": 0,
+    "ENG": 2,
+    "summary": "England comfortably secure top spot as their quality is simply too high for a spirited but outclassed Panamanian outfit."
+  },
+  "g_l_6": {
+    "CRO": 1,
+    "GHA": 1,
+    "summary": "Croatia and Ghana play out a tense draw as both sides need points, with Croatia's experience matched by Ghana's energy and pace."
+  },
+  "g_e_1": {
+    "GER": 4,
+    "CUW": 0,
+    "summary": "Germany's superior squad depth and tactical organization overwhelm a limited Cura\u00e7ao side with no realistic path to containing their attacking firepower."
+  },
+  "g_e_2": {
+    "CIV": 1,
+    "ECU": 1,
+    "summary": "Two evenly matched Tier 3 sides cancel each other out in a physical, competitive opener with Ecuador's high-pressing style neutralizing Ivory Coast's individual quality."
+  },
+  "g_e_3": {
+    "GER": 2,
+    "CIV": 0,
+    "summary": "Germany's tactical discipline and midfield control shut down Ivory Coast's attacking threats while clinical finishing secures a comfortable victory."
+  },
+  "g_e_4": {
+    "ECU": 3,
+    "CUW": 0,
+    "summary": "Ecuador's energetic pressing and youthful attacking talent prove far too much for Cura\u00e7ao, who struggle to cope with the pace and intensity throughout."
+  },
+  "g_e_5": {
+    "GER": 2,
+    "ECU": 1,
+    "summary": "Germany edge a competitive match against an improving Ecuador side, with their superior experience and quality in the final third proving the decisive difference."
+  },
+  "g_e_6": {
+    "CUW": 0,
+    "CIV": 2,
+    "summary": "Ivory Coast's physical presence and individual class are too much for Cura\u00e7ao, who exit the tournament without a point as CIV secure third place in the group."
+  },
+  "g_c_1": {
+    "BRA": 2,
+    "MAR": 1,
+    "summary": "Brazil's attacking depth and individual brilliance edge out a resilient Morocco side that makes it competitive but ultimately can't contain South American flair."
+  },
+  "g_c_2": {
+    "HAI": 0,
+    "SCO": 2,
+    "summary": "Scotland's organization and set-piece threat prove too much for Haiti, who lack the quality to compete at this level against a disciplined European side."
+  },
+  "g_c_3": {
+    "BRA": 4,
+    "HAI": 0,
+    "summary": "Brazil's world-class attacking talent runs riot against a limited Haiti side with no realistic answer to the South American powerhouse's quality."
+  },
+  "g_c_4": {
+    "MAR": 1,
+    "SCO": 1,
+    "summary": "Morocco's defensive solidity is matched by Scotland's disciplined pressing, resulting in a hard-fought draw that keeps both teams' qualification hopes alive."
+  },
+  "g_c_5": {
+    "SCO": 0,
+    "BRA": 2,
+    "summary": "Brazil's class tells against a brave Scotland side that competes hard but cannot prevent the South Americans from securing top spot in the group."
+  },
+  "g_c_6": {
+    "MAR": 2,
+    "HAI": 0,
+    "summary": "Morocco's defensive organization and clinical finishing on the counter secure a comfortable win over Haiti to confirm second place in Group C."
+  },
+  "g_d_1": {
+    "USA": 2,
+    "PAR": 1,
+    "summary": "USA leverages home-crowd advantage and superior attacking depth to edge a defensively stubborn Paraguay side."
+  },
+  "g_d_2": {
+    "AUS": 1,
+    "TUR": 2,
+    "summary": "Turkey's rising tactical quality and physical intensity prove too much for a resilient but outgunned Australia."
+  },
+  "g_d_3": {
+    "USA": 3,
+    "AUS": 1,
+    "summary": "USA's rapid attacking transitions and home support overwhelm Australia, who struggle to contain the hosts' pace on the flanks."
+  },
+  "g_d_4": {
+    "TUR": 1,
+    "PAR": 1,
+    "summary": "Paraguay's disciplined counter-attacking system neutralizes Turkey's attacking threat, earning a hard-fought point for both sides."
+  },
+  "g_d_5": {
+    "TUR": 1,
+    "USA": 2,
+    "summary": "USA secures top spot in the group with a composed performance, converting key chances against a Turkey side that pushes hard but falls short."
+  },
+  "g_d_6": {
+    "PAR": 1,
+    "AUS": 0,
+    "summary": "Paraguay's defensive solidity and a clinical set-piece goal seal a crucial win over Australia, securing second place in Group D."
+  },
+  "g_k_1": {
+    "POR": 3,
+    "COD": 0,
+    "summary": "Portugal's deep squad and world-class attacking talent prove too much for a physically imposing but technically limited DR Congo side."
+  },
+  "g_k_2": {
+    "UZB": 1,
+    "COL": 2,
+    "summary": "Colombia's experienced midfield and attacking flair from players like D\u00edaz and Arias edge out an organized but outclassed Uzbekistan."
+  },
+  "g_k_3": {
+    "POR": 4,
+    "UZB": 0,
+    "summary": "Portugal's attacking firepower overwhelms Uzbekistan, with Ronaldo and supporting cast exploiting a limited defensive unit."
+  },
+  "g_k_4": {
+    "COL": 2,
+    "COD": 0,
+    "summary": "Colombia's technical superiority and disciplined defensive structure neutralize DR Congo's physical threat and secure a comfortable win."
+  },
+  "g_k_5": {
+    "COL": 1,
+    "POR": 2,
+    "summary": "Portugal clinch top spot with a hard-fought victory over Colombia, with their superior individual quality proving decisive in a competitive match."
+  },
+  "g_k_6": {
+    "COD": 1,
+    "UZB": 1,
+    "summary": "Both eliminated sides share the spoils in a scrappy encounter, with DR Congo's physicality matched by Uzbekistan's organized defensive resilience."
+  },
+  "g_a_1": {
+    "MEX": 2,
+    "RSA": 1,
+    "summary": "Mexico, buoyed by near-home support in the USA/Mexico venues, edges South Africa thanks to superior squad depth and attacking creativity."
+  },
+  "g_a_2": {
+    "KOR": 1,
+    "CZE": 1,
+    "summary": "South Korea's high-energy pressing is matched by Czechia's technical composure, resulting in a hard-fought draw that suits neither side."
+  },
+  "g_a_3": {
+    "MEX": 2,
+    "KOR": 0,
+    "summary": "Mexico's home-crowd advantage and clinical finishing prove too much for a South Korean side that struggles to break down a well-organized Mexican defense."
+  },
+  "g_a_4": {
+    "RSA": 1,
+    "CZE": 2,
+    "summary": "Czechia's technical midfield controls the tempo and converts key chances, while South Africa's spirited effort is ultimately not enough."
+  },
+  "g_a_5": {
+    "CZE": 1,
+    "MEX": 2,
+    "summary": "Mexico secures top spot with a confident performance, their attacking trio exploiting spaces left by a Czech side that must chase the game."
+  },
+  "g_a_6": {
+    "RSA": 1,
+    "KOR": 2,
+    "summary": "South Korea's relentless second-half pressing earns a crucial comeback win, securing enough points to compete for a best third-place berth."
+  },
+  "g_b_1": {
+    "CAN": 1,
+    "SUI": 1,
+    "summary": "Two well-organized, defensively solid sides cancel each other out in a tight opener, with Canada's home support unable to break Swiss resilience."
+  },
+  "g_b_2": {
+    "QAT": 1,
+    "BIH": 2,
+    "summary": "Bosnia's talented individuals prove too much for a Qatar side still developing at international level, with a late winner sealing the points."
+  },
+  "g_b_3": {
+    "CAN": 3,
+    "QAT": 0,
+    "summary": "Canada's pace, physicality, and home-crowd energy overwhelm a limited Qatar side in a dominant display that boosts their goal difference."
+  },
+  "g_b_4": {
+    "SUI": 2,
+    "BIH": 1,
+    "summary": "Switzerland's tactical discipline and clinical finishing edge out Bosnia in a closely contested match that keeps both sides in contention."
+  },
+  "g_b_5": {
+    "CAN": 2,
+    "BIH": 0,
+    "summary": "Canada secures top spot with a composed performance, their pressing game stifling Bosnia's creative players throughout."
+  },
+  "g_b_6": {
+    "SUI": 2,
+    "QAT": 0,
+    "summary": "Switzerland comfortably see off Qatar to confirm second place, their organized structure and superior quality proving the difference."
+  },
+  "g_h_1": {
+    "ESP": 4,
+    "CPV": 0,
+    "summary": "Spain's possession-based system and technical superiority overwhelm a limited Cape Verde side with no answer to the Spanish press."
+  },
+  "g_h_2": {
+    "KSA": 1,
+    "URU": 2,
+    "summary": "Uruguay's defensive grit and clinical finishing from their experienced forwards prove too much for an improving but outclassed Saudi Arabia."
+  },
+  "g_h_3": {
+    "ESP": 2,
+    "KSA": 0,
+    "summary": "Spain control the midfield completely and convert their chances efficiently against a Saudi side that struggles to create anything meaningful."
+  },
+  "g_h_4": {
+    "URU": 3,
+    "CPV": 0,
+    "summary": "Uruguay's physical and tactical superiority is too much for Cape Verde, who are unable to cope with the South American's pressing and direct play."
+  },
+  "g_h_5": {
+    "ESP": 1,
+    "URU": 1,
+    "summary": "A hard-fought draw as Uruguay's defensive discipline frustrates Spain, with both sides content to secure their already-confirmed qualification."
+  },
+  "g_h_6": {
+    "CPV": 1,
+    "KSA": 1,
+    "summary": "A dead-rubber match ends in a fair draw as both eliminated sides play with freedom, sharing the spoils in an entertaining but inconsequential clash."
+  },
+  "m73": {
+    "CZE": 1,
+    "SUI": 2,
+    "summary": "Switzerland's superior organization and clinical finishing edge out a competitive Czech side in a tight Central European clash."
+  },
+  "m74": {
+    "GER": 3,
+    "SCO": 1,
+    "summary": "Germany's dominant group stage form carries over as their attacking depth overwhelms a spirited but outclassed Scotland side."
+  },
+  "m75": {
+    "NED": 2,
+    "MAR": 1,
+    "summary": "The Netherlands' individual quality and tactical flexibility prove just enough to overcome Morocco's disciplined defensive structure in a hard-fought encounter."
+  },
+  "m76": {
+    "BRA": 3,
+    "JPN": 0,
+    "summary": "Brazil's attacking brilliance and physical superiority prove too much for a technically gifted but outgunned Japan side."
+  },
+  "m77": {
+    "FRA": 3,
+    "PAR": 0,
+    "summary": "France's world-class squad featuring Mbapp\u00e9 and a deep attacking roster overwhelms a defensively-minded Paraguay side that scraped through as a third-placed team."
+  },
+  "m78": {
+    "ECU": 1,
+    "SEN": 2,
+    "summary": "Senegal's pace, physicality, and African champion pedigree prove too much for Ecuador, with Senegal edging a competitive match through clinical finishing on the counter."
+  },
+  "m79": {
+    "MEX": 2,
+    "NOR": 1,
+    "summary": "Mexico's passionate home support and tournament experience carry them past Norway, though Haaland's lone strike keeps it tense until the final whistle."
+  },
+  "m80": {
+    "ENG": 2,
+    "CIV": 0,
+    "summary": "England's star-studded attack and defensive solidity prove too strong for Ivory Coast, who struggle to contain the Premier League quality on display throughout."
+  },
+  "m81": {
+    "USA": 2,
+    "SWE": 1,
+    "summary": "USA, buoyed by host-nation support and a perfect group stage, edge out a physical Sweden side thanks to superior attacking depth and home crowd energy."
+  },
+  "m82": {
+    "BEL": 3,
+    "KOR": 1,
+    "summary": "Belgium's golden generation, dominant in the group stage with a +7 GD, proves too powerful for a spirited South Korea side that qualified as a third-placed team."
+  },
+  "m83": {
+    "COL": 2,
+    "CRO": 1,
+    "summary": "Colombia's youthful attacking talent edges an aging but experienced Croatia side, with their pressing game and pace proving the difference in a tight contest."
+  },
+  "m84": {
+    "ESP": 2,
+    "ALG": 0,
+    "summary": "Spain's possession-based system and technical superiority suffocates Algeria, with their young talent controlling the match from start to finish."
+  },
+  "m85": {
+    "CAN": 2,
+    "AUT": 1,
+    "summary": "Canada, buoyed by strong home support and a dominant group stage, edges Austria in a tight contest where the host nation's energy and depth prove decisive."
+  },
+  "m86": {
+    "ARG": 2,
+    "URU": 1,
+    "summary": "Argentina's world-class attacking talent and defending champion pedigree narrowly overcomes a gritty Uruguay side in a fiercely contested South American derby."
+  },
+  "m87": {
+    "POR": 3,
+    "GHA": 1,
+    "summary": "Portugal's deep squad and clinical finishing prove too much for Ghana, who show flashes of athleticism but ultimately cannot contain the Tier 1 European side."
+  },
+  "m88": {
+    "TUR": 1,
+    "EGY": 1,
+    "summary": "A tactically cautious affair ends level after 90 minutes, with Turkey's greater squad depth eventually telling as they advance 4-2 on penalties."
+  },
+  "m89": {
+    "GER": 1,
+    "FRA": 2,
+    "summary": "France's superior individual quality, led by Mbapp\u00e9's decisive contribution, edges a resilient Germany side in a classic heavyweight European clash that remains tight until the final stages."
+  },
+  "m90": {
+    "SUI": 1,
+    "NED": 2,
+    "summary": "The Netherlands' attacking talent and greater squad depth ultimately overcome Switzerland's disciplined defensive organization, though the Swiss make them work hard for every chance."
+  },
+  "m91": {
+    "BRA": 2,
+    "SEN": 0,
+    "summary": "Brazil's world-class attacking wealth and technical superiority prove too much for a brave Senegal side, with the South Americans controlling possession and converting their chances efficiently."
+  },
+  "m92": {
+    "MEX": 0,
+    "ENG": 2,
+    "summary": "England's star-studded squad and Premier League quality prove the difference against a passionate Mexico side, whose home support cannot compensate for the significant gap in individual talent."
+  },
+  "m93": {
+    "COL": 1,
+    "ESP": 2,
+    "summary": "Spain's possession mastery and technical superiority gradually wear down a spirited Colombia side, with their young talent controlling the tempo and converting key chances."
+  },
+  "m94": {
+    "USA": 1,
+    "BEL": 2,
+    "summary": "Belgium's golden generation quality and clinical finishing edge out a passionate host-nation USA side, whose home crowd energy keeps it close but cannot overcome the European class."
+  },
+  "m95": {
+    "ARG": 3,
+    "EGY": 0,
+    "summary": "Argentina's world-class attacking depth and defending champion pedigree prove far too much for a Turkey-fatigued Egypt side that advanced via penalties and cannot contain Messi and company."
+  },
+  "m96": {
+    "CAN": 1,
+    "POR": 2,
+    "summary": "Portugal's deep squad and individual brilliance ultimately overcome a resilient Canada side buoyed by home support, with the European side's quality proving decisive in the second half."
+  },
+  "m97": {
+    "FRA": 2,
+    "NED": 1,
+    "summary": "France's superior individual quality led by Mbapp\u00e9 proves the decisive factor against a well-organized Netherlands side that competes hard but ultimately cannot contain the French attacking threat."
+  },
+  "m98": {
+    "ESP": 2,
+    "BEL": 1,
+    "summary": "Spain's relentless possession game and youthful energy gradually wear down Belgium's aging golden generation, with the Spanish technical superiority telling in the final stages of a tight contest."
+  },
+  "m99": {
+    "BRA": 1,
+    "ENG": 2,
+    "summary": "England's star-studded attack and defensive resilience edge a classic heavyweight clash against Brazil, with the Three Lions converting their chances clinically in a match that could have gone either way."
+  },
+  "m100": {
+    "ARG": 2,
+    "POR": 1,
+    "summary": "Argentina's defending champion mentality and Messi's decisive brilliance edge a compelling duel against Portugal, with the South Americans showing their tournament pedigree in the crucial moments."
+  },
+  "m101": {
+    "FRA": 2,
+    "ESP": 1,
+    "summary": "Mbapp\u00e9's pace and clinical finishing prove too much for Spain's high defensive line, with France's individual brilliance ultimately overcoming Spain's cohesive possession system in a tightly contested semi-final."
+  },
+  "m102": {
+    "ENG": 1,
+    "ARG": 2,
+    "summary": "Messi and Argentina's defending champion mentality edge a pulsating semi-final against England, with the South Americans' tournament experience and individual magic proving decisive in a match that goes to extra time."
+  },
+  "m103": {
+    "ESP": 2,
+    "ENG": 1,
+    "summary": "Spain's possession-based system and youthful energy help them recover from semi-final heartbreak, with their technical superiority and cohesive pressing ultimately edging a resilient England side to claim third place."
+  },
+  "m104": {
+    "FRA": 3,
+    "ARG": 2,
+    "summary": "In a rematch of the 2022 final, Mbapp\u00e9 leads France to a hard-fought victory over defending champions Argentina, with France's superior squad depth and tactical discipline ultimately proving decisive in an epic, end-to-end final."
   }
 }

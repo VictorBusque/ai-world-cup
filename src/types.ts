@@ -1,20 +1,7 @@
 // ── JSON file schema types (match what's on disk) ──
 
-/** What each model JSON looks like on disk */
-export interface ModelJSON {
-  name: string;
-  provider: string;
-  color: string;
-  predictions: Record<string, Record<string, number>>; // matchId → { "USA": 1, "GER": 2 }
-  playoffs: {
-    r32?: Record<string, Record<string, number>>;
-    r16?: Record<string, Record<string, number>>;
-    qf?: Record<string, Record<string, number>>;
-    sf?: Record<string, Record<string, number>>;
-    bronze?: Record<string, Record<string, number>>;
-    final?: Record<string, Record<string, number>>;
-  };
-}
+/** New flat format: matchId → { teamCode: score, ..., "summary": "..." } */
+export type ModelJSON = Record<string, Record<string, number | string>>;
 
 /** What tournament.json matches look like on disk */
 export interface TournamentMatchJSON {
@@ -66,7 +53,7 @@ export interface Match {
   time: string;
   venue: string;
   actualScore: { teamA: number; teamB: number } | null;
-  predictions: Record<string, { teamAScore: number; teamBScore: number }>;
+  predictions: Record<string, { teamAScore: number; teamBScore: number; summary?: string }>;
 }
 
 export interface GroupStanding {
@@ -109,7 +96,7 @@ export interface PlayoffMatch {
 /** Parsed playoff predictions for a single model */
 export interface ModelPlayoffPrediction {
   modelId: string;
-  rounds: Record<string, Record<string, { teamA: string; teamAScore: number; teamB: string; teamBScore: number }>>;
+  rounds: Record<string, Record<string, { teamA: string; teamAScore: number; teamB: string; teamBScore: number; summary?: string }>>;
   champion: string | null; // team code
   runnerUp: string | null; // team code
 }
@@ -121,3 +108,13 @@ export const PLAYOFF_ROUNDS: PlayoffRound[] = [
   "Semi-finals",
   "Final",
 ];
+
+/** Bracket topology — correct match ordering within each round so adjacent pairs feed into the next round */
+export const BRACKET_ORDER: Record<string, string[]> = {
+  r32: ["m74", "m77", "m73", "m75", "m83", "m84", "m81", "m82", "m76", "m78", "m79", "m80", "m86", "m88", "m85", "m87"],
+  r16: ["m89", "m90", "m93", "m94", "m91", "m92", "m95", "m96"],
+  qf: ["m97", "m98", "m99", "m100"],
+  sf: ["m101", "m102"],
+  bronze: ["m103"],
+  final: ["m104"],
+};
