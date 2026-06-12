@@ -1,14 +1,24 @@
 {
-  "name": "react-example",
-  "private": true,
-  "version": "0.0.0",
+  "name": "ai-world-cup-predictor",
+  "description": "Interactive dashboard comparing AI model predictions for the 2026 FIFA World Cup",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "Victor Busque",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VictorBusque/ai-world-cup.git"
+  },
+  "homepage": "https://github.com/VictorBusque/ai-world-cup#readme",
+  "keywords": ["world-cup", "fifa", "ai", "predictions", "leaderboard", "react", "typescript"],
   "type": "module",
   "scripts": {
     "dev": "bun run --hot server.ts",
     "build": "vite build && bun build server.ts --outdir dist --target=bun --sourcemap",
+    "build:static": "vite build",
     "start": "bun run dist/server.js",
     "clean": "rm -rf dist server.js",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "predict": "bun run scripts/predict.js"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
