@@ -4,1065 +4,337 @@
       "id": "mexico",
       "name": "Mexico",
       "code": "MEX",
-      "flag": "🇲🇽",
+      "flag": "\ud83c\uddf2\ud83c\uddfd",
       "group": "Group A"
     },
     "safrica": {
       "id": "safrica",
       "name": "South Africa",
       "code": "RSA",
-      "flag": "🇿🇦",
+      "flag": "\ud83c\uddff\ud83c\udde6",
       "group": "Group A"
     },
     "skorea": {
       "id": "skorea",
       "name": "South Korea",
       "code": "KOR",
-      "flag": "🇰🇷",
+      "flag": "\ud83c\uddf0\ud83c\uddf7",
       "group": "Group A"
     },
     "czechia": {
       "id": "czechia",
       "name": "Czechia",
       "code": "CZE",
-      "flag": "🇨🇿",
+      "flag": "\ud83c\udde8\ud83c\uddff",
       "group": "Group A"
     },
     "canada": {
       "id": "canada",
       "name": "Canada",
       "code": "CAN",
-      "flag": "🇨🇦",
+      "flag": "\ud83c\udde8\ud83c\udde6",
       "group": "Group B"
     },
     "bosnia": {
       "id": "bosnia",
       "name": "Bosnia & Herzegovina",
       "code": "BIH",
-      "flag": "🇧🇦",
+      "flag": "\ud83c\udde7\ud83c\udde6",
       "group": "Group B"
     },
     "qatar": {
       "id": "qatar",
       "name": "Qatar",
       "code": "QAT",
-      "flag": "🇶🇦",
+      "flag": "\ud83c\uddf6\ud83c\udde6",
       "group": "Group B"
     },
     "switzerland": {
       "id": "switzerland",
       "name": "Switzerland",
       "code": "SUI",
-      "flag": "🇨🇭",
+      "flag": "\ud83c\udde8\ud83c\udded",
       "group": "Group B"
     },
     "brazil": {
       "id": "brazil",
       "name": "Brazil",
       "code": "BRA",
-      "flag": "🇧🇷",
+      "flag": "\ud83c\udde7\ud83c\uddf7",
       "group": "Group C"
     },
     "morocco": {
       "id": "morocco",
       "name": "Morocco",
       "code": "MAR",
-      "flag": "🇲🇦",
+      "flag": "\ud83c\uddf2\ud83c\udde6",
       "group": "Group C"
     },
     "haiti": {
       "id": "haiti",
       "name": "Haiti",
       "code": "HAI",
-      "flag": "🇭🇹",
+      "flag": "\ud83c\udded\ud83c\uddf9",
       "group": "Group C"
     },
     "scotland": {
       "id": "scotland",
       "name": "Scotland",
       "code": "SCO",
-      "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+      "flag": "\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc73\udb40\udc63\udb40\udc74\udb40\udc7f",
       "group": "Group C"
     },
     "usa": {
       "id": "usa",
       "name": "United States",
       "code": "USA",
-      "flag": "🇺🇸",
+      "flag": "\ud83c\uddfa\ud83c\uddf8",
       "group": "Group D"
     },
     "paraguay": {
       "id": "paraguay",
       "name": "Paraguay",
       "code": "PAR",
-      "flag": "🇵🇾",
+      "flag": "\ud83c\uddf5\ud83c\uddfe",
       "group": "Group D"
     },
     "australia": {
       "id": "australia",
       "name": "Australia",
       "code": "AUS",
-      "flag": "🇦🇺",
+      "flag": "\ud83c\udde6\ud83c\uddfa",
       "group": "Group D"
     },
     "turkiye": {
       "id": "turkiye",
-      "name": "Türkiye",
+      "name": "T\u00fcrkiye",
       "code": "TUR",
-      "flag": "🇹🇷",
+      "flag": "\ud83c\uddf9\ud83c\uddf7",
       "group": "Group D"
     },
     "germany": {
       "id": "germany",
       "name": "Germany",
       "code": "GER",
-      "flag": "🇩🇪",
+      "flag": "\ud83c\udde9\ud83c\uddea",
       "group": "Group E"
     },
     "curacao": {
       "id": "curacao",
-      "name": "Curaçao",
+      "name": "Cura\u00e7ao",
       "code": "CUW",
-      "flag": "🇨🇼",
+      "flag": "\ud83c\udde8\ud83c\uddfc",
       "group": "Group E"
     },
     "ivorycoast": {
       "id": "ivorycoast",
       "name": "Ivory Coast",
       "code": "CIV",
-      "flag": "🇨🇮",
+      "flag": "\ud83c\udde8\ud83c\uddee",
       "group": "Group E"
     },
     "ecuador": {
       "id": "ecuador",
       "name": "Ecuador",
       "code": "ECU",
-      "flag": "🇪🇨",
+      "flag": "\ud83c\uddea\ud83c\udde8",
       "group": "Group E"
     },
     "netherlands": {
       "id": "netherlands",
       "name": "Netherlands",
       "code": "NED",
-      "flag": "🇳🇱",
+      "flag": "\ud83c\uddf3\ud83c\uddf1",
       "group": "Group F"
     },
     "japan": {
       "id": "japan",
       "name": "Japan",
       "code": "JPN",
-      "flag": "🇯🇵",
+      "flag": "\ud83c\uddef\ud83c\uddf5",
       "group": "Group F"
     },
     "sweden": {
       "id": "sweden",
       "name": "Sweden",
       "code": "SWE",
-      "flag": "🇸🇪",
+      "flag": "\ud83c\uddf8\ud83c\uddea",
       "group": "Group F"
     },
     "tunisia": {
       "id": "tunisia",
       "name": "Tunisia",
       "code": "TUN",
-      "flag": "🇹🇳",
+      "flag": "\ud83c\uddf9\ud83c\uddf3",
       "group": "Group F"
     },
     "belgium": {
       "id": "belgium",
       "name": "Belgium",
       "code": "BEL",
-      "flag": "🇧🇪",
+      "flag": "\ud83c\udde7\ud83c\uddea",
       "group": "Group G"
     },
     "egypt": {
       "id": "egypt",
       "name": "Egypt",
       "code": "EGY",
-      "flag": "🇪🇬",
+      "flag": "\ud83c\uddea\ud83c\uddec",
       "group": "Group G"
     },
     "iran": {
       "id": "iran",
       "name": "Iran",
       "code": "IRN",
-      "flag": "🇮🇷",
+      "flag": "\ud83c\uddee\ud83c\uddf7",
       "group": "Group G"
     },
     "newzealand": {
       "id": "newzealand",
       "name": "New Zealand",
       "code": "NZL",
-      "flag": "🇳🇿",
+      "flag": "\ud83c\uddf3\ud83c\uddff",
       "group": "Group G"
     },
     "spain": {
       "id": "spain",
       "name": "Spain",
       "code": "ESP",
-      "flag": "🇪🇸",
+      "flag": "\ud83c\uddea\ud83c\uddf8",
       "group": "Group H"
     },
     "capeverde": {
       "id": "capeverde",
       "name": "Cape Verde",
       "code": "CPV",
-      "flag": "🇨🇻",
+      "flag": "\ud83c\udde8\ud83c\uddfb",
       "group": "Group H"
     },
     "saudiarabia": {
       "id": "saudiarabia",
       "name": "Saudi Arabia",
       "code": "KSA",
-      "flag": "🇸🇦",
+      "flag": "\ud83c\uddf8\ud83c\udde6",
       "group": "Group H"
     },
     "uruguay": {
       "id": "uruguay",
       "name": "Uruguay",
       "code": "URU",
-      "flag": "🇺🇾",
+      "flag": "\ud83c\uddfa\ud83c\uddfe",
       "group": "Group H"
     },
     "france": {
       "id": "france",
       "name": "France",
       "code": "FRA",
-      "flag": "🇫🇷",
+      "flag": "\ud83c\uddeb\ud83c\uddf7",
       "group": "Group I"
     },
     "senegal": {
       "id": "senegal",
       "name": "Senegal",
       "code": "SEN",
-      "flag": "🇸🇳",
+      "flag": "\ud83c\uddf8\ud83c\uddf3",
       "group": "Group I"
     },
     "norway": {
       "id": "norway",
       "name": "Norway",
       "code": "NOR",
-      "flag": "🇳🇴",
+      "flag": "\ud83c\uddf3\ud83c\uddf4",
       "group": "Group I"
     },
     "iraq": {
       "id": "iraq",
       "name": "Iraq",
       "code": "IRQ",
-      "flag": "🇮🇶",
+      "flag": "\ud83c\uddee\ud83c\uddf6",
       "group": "Group I"
     },
     "argentina": {
       "id": "argentina",
       "name": "Argentina",
       "code": "ARG",
-      "flag": "🇦🇷",
+      "flag": "\ud83c\udde6\ud83c\uddf7",
       "group": "Group J"
     },
     "algeria": {
       "id": "algeria",
       "name": "Algeria",
       "code": "ALG",
-      "flag": "🇩🇿",
+      "flag": "\ud83c\udde9\ud83c\uddff",
       "group": "Group J"
     },
     "austria": {
       "id": "austria",
       "name": "Austria",
       "code": "AUT",
-      "flag": "🇦🇹",
+      "flag": "\ud83c\udde6\ud83c\uddf9",
       "group": "Group J"
     },
     "jordan": {
       "id": "jordan",
       "name": "Jordan",
       "code": "JOR",
-      "flag": "🇯🇴",
+      "flag": "\ud83c\uddef\ud83c\uddf4",
       "group": "Group J"
     },
     "portugal": {
       "id": "portugal",
       "name": "Portugal",
       "code": "POR",
-      "flag": "🇵🇹",
+      "flag": "\ud83c\uddf5\ud83c\uddf9",
       "group": "Group K"
     },
     "drcongo": {
       "id": "drcongo",
       "name": "DR Congo",
       "code": "COD",
-      "flag": "🇨🇩",
+      "flag": "\ud83c\udde8\ud83c\udde9",
       "group": "Group K"
     },
     "uzbekistan": {
       "id": "uzbekistan",
       "name": "Uzbekistan",
       "code": "UZB",
-      "flag": "🇺🇿",
+      "flag": "\ud83c\uddfa\ud83c\uddff",
       "group": "Group K"
     },
     "colombia": {
       "id": "colombia",
       "name": "Colombia",
       "code": "COL",
-      "flag": "🇨🇴",
+      "flag": "\ud83c\udde8\ud83c\uddf4",
       "group": "Group K"
     },
     "england": {
       "id": "england",
       "name": "England",
       "code": "ENG",
-      "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+      "flag": "\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f",
       "group": "Group L"
     },
     "croatia": {
       "id": "croatia",
       "name": "Croatia",
       "code": "CRO",
-      "flag": "🇭🇷",
+      "flag": "\ud83c\udded\ud83c\uddf7",
       "group": "Group L"
     },
     "ghana": {
       "id": "ghana",
       "name": "Ghana",
       "code": "GHA",
-      "flag": "🇬🇭",
+      "flag": "\ud83c\uddec\ud83c\udded",
       "group": "Group L"
     },
     "panama": {
       "id": "panama",
       "name": "Panama",
       "code": "PAN",
-      "flag": "🇵🇦",
+      "flag": "\ud83c\uddf5\ud83c\udde6",
       "group": "Group L"
     }
-  },
-  "matches": [
-    {
-      "id": "g_a_1",
-      "group": "Group A",
-      "teamA": "mexico",
-      "teamB": "safrica",
-      "date": "2026-06-11",
-      "time": "15:00",
-      "venue": "Estadio Azteca, Mexico City",
-      "actualScore": {
-        "teamA": 2,
-        "teamB": 0
-      }
-    },
-    {
-      "id": "g_a_2",
-      "group": "Group A",
-      "teamA": "skorea",
-      "teamB": "czechia",
-      "date": "2026-06-11",
-      "time": "18:00",
-      "venue": "Estadio Akron, Zapopan",
-      "actualScore": {
-        "teamA": 2,
-        "teamB": 1
-      }
-    },
-    {
-      "id": "g_a_3",
-      "group": "Group A",
-      "teamA": "mexico",
-      "teamB": "skorea",
-      "date": "2026-06-18",
-      "time": "12:00",
-      "venue": "Mercedes-Benz Stadium, Atlanta",
-      "actualScore": null
-    },
-    {
-      "id": "g_a_4",
-      "group": "Group A",
-      "teamA": "safrica",
-      "teamB": "czechia",
-      "date": "2026-06-18",
-      "time": "21:00",
-      "venue": "Estadio Akron, Zapopan",
-      "actualScore": null
-    },
-    {
-      "id": "g_a_5",
-      "group": "Group A",
-      "teamA": "czechia",
-      "teamB": "mexico",
-      "date": "2026-06-24",
-      "time": "21:00",
-      "venue": "Estadio Azteca, Mexico City",
-      "actualScore": null
-    },
-    {
-      "id": "g_a_6",
-      "group": "Group A",
-      "teamA": "safrica",
-      "teamB": "skorea",
-      "date": "2026-06-24",
-      "time": "21:00",
-      "venue": "Estadio BBVA, Monterrey",
-      "actualScore": null
-    },
-    {
-      "id": "g_b_1",
-      "group": "Group B",
-      "teamA": "canada",
-      "teamB": "switzerland",
-      "date": "2026-06-12",
-      "time": "15:00",
-      "venue": "BMO Field, Toronto",
-      "actualScore": null
-    },
-    {
-      "id": "g_b_2",
-      "group": "Group B",
-      "teamA": "qatar",
-      "teamB": "bosnia",
-      "date": "2026-06-13",
-      "time": "15:00",
-      "venue": "Levi's Stadium, Santa Clara",
-      "actualScore": null
-    },
-    {
-      "id": "g_b_3",
-      "group": "Group B",
-      "teamA": "canada",
-      "teamB": "qatar",
-      "date": "2026-06-18",
-      "time": "15:00",
-      "venue": "SoFi Stadium, Inglewood",
-      "actualScore": null
-    },
-    {
-      "id": "g_b_4",
-      "group": "Group B",
-      "teamA": "switzerland",
-      "teamB": "bosnia",
-      "date": "2026-06-18",
-      "time": "18:00",
-      "venue": "BC Place, Vancouver",
-      "actualScore": null
-    },
-    {
-      "id": "g_b_5",
-      "group": "Group B",
-      "teamA": "canada",
-      "teamB": "bosnia",
-      "date": "2026-06-24",
-      "time": "15:00",
-      "venue": "BC Place, Vancouver",
-      "actualScore": null
-    },
-    {
-      "id": "g_b_6",
-      "group": "Group B",
-      "teamA": "switzerland",
-      "teamB": "qatar",
-      "date": "2026-06-24",
-      "time": "15:00",
-      "venue": "Lumen Field, Seattle",
-      "actualScore": null
-    },
-    {
-      "id": "g_c_1",
-      "group": "Group C",
-      "teamA": "brazil",
-      "teamB": "morocco",
-      "date": "2026-06-13",
-      "time": "18:00",
-      "venue": "MetLife Stadium, East Rutherford",
-      "actualScore": null
-    },
-    {
-      "id": "g_c_2",
-      "group": "Group C",
-      "teamA": "haiti",
-      "teamB": "scotland",
-      "date": "2026-06-13",
-      "time": "21:00",
-      "venue": "Gillette Stadium, Foxborough",
-      "actualScore": null
-    },
-    {
-      "id": "g_c_3",
-      "group": "Group C",
-      "teamA": "brazil",
-      "teamB": "haiti",
-      "date": "2026-06-19",
-      "time": "18:00",
-      "venue": "Gillette Stadium, Foxborough",
-      "actualScore": null
-    },
-    {
-      "id": "g_c_4",
-      "group": "Group C",
-      "teamA": "morocco",
-      "teamB": "scotland",
-      "date": "2026-06-19",
-      "time": "20:30",
-      "venue": "Lincoln Financial Field, Philadelphia",
-      "actualScore": null
-    },
-    {
-      "id": "g_c_5",
-      "group": "Group C",
-      "teamA": "scotland",
-      "teamB": "brazil",
-      "date": "2026-06-24",
-      "time": "18:00",
-      "venue": "Hard Rock Stadium, Miami Gardens",
-      "actualScore": null
-    },
-    {
-      "id": "g_c_6",
-      "group": "Group C",
-      "teamA": "morocco",
-      "teamB": "haiti",
-      "date": "2026-06-24",
-      "time": "18:00",
-      "venue": "Mercedes-Benz Stadium, Atlanta",
-      "actualScore": null
-    },
-    {
-      "id": "g_d_1",
-      "group": "Group D",
-      "teamA": "usa",
-      "teamB": "paraguay",
-      "date": "2026-06-12",
-      "time": "21:00",
-      "venue": "SoFi Stadium, Inglewood",
-      "actualScore": null
-    },
-    {
-      "id": "g_d_2",
-      "group": "Group D",
-      "teamA": "australia",
-      "teamB": "turkiye",
-      "date": "2026-06-14",
-      "time": "00:00",
-      "venue": "BC Place, Vancouver",
-      "actualScore": null
-    },
-    {
-      "id": "g_d_3",
-      "group": "Group D",
-      "teamA": "usa",
-      "teamB": "australia",
-      "date": "2026-06-19",
-      "time": "15:00",
-      "venue": "Lumen Field, Seattle",
-      "actualScore": null
-    },
-    {
-      "id": "g_d_4",
-      "group": "Group D",
-      "teamA": "turkiye",
-      "teamB": "paraguay",
-      "date": "2026-06-19",
-      "time": "23:00",
-      "venue": "Levi's Stadium, Santa Clara",
-      "actualScore": null
-    },
-    {
-      "id": "g_d_5",
-      "group": "Group D",
-      "teamA": "turkiye",
-      "teamB": "usa",
-      "date": "2026-06-25",
-      "time": "22:00",
-      "venue": "SoFi Stadium, Inglewood",
-      "actualScore": null
-    },
-    {
-      "id": "g_d_6",
-      "group": "Group D",
-      "teamA": "paraguay",
-      "teamB": "australia",
-      "date": "2026-06-25",
-      "time": "22:00",
-      "venue": "Levi's Stadium, Santa Clara",
-      "actualScore": null
-    },
-    {
-      "id": "g_e_1",
-      "group": "Group E",
-      "teamA": "germany",
-      "teamB": "curacao",
-      "date": "2026-06-14",
-      "time": "13:00",
-      "venue": "NRG Stadium, Houston",
-      "actualScore": null
-    },
-    {
-      "id": "g_e_2",
-      "group": "Group E",
-      "teamA": "ivorycoast",
-      "teamB": "ecuador",
-      "date": "2026-06-14",
-      "time": "19:00",
-      "venue": "Lincoln Financial Field, Philadelphia",
-      "actualScore": null
-    },
-    {
-      "id": "g_e_3",
-      "group": "Group E",
-      "teamA": "germany",
-      "teamB": "ivorycoast",
-      "date": "2026-06-20",
-      "time": "16:00",
-      "venue": "BMO Field, Toronto",
-      "actualScore": null
-    },
-    {
-      "id": "g_e_4",
-      "group": "Group E",
-      "teamA": "ecuador",
-      "teamB": "curacao",
-      "date": "2026-06-20",
-      "time": "20:00",
-      "venue": "Arrowhead Stadium, Kansas City",
-      "actualScore": null
-    },
-    {
-      "id": "g_e_5",
-      "group": "Group E",
-      "teamA": "germany",
-      "teamB": "ecuador",
-      "date": "2026-06-25",
-      "time": "16:00",
-      "venue": "Lincoln Financial Field, Philadelphia",
-      "actualScore": null
-    },
-    {
-      "id": "g_e_6",
-      "group": "Group E",
-      "teamA": "curacao",
-      "teamB": "ivorycoast",
-      "date": "2026-06-25",
-      "time": "16:00",
-      "venue": "MetLife Stadium, East Rutherford",
-      "actualScore": null
-    },
-    {
-      "id": "g_f_1",
-      "group": "Group F",
-      "teamA": "netherlands",
-      "teamB": "japan",
-      "date": "2026-06-14",
-      "time": "16:00",
-      "venue": "AT&T Stadium, Arlington",
-      "actualScore": null
-    },
-    {
-      "id": "g_f_2",
-      "group": "Group F",
-      "teamA": "sweden",
-      "teamB": "tunisia",
-      "date": "2026-06-14",
-      "time": "22:00",
-      "venue": "Estadio BBVA, Monterrey",
-      "actualScore": null
-    },
-    {
-      "id": "g_f_3",
-      "group": "Group F",
-      "teamA": "netherlands",
-      "teamB": "sweden",
-      "date": "2026-06-20",
-      "time": "13:00",
-      "venue": "NRG Stadium, Houston",
-      "actualScore": null
-    },
-    {
-      "id": "g_f_4",
-      "group": "Group F",
-      "teamA": "tunisia",
-      "teamB": "japan",
-      "date": "2026-06-21",
-      "time": "00:00",
-      "venue": "Estadio BBVA, Monterrey",
-      "actualScore": null
-    },
-    {
-      "id": "g_f_5",
-      "group": "Group F",
-      "teamA": "netherlands",
-      "teamB": "tunisia",
-      "date": "2026-06-25",
-      "time": "19:00",
-      "venue": "AT&T Stadium, Arlington",
-      "actualScore": null
-    },
-    {
-      "id": "g_f_6",
-      "group": "Group F",
-      "teamA": "japan",
-      "teamB": "sweden",
-      "date": "2026-06-25",
-      "time": "19:00",
-      "venue": "Arrowhead Stadium, Kansas City",
-      "actualScore": null
-    },
-    {
-      "id": "g_g_1",
-      "group": "Group G",
-      "teamA": "belgium",
-      "teamB": "egypt",
-      "date": "2026-06-15",
-      "time": "15:00",
-      "venue": "Lumen Field, Seattle",
-      "actualScore": null
-    },
-    {
-      "id": "g_g_2",
-      "group": "Group G",
-      "teamA": "iran",
-      "teamB": "newzealand",
-      "date": "2026-06-15",
-      "time": "21:00",
-      "venue": "SoFi Stadium, Inglewood",
-      "actualScore": null
-    },
-    {
-      "id": "g_g_3",
-      "group": "Group G",
-      "teamA": "belgium",
-      "teamB": "iran",
-      "date": "2026-06-21",
-      "time": "15:00",
-      "venue": "SoFi Stadium, Inglewood",
-      "actualScore": null
-    },
-    {
-      "id": "g_g_4",
-      "group": "Group G",
-      "teamA": "newzealand",
-      "teamB": "egypt",
-      "date": "2026-06-21",
-      "time": "21:00",
-      "venue": "BC Place, Vancouver",
-      "actualScore": null
-    },
-    {
-      "id": "g_g_5",
-      "group": "Group G",
-      "teamA": "belgium",
-      "teamB": "newzealand",
-      "date": "2026-06-26",
-      "time": "23:00",
-      "venue": "Lumen Field, Seattle",
-      "actualScore": null
-    },
-    {
-      "id": "g_g_6",
-      "group": "Group G",
-      "teamA": "egypt",
-      "teamB": "iran",
-      "date": "2026-06-26",
-      "time": "23:00",
-      "venue": "BC Place, Vancouver",
-      "actualScore": null
-    },
-    {
-      "id": "g_h_1",
-      "group": "Group H",
-      "teamA": "spain",
-      "teamB": "capeverde",
-      "date": "2026-06-15",
-      "time": "12:00",
-      "venue": "Mercedes-Benz Stadium, Atlanta",
-      "actualScore": null
-    },
-    {
-      "id": "g_h_2",
-      "group": "Group H",
-      "teamA": "saudiarabia",
-      "teamB": "uruguay",
-      "date": "2026-06-15",
-      "time": "18:00",
-      "venue": "Hard Rock Stadium, Miami Gardens",
-      "actualScore": null
-    },
-    {
-      "id": "g_h_3",
-      "group": "Group H",
-      "teamA": "spain",
-      "teamB": "saudiarabia",
-      "date": "2026-06-21",
-      "time": "12:00",
-      "venue": "Mercedes-Benz Stadium, Atlanta",
-      "actualScore": null
-    },
-    {
-      "id": "g_h_4",
-      "group": "Group H",
-      "teamA": "uruguay",
-      "teamB": "capeverde",
-      "date": "2026-06-21",
-      "time": "18:00",
-      "venue": "Hard Rock Stadium, Miami Gardens",
-      "actualScore": null
-    },
-    {
-      "id": "g_h_5",
-      "group": "Group H",
-      "teamA": "spain",
-      "teamB": "uruguay",
-      "date": "2026-06-26",
-      "time": "20:00",
-      "venue": "NRG Stadium, Houston",
-      "actualScore": null
-    },
-    {
-      "id": "g_h_6",
-      "group": "Group H",
-      "teamA": "capeverde",
-      "teamB": "saudiarabia",
-      "date": "2026-06-26",
-      "time": "20:00",
-      "venue": "Estadio Akron, Zapopan",
-      "actualScore": null
-    },
-    {
-      "id": "g_i_1",
-      "group": "Group I",
-      "teamA": "france",
-      "teamB": "senegal",
-      "date": "2026-06-16",
-      "time": "15:00",
-      "venue": "MetLife Stadium, East Rutherford",
-      "actualScore": null
-    },
-    {
-      "id": "g_i_2",
-      "group": "Group I",
-      "teamA": "iraq",
-      "teamB": "norway",
-      "date": "2026-06-16",
-      "time": "18:00",
-      "venue": "Gillette Stadium, Foxborough",
-      "actualScore": null
-    },
-    {
-      "id": "g_i_3",
-      "group": "Group I",
-      "teamA": "france",
-      "teamB": "norway",
-      "date": "2026-06-22",
-      "time": "17:00",
-      "venue": "Lincoln Financial Field, Philadelphia",
-      "actualScore": null
-    },
-    {
-      "id": "g_i_4",
-      "group": "Group I",
-      "teamA": "senegal",
-      "teamB": "iraq",
-      "date": "2026-06-22",
-      "time": "20:00",
-      "venue": "MetLife Stadium, East Rutherford",
-      "actualScore": null
-    },
-    {
-      "id": "g_i_5",
-      "group": "Group I",
-      "teamA": "france",
-      "teamB": "iraq",
-      "date": "2026-06-26",
-      "time": "15:00",
-      "venue": "Gillette Stadium, Foxborough",
-      "actualScore": null
-    },
-    {
-      "id": "g_i_6",
-      "group": "Group I",
-      "teamA": "senegal",
-      "teamB": "norway",
-      "date": "2026-06-26",
-      "time": "15:00",
-      "venue": "BMO Field, Toronto",
-      "actualScore": null
-    },
-    {
-      "id": "g_j_1",
-      "group": "Group J",
-      "teamA": "argentina",
-      "teamB": "algeria",
-      "date": "2026-06-16",
-      "time": "21:00",
-      "venue": "Arrowhead Stadium, Kansas City",
-      "actualScore": null
-    },
-    {
-      "id": "g_j_2",
-      "group": "Group J",
-      "teamA": "austria",
-      "teamB": "jordan",
-      "date": "2026-06-17",
-      "time": "00:00",
-      "venue": "Levi's Stadium, Santa Clara",
-      "actualScore": null
-    },
-    {
-      "id": "g_j_3",
-      "group": "Group J",
-      "teamA": "argentina",
-      "teamB": "austria",
-      "date": "2026-06-22",
-      "time": "13:00",
-      "venue": "AT&T Stadium, Arlington",
-      "actualScore": null
-    },
-    {
-      "id": "g_j_4",
-      "group": "Group J",
-      "teamA": "jordan",
-      "teamB": "algeria",
-      "date": "2026-06-22",
-      "time": "23:00",
-      "venue": "Levi's Stadium, Santa Clara",
-      "actualScore": null
-    },
-    {
-      "id": "g_j_5",
-      "group": "Group J",
-      "teamA": "argentina",
-      "teamB": "jordan",
-      "date": "2026-06-27",
-      "time": "22:00",
-      "venue": "Arrowhead Stadium, Kansas City",
-      "actualScore": null
-    },
-    {
-      "id": "g_j_6",
-      "group": "Group J",
-      "teamA": "algeria",
-      "teamB": "austria",
-      "date": "2026-06-27",
-      "time": "22:00",
-      "venue": "AT&T Stadium, Arlington",
-      "actualScore": null
-    },
-    {
-      "id": "g_k_1",
-      "group": "Group K",
-      "teamA": "portugal",
-      "teamB": "drcongo",
-      "date": "2026-06-17",
-      "time": "13:00",
-      "venue": "NRG Stadium, Houston",
-      "actualScore": null
-    },
-    {
-      "id": "g_k_2",
-      "group": "Group K",
-      "teamA": "uzbekistan",
-      "teamB": "colombia",
-      "date": "2026-06-17",
-      "time": "22:00",
-      "venue": "Estadio Azteca, Mexico City",
-      "actualScore": null
-    },
-    {
-      "id": "g_k_3",
-      "group": "Group K",
-      "teamA": "portugal",
-      "teamB": "uzbekistan",
-      "date": "2026-06-23",
-      "time": "13:00",
-      "venue": "NRG Stadium, Houston",
-      "actualScore": null
-    },
-    {
-      "id": "g_k_4",
-      "group": "Group K",
-      "teamA": "colombia",
-      "teamB": "drcongo",
-      "date": "2026-06-23",
-      "time": "22:00",
-      "venue": "Estadio Akron, Zapopan",
-      "actualScore": null
-    },
-    {
-      "id": "g_k_5",
-      "group": "Group K",
-      "teamA": "colombia",
-      "teamB": "portugal",
-      "date": "2026-06-27",
-      "time": "19:30",
-      "venue": "Hard Rock Stadium, Miami Gardens",
-      "actualScore": null
-    },
-    {
-      "id": "g_k_6",
-      "group": "Group K",
-      "teamA": "drcongo",
-      "teamB": "uzbekistan",
-      "date": "2026-06-27",
-      "time": "19:30",
-      "venue": "Mercedes-Benz Stadium, Atlanta",
-      "actualScore": null
-    },
-    {
-      "id": "g_l_1",
-      "group": "Group L",
-      "teamA": "england",
-      "teamB": "croatia",
-      "date": "2026-06-17",
-      "time": "16:00",
-      "venue": "AT&T Stadium, Arlington",
-      "actualScore": null
-    },
-    {
-      "id": "g_l_2",
-      "group": "Group L",
-      "teamA": "ghana",
-      "teamB": "panama",
-      "date": "2026-06-17",
-      "time": "19:00",
-      "venue": "BMO Field, Toronto",
-      "actualScore": null
-    },
-    {
-      "id": "g_l_3",
-      "group": "Group L",
-      "teamA": "england",
-      "teamB": "ghana",
-      "date": "2026-06-23",
-      "time": "16:00",
-      "venue": "Gillette Stadium, Foxborough",
-      "actualScore": null
-    },
-    {
-      "id": "g_l_4",
-      "group": "Group L",
-      "teamA": "panama",
-      "teamB": "croatia",
-      "date": "2026-06-23",
-      "time": "19:00",
-      "venue": "BMO Field, Toronto",
-      "actualScore": null
-    },
-    {
-      "id": "g_l_5",
-      "group": "Group L",
-      "teamA": "panama",
-      "teamB": "england",
-      "date": "2026-06-27",
-      "time": "17:00",
-      "venue": "MetLife Stadium, East Rutherford",
-      "actualScore": null
-    },
-    {
-      "id": "g_l_6",
-      "group": "Group L",
-      "teamA": "croatia",
-      "teamB": "ghana",
-      "date": "2026-06-27",
-      "time": "17:00",
-      "venue": "Lincoln Financial Field, Philadelphia",
-      "actualScore": null
-    }
-  ]
+  }
 }

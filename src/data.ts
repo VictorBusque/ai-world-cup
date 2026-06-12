@@ -1,4 +1,6 @@
-import { Team, Match, AIModel, TournamentJSON, TournamentMatchJSON, ModelJSON, ModelPlayoffPrediction } from "./types";
+import { Team, Match, AIModel, ModelJSON, ModelPlayoffPrediction } from "./types";
+
+const API_URL = "https://n8n.stack.victorbusque.com/webhook/get-wc-data";
 
 // Hardcoded model registry with metadata — add new entries when you drop a new JSON
 const MODEL_FILES: { id: string; name: string; provider: string; avatarColor: string }[] = [
@@ -15,9 +17,23 @@ const MODEL_FILES: { id: string; name: string; provider: string; avatarColor: st
   { id: "nemotron-3-super", name: "Nemotron 3 Super", provider: "NVIDIA", avatarColor: "from-lime-500 to-green-600" },
 ];
 
+/** API match shape from the n8n webhook */
+interface ApiMatch {
+  team_a: string | null;
+  team_b: string | null;
+  score: string;
+  status: string; // "FINISHED" | "TIMED" | "IN_PLAY" | etc.
+  stage: string;  // "GROUP_STAGE" | "GROUP_STAGE GROUP_A"
+  started_at: string | null; // ISO datetime
+  referee_from: string | null;
+  match_id: string;
+  group?: string; // "GROUP_A" (newer API responses)
+  id: number;
+}
+
 /**
- * Fetch tournament.json + all model JSON files in parallel,
- * then hydrate into the internal Match[] / AIModel[] shapes.
+ * Fetch teams from static JSON + all match data from the live API,
+ * then hydrate into internal Match[] / AIModel[] shapes.
  */
 export async function loadData(): Promise<{
   teams: Record<string, Team>;
@@ -29,18 +45,47 @@ export async function loadData(): Promise<{
 }> {
   const baseUrl = import.meta.env.BASE_URL;
 
-  // Parallel fetch: tournament + all models
-  const [tournamentRes, ...modelReses] = await Promise.all([
+  // Parallel fetch: teams + API matches + all models
+  const [teamsRes, apiRes, ...modelReses] = await Promise.all([
     fetch(`${baseUrl}data/tournament.json`),
+    fetch(API_URL).catch(() => null),
     ...MODEL_FILES.map(m => fetch(`${baseUrl}data/models/${m.id}.json`)),
   ]);
 
-  if (!tournamentRes.ok) throw new Error(`Failed to load tournament.json: ${tournamentRes.status}`);
+  if (!teamsRes.ok) throw new Error(`Failed to load tournament.json: ${teamsRes.status}`);
 
-  const tournament: TournamentJSON = await tournamentRes.json();
-  const teams = tournament.teams;
+  const { teams }: { teams: Record<string, Team> } = await teamsRes.json();
 
-  // Parse models using hardcoded metadata
+  // Build code → Team lookup
+  const codeToTeam: Record<string, Team> = {};
+  for (const team of Object.values(teams)) {
+    codeToTeam[team.code] = team;
+  }
+
+  // ── Parse API match data ──────────────────────────────────────────────
+  let apiMatches: ApiMatch[] = [];
+  if (apiRes && apiRes.ok) {
+    try {
+      const data = await apiRes.json();
+      if (Array.isArray(data)) {
+        apiMatches = data;
+      } else if (data && typeof data === "object") {
+        // Handle { data: [...] } wrapper
+        if (Array.isArray(data.data)) {
+          apiMatches = data.data;
+        } else if (data.team_a !== undefined) {
+          apiMatches = [data];
+        }
+      }
+    } catch {
+      console.warn("Failed to parse API response");
+    }
+  }
+
+  // Filter out entries with null teams
+  apiMatches = apiMatches.filter(m => m.team_a && m.team_b);
+
+  // ── Parse model predictions ──────────────────────────────────────────
   const models: AIModel[] = [];
   const rawPredictions: Record<string, Record<string, Record<string, number | string>>> = {};
   const modelJsons: ModelJSON[] = [];
@@ -73,75 +118,110 @@ export async function loadData(): Promise<{
     modelJsons.push(json);
   }
 
-  // Build a reverse map: teamCode → teamId for resolving predictions
-  const codeToId: Record<string, string> = {};
-  for (const [id, team] of Object.entries(teams)) {
-    codeToId[team.code] = id;
-  }
+  // ── Build prediction lookup by team code pair ─────────────────────────
+  // Key: "TEAMACODE-TEAMBCODE" (same order as model JSON entry)
+  // Value: { teamAScore, teamBScore, summary? }
+  const predLookup: Record<string, Record<string, { teamAScore: number; teamBScore: number; summary?: string }>> = {};
 
-  // Hydrate matches: resolve team IDs to full objects + convert predictions
-  const matches: Match[] = tournament.matches.map((m: TournamentMatchJSON) => {
-    const teamA = teams[m.teamA];
-    const teamB = teams[m.teamB];
+  for (let i = 0; i < models.length; i++) {
+    const model = models[i];
+    const json = modelJsons[i];
+    if (!json) continue;
 
-    if (!teamA || !teamB) {
-      throw new Error(`Match ${m.id} references unknown team: ${m.teamA} or ${m.teamB}`);
-    }
+    predLookup[model.id] = {};
 
-    // Convert each model's { "MEX": 2, "RSA": 0, "summary": "..." } → { teamAScore, teamBScore }
-    const predictions: Match["predictions"] = {};
-    for (const meta of MODEL_FILES) {
-      const pred = rawPredictions[meta.id]?.[m.id];
-      if (!pred) continue;
+    for (const [matchKey, pred] of Object.entries(json)) {
+      // Skip playoff entries (m73–m104)
+      if (/^m\d+$/.test(matchKey)) {
+        const num = parseInt(matchKey.slice(1));
+        if (num >= 73) continue;
+      }
 
-      // Filter out non-numeric keys like "summary" to get team codes
       const codes = Object.keys(pred).filter(k => typeof pred[k] === "number");
-      if (codes.length !== 2) {
-        console.warn(`Model ${meta.id} match ${m.id}: expected 2 team codes, got ${codes.length}`);
-        continue;
-      }
+      if (codes.length !== 2) continue;
 
-      const scoreA = pred[teamA.code];
-      const scoreB = pred[teamB.code];
-
-      if (scoreA === undefined || scoreB === undefined) {
-        console.warn(`Model ${meta.id} match ${m.id}: codes ${codes.join(",")} don't match ${teamA.code}/${teamB.code}`);
-        continue;
-      }
-
-      const entry: { teamAScore: number; teamBScore: number; summary?: string } = {
-        teamAScore: scoreA as number,
-        teamBScore: scoreB as number,
+      // Store both orderings so lookup works regardless of API order
+      const entry = {
+        teamAScore: pred[codes[0]] as number,
+        teamBScore: pred[codes[1]] as number,
+        ...(typeof pred["summary"] === "string" ? { summary: pred["summary"] as string } : {}),
       };
 
-      if (typeof pred["summary"] === "string") {
-        entry.summary = pred["summary"];
-      }
+      predLookup[model.id][`${codes[0]}-${codes[1]}`] = entry;
 
-      predictions[meta.id] = entry;
+      // Reverse ordering
+      predLookup[model.id][`${codes[1]}-${codes[0]}`] = {
+        teamAScore: entry.teamBScore,
+        teamBScore: entry.teamAScore,
+        ...(entry.summary ? { summary: entry.summary } : {}),
+      };
+    }
+  }
+
+  // ── Build Match objects from API data ─────────────────────────────────
+  const matches: Match[] = apiMatches.map(am => {
+    const teamA = codeToTeam[am.team_a!];
+    const teamB = codeToTeam[am.team_b!];
+    if (!teamA || !teamB) return null;
+
+    // Parse group: prefer direct "group" field, then fall back to stage
+    let group = "";
+    if (am.group) {
+      // "GROUP_A" → "Group A"
+      const g = am.group.replace(/^GROUP_/, "Group ");
+      group = g;
+    } else {
+      const stageMatch = am.stage?.match(/GROUP_([A-Z])/);
+      if (stageMatch) group = `Group ${stageMatch[1]}`;
     }
 
+    // Parse actualScore: "2-0" → {teamA:2, teamB:0}, "-" → null
+    let actualScore: { teamA: number; teamB: number } | null = null;
+    if (am.score && am.score !== "-" && am.status === "FINISHED") {
+      const parts = am.score.split("-");
+      if (parts.length === 2 && !isNaN(parseInt(parts[0])) && !isNaN(parseInt(parts[1]))) {
+        actualScore = { teamA: parseInt(parts[0]), teamB: parseInt(parts[1]) };
+      }
+    }
+
+    // Parse date/time from started_at ISO string
+    let date = "";
+    let time = "";
+    if (am.started_at) {
+      const d = new Date(am.started_at);
+      date = d.toISOString().split("T")[0]; // "2026-06-11"
+      const timePart = d.toISOString().split("T")[1]; // "19:00:00.000Z"
+      time = timePart.substring(0, 5); // "19:00"
+    }
+
+    // Look up predictions by team code pair
+    const predictions: Match["predictions"] = {};
+    const predKey = `${am.team_a}-${am.team_b}`;
+    for (const model of models) {
+      const pred = predLookup[model.id]?.[predKey];
+      if (pred) {
+        predictions[model.id] = pred;
+      }
+    }
+
+    // Derive a readable match ID from the API match_id
+    // "GROUP_STAGE:GROUP_A:MEX-RSA" → keep as-is for uniqueness
+    const id = am.match_id || String(am.id);
+
     return {
-      id: m.id,
-      group: m.group,
+      id,
+      group,
       teamA,
       teamB,
-      date: m.date,
-      time: m.time,
-      venue: m.venue,
-      actualScore: m.actualScore,
+      date,
+      time,
+      venue: "", // API doesn't provide venue yet
+      actualScore,
       predictions,
     };
-  });
+  }).filter(Boolean) as Match[];
 
-  // Parse playoff predictions from model JSONs
-  // Flat keys m73-m104 in each model JSON represent playoff matches:
-  //   m73-m88  = Round of 32  (16 matches)
-  //   m89-m96  = Round of 16  (8 matches)
-  //   m97-m100 = Quarter-finals (4 matches)
-  //   m101-m102 = Semi-finals (2 matches)
-  //   m103     = Bronze match (1 match)
-  //   m104     = Final (1 match)
+  // ── Parse playoff predictions (unchanged, uses model JSON keys directly) ──
   const PLAYOFF_MATCH_RANGES: Record<string, [number, number]> = {
     r32: [73, 88],
     r16: [89, 96],
@@ -158,7 +238,6 @@ export async function loadData(): Promise<{
     const json = modelJsons[i];
     if (!json) continue;
 
-    // Check if any playoff match exists
     const hasPlayoffData = Object.entries(PLAYOFF_MATCH_RANGES).some(([, range]) => {
       const [start, end] = range;
       return Array.from({ length: end - start + 1 }, (_, j) => `m${start + j}`).some(k => k in json);
