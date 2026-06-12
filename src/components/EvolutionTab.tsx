@@ -20,7 +20,7 @@ function buildEvolutionData(models: AIModel[], matches: Match[]): {
   points: EvolutionPoint[];
   modelIds: string[];
 } {
-  const completedMatches = matches.filter(m => m.actualScore !== null);
+  const completedMatches = matches.filter(m => m.status === "FINISHED" && m.actualScore !== null);
   const modelIds = models.map(m => m.id);
   const cumulative: Record<string, number> = {};
   modelIds.forEach(id => { cumulative[id] = 0; });

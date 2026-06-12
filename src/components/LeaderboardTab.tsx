@@ -11,7 +11,7 @@ interface LeaderboardTabProps {
 }
 
 export default React.memo(function LeaderboardTab({ models, matches, totalGroupMatches, onSelectModel }: LeaderboardTabProps) {
-  const completedCount = matches.filter(m => m.actualScore !== null).length;
+  const completedCount = matches.filter(m => m.status === "FINISHED" && m.actualScore !== null).length;
 
   return (
     <div className="space-y-6">

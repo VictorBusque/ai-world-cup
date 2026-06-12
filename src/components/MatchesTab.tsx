@@ -22,7 +22,7 @@ export default React.memo(function MatchesTab({ matches, models }: MatchesTabPro
     return ["All", ...uniqueGroups];
   }, [matches]);
 
-  const statuses = ["All", "Completed", "Upcoming"];
+  const statuses = ["All", "Completed", "Live", "Upcoming"];
 
   // Filter & sort matches by date then time
   const filteredMatches = matches
@@ -30,8 +30,9 @@ export default React.memo(function MatchesTab({ matches, models }: MatchesTabPro
       const groupMatches = selectedGroup === "All" || match.group === selectedGroup;
       const statusMatches = 
         selectedStatus === "All" || 
-        (selectedStatus === "Completed" && match.actualScore !== null) ||
-        (selectedStatus === "Upcoming" && match.actualScore === null);
+        (selectedStatus === "Completed" && match.status === "FINISHED" && match.actualScore !== null) ||
+        (selectedStatus === "Live" && match.status === "IN_PLAY") ||
+        (selectedStatus === "Upcoming" && match.actualScore === null && match.status !== "IN_PLAY");
       return groupMatches && statusMatches;
     })
     .sort((a, b) => {
@@ -201,6 +202,11 @@ export default React.memo(function MatchesTab({ matches, models }: MatchesTabPro
                           <span className="text-4xl md:text-5xl font-display text-white tracking-widest leading-none">
                             {match.actualScore.teamB}
                           </span>
+                          {match.status === "IN_PLAY" && (
+                            <span className="ml-2 px-2 py-0.5 bg-red-600 text-white text-[10px] font-black uppercase tracking-wider animate-pulse">
+                              Live
+                            </span>
+                          )}
                         </div>
                       ) : (
                         <div className="text-[10px] uppercase font-mono bg-black px-3.5 py-2 border-2 border-zinc-800 text-zinc-500 font-black tracking-widest">

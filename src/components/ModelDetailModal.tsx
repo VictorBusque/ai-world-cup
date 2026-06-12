@@ -18,8 +18,8 @@ export default React.memo(function ModelDetailModal({ model, matches, teams, mod
     match,
     pred: match.predictions[model.id],
   })).sort((a, b) => {
-    const aCompleted = a.match.actualScore !== null ? 0 : 1;
-    const bCompleted = b.match.actualScore !== null ? 0 : 1;
+    const aCompleted = a.match.status === "FINISHED" && a.match.actualScore !== null ? 0 : (a.match.status === "IN_PLAY" ? 1 : 2);
+    const bCompleted = b.match.status === "FINISHED" && b.match.actualScore !== null ? 0 : (b.match.status === "IN_PLAY" ? 1 : 2);
     if (aCompleted !== bCompleted) return aCompleted - bCompleted;
     return (a.match.date + a.match.time).localeCompare(b.match.date + b.match.time);
   });
@@ -117,12 +117,13 @@ export default React.memo(function ModelDetailModal({ model, matches, teams, mod
           <div>
             <h3 className="text-[11px] uppercase font-mono tracking-wider font-extrabold text-zinc-400 mb-3 flex items-center gap-1.5">
               <Activity className="h-4 w-4 text-yellow-400" />
-              Group Stage Predictions ({modelMatches.filter(m => m.match.actualScore !== null).length} Played / {modelMatches.length} Total)
+              Group Stage Predictions ({modelMatches.filter(m => m.match.status === "FINISHED" && m.match.actualScore !== null).length} Played / {modelMatches.length} Total)
             </h3>
 
             <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
               {modelMatches.map(({ match, pred }) => {
-                const isCompleted = match.actualScore !== null;
+                const isCompleted = match.status === "FINISHED" && match.actualScore !== null;
+                const isLive = match.status === "IN_PLAY" && match.actualScore !== null;
                 
                 let evaluationBadge: React.ReactNode = null;
                 if (!pred) {
@@ -176,7 +177,7 @@ export default React.memo(function ModelDetailModal({ model, matches, teams, mod
                   >
                     <div className="flex items-center justify-between gap-4 text-xs font-sans">
                       <div className="flex flex-col gap-0.5 min-w-[100px]">
-                        <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-wide">{match.group} {isCompleted ? "• Completed" : "• Upcoming"}</span>
+                        <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-wide">{match.group} {isCompleted ? "• Completed" : isLive ? "• Live" : "• Upcoming"}</span>
                         <div className="font-bold text-white uppercase text-xs">
                           {match.teamA.flag} {match.teamA.code} vs {match.teamB.flag} {match.teamB.code}
                         </div>
@@ -201,8 +202,8 @@ export default React.memo(function ModelDetailModal({ model, matches, teams, mod
                         {/* Actual Score bubble */}
                         <div className="text-center">
                           <span className="text-[9px] text-zinc-500 block uppercase font-mono">Actual</span>
-                          <span className={`font-mono font-black bg-black/60 border px-2.5 py-0.5 rounded-none block ${isCompleted ? "text-emerald-400 border-emerald-400/30" : "text-zinc-400 border-zinc-800"}`}>
-                            {isCompleted ? `${match.actualScore!.teamA}-${match.actualScore!.teamB}` : "—"}
+                          <span className={`font-mono font-black bg-black/60 border px-2.5 py-0.5 rounded-none block ${(isCompleted || isLive) ? (isLive ? "text-red-400 border-red-400/30" : "text-emerald-400 border-emerald-400/30") : "text-zinc-400 border-zinc-800"}`}>
+                            {(isCompleted || isLive) ? `${match.actualScore!.teamA}-${match.actualScore!.teamB}` : "—"}
                           </span>
                         </div>
                       </div>

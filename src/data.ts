@@ -281,7 +281,8 @@ export async function loadData(): Promise<{
 
     // Parse actualScore: "2-0" → {teamA:2, teamB:0}, "-" → null
     let actualScore: { teamA: number; teamB: number } | null = null;
-    if (am.score && am.score !== "-" && am.status === "FINISHED") {
+    const isLiveOrFinished = am.status === "FINISHED" || am.status === "IN_PLAY";
+    if (am.score && am.score !== "-" && isLiveOrFinished) {
       const parts = am.score.split("-");
       if (parts.length === 2 && !isNaN(parseInt(parts[0])) && !isNaN(parseInt(parts[1]))) {
         actualScore = { teamA: parseInt(parts[0]), teamB: parseInt(parts[1]) };
@@ -325,6 +326,7 @@ export async function loadData(): Promise<{
       date,
       time,
       venue: "", // API doesn't provide venue yet
+      status: am.status || "TIMED",
       actualScore,
       predictions,
     };

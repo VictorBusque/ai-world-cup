@@ -53,6 +53,7 @@ export interface Match {
   date: string;
   time: string;
   venue: string;
+  status: "FINISHED" | "IN_PLAY" | "TIMED" | string;
   actualScore: { teamA: number; teamB: number } | null;
   predictions: Record<string, { teamAScore: number; teamBScore: number; summary?: string }>;
 }

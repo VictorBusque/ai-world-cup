@@ -10,7 +10,7 @@ export function analyzePredictions(matches: Match[], models: AIModel[]): AIModel
     avgGoalDeviation: 0
   }));
 
-  const completedMatches = matches.filter(m => m.actualScore !== null);
+  const completedMatches = matches.filter(m => m.status === "FINISHED" && m.actualScore !== null);
   const totalCompleted = completedMatches.length;
 
   updatedModels.forEach(model => {
@@ -26,7 +26,7 @@ export function analyzePredictions(matches: Match[], models: AIModel[]): AIModel
         matchesWithPred += 1;
       }
 
-      if (match.actualScore && pred) {
+      if (match.status === "FINISHED" && match.actualScore && pred) {
         const actScore = match.actualScore;
         const actDiff = actScore.teamA - actScore.teamB;
         const predDiff = pred.teamAScore - pred.teamBScore;
@@ -77,7 +77,7 @@ export function calculateActualStandings(group: string, teams: Team[], matches: 
     };
   });
 
-  const groupMatches = matches.filter(m => m.group === group && m.actualScore !== null);
+  const groupMatches = matches.filter(m => m.group === group && m.status === "FINISHED" && m.actualScore !== null);
 
   groupMatches.forEach(m => {
     const act = m.actualScore!;
