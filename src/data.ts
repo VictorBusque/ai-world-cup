@@ -135,33 +135,66 @@ export async function loadData(): Promise<{
   });
 
   // Parse playoff predictions from model JSONs
-  const ROUND_KEYS = ["r32", "r16", "qf", "sf", "bronze", "final"] as const;
+  // Flat keys m73-m104 in each model JSON represent playoff matches:
+  //   m73-m88  = Round of 32  (16 matches)
+  //   m89-m96  = Round of 16  (8 matches)
+  //   m97-m100 = Quarter-finals (4 matches)
+  //   m101-m102 = Semi-finals (2 matches)
+  //   m103     = Bronze match (1 match)
+  //   m104     = Final (1 match)
+  const PLAYOFF_MATCH_RANGES: Record<string, [number, number]> = {
+    r32: [73, 88],
+    r16: [89, 96],
+    qf: [97, 100],
+    sf: [101, 102],
+    bronze: [103, 103],
+    final: [104, 104],
+  };
+
   const modelPlayoffPredictions: ModelPlayoffPrediction[] = [];
 
   for (let i = 0; i < models.length; i++) {
     const model = models[i];
     const json = modelJsons[i];
-    if (!json?.["playoffs"]) continue;
+    if (!json) continue;
 
-    const playoffData = json["playoffs"] as Record<string, Record<string, Record<string, number | string>>>;
+    // Check if any playoff match exists
+    const hasPlayoffData = Object.entries(PLAYOFF_MATCH_RANGES).some(([, range]) => {
+      const [start, end] = range;
+      return Array.from({ length: end - start + 1 }, (_, j) => `m${start + j}`).some(k => k in json);
+    });
+    if (!hasPlayoffData) continue;
+
     const rounds: ModelPlayoffPrediction["rounds"] = {};
 
-    for (const roundKey of ROUND_KEYS) {
-      const roundData = playoffData[roundKey];
-      if (!roundData) continue;
+    for (const [roundKey, [start, end]] of Object.entries(PLAYOFF_MATCH_RANGES)) {
+      const parsedMatches: Record<string, { teamA: string; teamAScore: number; teamB: string; teamBScore: number; summary?: string }> = {};
 
-      const parsedMatches: Record<string, { teamA: string; teamAScore: number; teamB: string; teamBScore: number }> = {};
-      for (const [matchId, scores] of Object.entries(roundData)) {
+      for (let m = start; m <= end; m++) {
+        const matchId = `m${m}`;
+        const scores = json[matchId];
+        if (!scores) continue;
+
         const codes = Object.keys(scores).filter(k => typeof scores[k] === "number");
         if (codes.length !== 2) continue;
-        parsedMatches[matchId] = {
+
+        const entry: { teamA: string; teamAScore: number; teamB: string; teamBScore: number; summary?: string } = {
           teamA: codes[0],
           teamAScore: scores[codes[0]] as number,
           teamB: codes[1],
           teamBScore: scores[codes[1]] as number,
         };
+
+        if (typeof scores["summary"] === "string") {
+          entry.summary = scores["summary"];
+        }
+
+        parsedMatches[matchId] = entry;
       }
-      rounds[roundKey] = parsedMatches;
+
+      if (Object.keys(parsedMatches).length > 0) {
+        rounds[roundKey] = parsedMatches;
+      }
     }
 
     // Derive champion and runner-up from the final

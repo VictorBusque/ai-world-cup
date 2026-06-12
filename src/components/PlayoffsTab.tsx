@@ -11,13 +11,14 @@ interface PlayoffsTabProps {
   modelPlayoffPredictions: ModelPlayoffPrediction[];
 }
 
-const ROUND_ORDER = ["r32", "r16", "qf", "sf", "final"] as const;
+const ROUND_ORDER = ["r32", "r16", "qf", "sf", "bronze", "final"] as const;
 
 const ROUND_META: Record<string, { label: string; short: string }> = {
   r32: { label: "ROUND OF 32", short: "R32" },
   r16: { label: "ROUND OF 16", short: "R16" },
   qf: { label: "QUARTER-FINALS", short: "QF" },
   sf: { label: "SEMI-FINALS", short: "SF" },
+  bronze: { label: "BRONZE MATCH", short: "3RD" },
   final: { label: "FINAL", short: "F" },
 };
 
@@ -26,6 +27,7 @@ const ROUND_COUNTS: Record<string, number> = {
   r16: 8,
   qf: 4,
   sf: 2,
+  bronze: 1,
   final: 1,
 };
 
