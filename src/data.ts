@@ -12,7 +12,6 @@ const MODEL_FILES = [
   "deepseek-v4-flash",
   "mistral-medium-3.5",
   "glm-5.1",
-  // "nemotron-3-ultra",
   "kimi-k2.6",
 ];
 

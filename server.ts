@@ -112,6 +112,11 @@ async function startServer() {
     console.log("Vite development server middleware loaded.");
   } else {
     const distPath = path.join(process.cwd(), "dist");
+    // Serve static assets under the Vite base path (/ai-world-cup/) so that
+    // the production build's asset and data fetches resolve correctly.
+    // Also serve at root as a fallback.
+    const base = "/ai-world-cup";
+    app.use(base, express.static(distPath));
     app.use(express.static(distPath));
     app.get("*", (req, res) => {
       res.sendFile(path.join(distPath, "index.html"));
