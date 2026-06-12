@@ -119,7 +119,7 @@ export default function LeaderboardTab({ models, matches, onSelectModel }: Leade
                 <th className="py-4 px-4 text-center font-black">Exact (3pt)</th>
                 <th className="py-4 px-4 text-center font-black">Outcome (1pt)</th>
                 <th className="py-4 px-4 text-center font-black">Avg Goals</th>
-                <th className="py-4 px-5 font-black">Core Strategy</th>
+                <th className="py-4 px-5 font-black">Provider</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-900">
@@ -158,7 +158,7 @@ export default function LeaderboardTab({ models, matches, onSelectModel }: Leade
                             {model.name}
                           </span>
                           <span className="text-[10px] text-zinc-500 block font-mono uppercase tracking-wider">
-                            {model.provider} • {model.version}
+                            {model.provider}
                           </span>
                         </div>
                       </div>
@@ -201,11 +201,11 @@ export default function LeaderboardTab({ models, matches, onSelectModel }: Leade
                       {model.avgPredictedGoals}
                     </td>
 
-                    {/* Core Strategy */}
+                    {/* Provider */}
                     <td className="py-4 px-5">
-                      <p className="text-xs text-zinc-405 line-clamp-2 max-w-sm font-sans italic group-hover:text-zinc-200 transition-colors">
-                        "{model.style}"
-                      </p>
+                      <span className="text-xs text-zinc-400 font-mono uppercase tracking-wider group-hover:text-zinc-200 transition-colors">
+                        {model.provider}
+                      </span>
                     </td>
                   </motion.tr>
                 );

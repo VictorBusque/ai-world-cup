@@ -1,7 +1,6 @@
 import { Match, AIModel, GroupStanding, Team } from "./types";
 
 export function analyzePredictions(matches: Match[], models: AIModel[]): AIModel[] {
-  // Reset stats
   const updatedModels = models.map(m => ({
     ...m,
     points: 0,
@@ -15,14 +14,13 @@ export function analyzePredictions(matches: Match[], models: AIModel[]): AIModel
 
   updatedModels.forEach(model => {
     let totalPredGoals = 0;
-    
+
     matches.forEach(match => {
       const pred = match.predictions[model.id];
       if (pred) {
         totalPredGoals += (pred.teamAScore + pred.teamBScore);
       }
 
-      // If completed, compute points
       if (match.actualScore && pred) {
         const actScore = match.actualScore;
         const actDiff = actScore.teamA - actScore.teamB;
@@ -45,12 +43,10 @@ export function analyzePredictions(matches: Match[], models: AIModel[]): AIModel
       }
     });
 
-    // Stats
     model.avgPredictedGoals = +(totalPredGoals / Math.max(1, matches.length)).toFixed(2);
     model.accuracy = totalCompleted > 0 ? Math.round((model.correctOutcomes / totalCompleted) * 100) : 100;
   });
 
-  // Sort by points desc, accuracy desc, exactScores desc, name asc
   return updatedModels.sort((a, b) => {
     if (b.points !== a.points) return b.points - a.points;
     if (b.accuracy !== a.accuracy) return b.accuracy - a.accuracy;
@@ -65,17 +61,9 @@ export function calculateActualStandings(group: string, teams: Team[], matches: 
 
   groupTeams.forEach(t => {
     standingsMap[t.id] = {
-      teamId: t.id,
-      teamName: t.name,
-      flag: t.flag,
-      played: 0,
-      won: 0,
-      drawn: 0,
-      lost: 0,
-      gf: 0,
-      ga: 0,
-      gd: 0,
-      pts: 0
+      teamId: t.id, teamName: t.name, flag: t.flag,
+      played: 0, won: 0, drawn: 0, lost: 0,
+      gf: 0, ga: 0, gd: 0, pts: 0
     };
   });
 
@@ -87,34 +75,17 @@ export function calculateActualStandings(group: string, teams: Team[], matches: 
     const tB = standingsMap[m.teamB.id];
 
     if (tA && tB) {
-      tA.played += 1;
-      tB.played += 1;
-      tA.gf += act.teamA;
-      tA.ga += act.teamB;
-      tB.gf += act.teamB;
-      tB.ga += act.teamA;
+      tA.played += 1; tB.played += 1;
+      tA.gf += act.teamA; tA.ga += act.teamB;
+      tB.gf += act.teamB; tB.ga += act.teamA;
 
-      if (act.teamA > act.teamB) {
-        tA.won += 1;
-        tA.pts += 3;
-        tB.lost += 1;
-      } else if (act.teamB > act.teamA) {
-        tB.won += 1;
-        tB.pts += 3;
-        tA.lost += 1;
-      } else {
-        tA.drawn += 1;
-        tB.drawn += 1;
-        tA.pts += 1;
-        tB.pts += 1;
-      }
+      if (act.teamA > act.teamB) { tA.won += 1; tA.pts += 3; tB.lost += 1; }
+      else if (act.teamB > act.teamA) { tB.won += 1; tB.pts += 3; tA.lost += 1; }
+      else { tA.drawn += 1; tB.drawn += 1; tA.pts += 1; tB.pts += 1; }
     }
   });
 
-  return Object.values(standingsMap).map(s => ({
-    ...s,
-    gd: s.gf - s.ga
-  })).sort((a, b) => {
+  return Object.values(standingsMap).map(s => ({ ...s, gd: s.gf - s.ga })).sort((a, b) => {
     if (b.pts !== a.pts) return b.pts - a.pts;
     if (b.gd !== a.gd) return b.gd - a.gd;
     if (b.gf !== a.gf) return b.gf - a.gf;
@@ -128,17 +99,9 @@ export function calculatePredictedStandings(group: string, teams: Team[], matche
 
   groupTeams.forEach(t => {
     standingsMap[t.id] = {
-      teamId: t.id,
-      teamName: t.name,
-      flag: t.flag,
-      played: 0,
-      won: 0,
-      drawn: 0,
-      lost: 0,
-      gf: 0,
-      ga: 0,
-      gd: 0,
-      pts: 0
+      teamId: t.id, teamName: t.name, flag: t.flag,
+      played: 0, won: 0, drawn: 0, lost: 0,
+      gf: 0, ga: 0, gd: 0, pts: 0
     };
   });
 
@@ -150,34 +113,17 @@ export function calculatePredictedStandings(group: string, teams: Team[], matche
     const tB = standingsMap[m.teamB.id];
 
     if (tA && tB && pred) {
-      tA.played += 1;
-      tB.played += 1;
-      tA.gf += pred.teamAScore;
-      tA.ga += pred.teamBScore;
-      tB.gf += pred.teamBScore;
-      tB.ga += pred.teamAScore;
+      tA.played += 1; tB.played += 1;
+      tA.gf += pred.teamAScore; tA.ga += pred.teamBScore;
+      tB.gf += pred.teamBScore; tB.ga += pred.teamAScore;
 
-      if (pred.teamAScore > pred.teamBScore) {
-        tA.won += 1;
-        tA.pts += 3;
-        tB.lost += 1;
-      } else if (pred.teamBScore > pred.teamAScore) {
-        tB.won += 1;
-        tB.pts += 3;
-        tA.lost += 1;
-      } else {
-        tA.drawn += 1;
-        tB.drawn += 1;
-        tA.pts += 1;
-        tB.pts += 1;
-      }
+      if (pred.teamAScore > pred.teamBScore) { tA.won += 1; tA.pts += 3; tB.lost += 1; }
+      else if (pred.teamBScore > pred.teamAScore) { tB.won += 1; tB.pts += 3; tA.lost += 1; }
+      else { tA.drawn += 1; tB.drawn += 1; tA.pts += 1; tB.pts += 1; }
     }
   });
 
-  return Object.values(standingsMap).map(s => ({
-    ...s,
-    gd: s.gf - s.ga
-  })).sort((a, b) => {
+  return Object.values(standingsMap).map(s => ({ ...s, gd: s.gf - s.ga })).sort((a, b) => {
     if (b.pts !== a.pts) return b.pts - a.pts;
     if (b.gd !== a.gd) return b.gd - a.gd;
     if (b.gf !== a.gf) return b.gf - a.gf;

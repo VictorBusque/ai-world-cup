@@ -44,7 +44,7 @@ export default function ModelDetailModal({ model, matches, onClose }: ModelDetai
             <div>
               <h2 className="font-display text-xl uppercase tracking-wider text-white italic">{model.name} Playbook</h2>
               <p className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
-                {model.provider} • Version {model.version}
+                {model.provider}
               </p>
             </div>
           </div>
@@ -65,7 +65,7 @@ export default function ModelDetailModal({ model, matches, onClose }: ModelDetai
               Strategic Persona
             </div>
             <p className="text-xs text-zinc-200 leading-relaxed font-sans font-medium italic">
-              "{model.style}"
+              Model predictions loaded from JSON data.
             </p>
           </div>
 

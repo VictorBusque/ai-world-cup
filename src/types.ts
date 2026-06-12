@@ -1,18 +1,32 @@
-export interface AIModel {
-  id: string;
+// ── JSON file schema types (match what's on disk) ──
+
+/** What each model JSON looks like on disk */
+export interface ModelJSON {
   name: string;
-  version: string;
   provider: string;
-  avatarColor: string;
-  style: string;
-  avgPredictedGoals: number;
-  upsetPropensity: string; // HIGH, MEDIUM, LOW
-  drawPropensity: string;  // HIGH, MEDIUM, LOW
-  accuracy: number;        // dynamic based on outcomes
-  exactScores: number;     // dynamic
-  correctOutcomes: number; // dynamic
-  points: number;          // dynamic
+  color: string;
+  predictions: Record<string, Record<string, number>>; // matchId → { "USA": 1, "GER": 2 }
 }
+
+/** What tournament.json matches look like on disk */
+export interface TournamentMatchJSON {
+  id: string;
+  group: string;
+  teamA: string; // team id
+  teamB: string;
+  date: string;
+  time: string;
+  venue: string;
+  actualScore: { teamA: number; teamB: number } | null;
+}
+
+/** What tournament.json looks like on disk */
+export interface TournamentJSON {
+  teams: Record<string, Team>;
+  matches: TournamentMatchJSON[];
+}
+
+// ── Internal hydrated types (used by components) ──
 
 export interface Team {
   id: string;
@@ -20,6 +34,18 @@ export interface Team {
   code: string;
   flag: string;
   group: string;
+}
+
+export interface AIModel {
+  id: string;
+  name: string;
+  provider: string;
+  avatarColor: string;
+  points: number;
+  exactScores: number;
+  correctOutcomes: number;
+  accuracy: number;
+  avgPredictedGoals: number;
 }
 
 export interface Match {
@@ -30,15 +56,8 @@ export interface Match {
   date: string;
   time: string;
   venue: string;
-  actualScore: {
-    teamA: number;
-    teamB: number;
-  } | null; // null if unplayed/unsimulated
-  predictions: Record<string, {
-    teamAScore: number;
-    teamBScore: number;
-    reason: string;
-  }>;
+  actualScore: { teamA: number; teamB: number } | null;
+  predictions: Record<string, { teamAScore: number; teamBScore: number }>;
 }
 
 export interface GroupStanding {
@@ -49,8 +68,39 @@ export interface GroupStanding {
   won: number;
   drawn: number;
   lost: number;
-  gf: number; // goals for
-  ga: number; // goals against
-  gd: number; // goal difference
-  pts: number; // points
+  gf: number;
+  ga: number;
+  gd: number;
+  pts: number;
 }
+
+// ── Playoff / Knockout types ──
+
+export type PlayoffRound =
+  | "Round of 32"
+  | "Round of 16"
+  | "Quarter-finals"
+  | "Semi-finals"
+  | "Final";
+
+/** A single knockout match (same shape as group Match but keyed by round) */
+export interface PlayoffMatch {
+  id: string;
+  round: PlayoffRound;
+  slot: number; // position within the round (1-indexed)
+  teamA: Team | null; // null = TBD
+  teamB: Team | null;
+  date: string;
+  time: string;
+  venue: string;
+  actualScore: { teamA: number; teamB: number } | null;
+  predictions: Record<string, { teamAScore: number; teamBScore: number }>;
+}
+
+export const PLAYOFF_ROUNDS: PlayoffRound[] = [
+  "Round of 32",
+  "Round of 16",
+  "Quarter-finals",
+  "Semi-finals",
+  "Final",
+];
