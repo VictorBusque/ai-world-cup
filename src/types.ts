@@ -6,6 +6,14 @@ export interface ModelJSON {
   provider: string;
   color: string;
   predictions: Record<string, Record<string, number>>; // matchId → { "USA": 1, "GER": 2 }
+  playoffs: {
+    r32?: Record<string, Record<string, number>>;
+    r16?: Record<string, Record<string, number>>;
+    qf?: Record<string, Record<string, number>>;
+    sf?: Record<string, Record<string, number>>;
+    bronze?: Record<string, Record<string, number>>;
+    final?: Record<string, Record<string, number>>;
+  };
 }
 
 /** What tournament.json matches look like on disk */
@@ -95,6 +103,14 @@ export interface PlayoffMatch {
   venue: string;
   actualScore: { teamA: number; teamB: number } | null;
   predictions: Record<string, { teamAScore: number; teamBScore: number }>;
+}
+
+/** Parsed playoff predictions for a single model */
+export interface ModelPlayoffPrediction {
+  modelId: string;
+  rounds: Record<string, Record<string, { teamA: string; teamAScore: number; teamB: string; teamBScore: number }>>;
+  champion: string | null; // team code
+  runnerUp: string | null; // team code
 }
 
 export const PLAYOFF_ROUNDS: PlayoffRound[] = [

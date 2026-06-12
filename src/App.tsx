@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { AnimatePresence } from "motion/react";
-import { Match, AIModel, Team, PlayoffMatch } from "./types";
+import { Match, AIModel, Team, ModelPlayoffPrediction, PlayoffMatch } from "./types";
 import { loadData } from "./data";
 import { analyzePredictions } from "./utils";
 
@@ -9,12 +9,13 @@ import MatchesTab from "./components/MatchesTab";
 import StandingsTab from "./components/StandingsTab";
 import EvolutionTab from "./components/EvolutionTab";
 import PlayoffsTab from "./components/PlayoffsTab";
+import PredictionsTab from "./components/PredictionsTab";
 import ModelDetailModal from "./components/ModelDetailModal";
 
-import { Award, Swords, BarChart3, TrendingUp, Trophy } from "lucide-react";
+import { Award, Swords, BarChart3, TrendingUp, Trophy, Eye } from "lucide-react";
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<"leaderboard" | "matches" | "standings" | "evolution" | "playoffs">("leaderboard");
+  const [activeTab, setActiveTab] = useState<"leaderboard" | "matches" | "standings" | "evolution" | "playoffs" | "predictions">("leaderboard");
 
   // Async data loading state
   const [loading, setLoading] = useState(true);
@@ -24,15 +25,17 @@ export default function App() {
   const [matches, setMatches] = useState<Match[]>([]);
   const [selectedDiagnosticModel, setSelectedDiagnosticModel] = useState<AIModel | null>(null);
   const [playoffMatches, setPlayoffMatches] = useState<PlayoffMatch[]>([]);
+  const [modelPlayoffPredictions, setModelPlayoffPredictions] = useState<ModelPlayoffPrediction[]>([]);
 
   // Bootstrap: load JSON data on mount
   React.useEffect(() => {
     loadData()
-      .then(({ teams, matches, models, playoffMatches }) => {
+      .then(({ teams, matches, models, playoffMatches, modelPlayoffPredictions }) => {
         setTeams(teams);
         setBaseModels(models);
         setMatches(matches);
         if (playoffMatches) setPlayoffMatches(playoffMatches);
+        setModelPlayoffPredictions(modelPlayoffPredictions);
         setLoading(false);
       })
       .catch(err => {
@@ -157,20 +160,20 @@ export default function App() {
               <Swords className="h-4 w-4 text-emerald-400" /> Matches
             </button>
             <button
-              onClick={() => setActiveTab("standings")}
-              className={`px-5 py-4 text-xs sm:text-sm font-black uppercase tracking-widest transition-all flex items-center gap-2 border-b-4 ${
-                activeTab === "standings" ? "border-indigo-400 text-white bg-zinc-900" : "border-transparent text-zinc-500 hover:text-zinc-300"
-              }`}
-            >
-              <BarChart3 className="h-4 w-4 text-indigo-400" /> Standings Comparison
-            </button>
-            <button
               onClick={() => setActiveTab("evolution")}
               className={`px-5 py-4 text-xs sm:text-sm font-black uppercase tracking-widest transition-all flex items-center gap-2 border-b-4 ${
                 activeTab === "evolution" ? "border-yellow-400 text-white bg-zinc-900" : "border-transparent text-zinc-500 hover:text-zinc-300"
               }`}
             >
               <TrendingUp className="h-4 w-4 text-yellow-400" /> Evolution
+            </button>
+            <button
+              onClick={() => setActiveTab("standings")}
+              className={`px-5 py-4 text-xs sm:text-sm font-black uppercase tracking-widest transition-all flex items-center gap-2 border-b-4 ${
+                activeTab === "standings" ? "border-indigo-400 text-white bg-zinc-900" : "border-transparent text-zinc-500 hover:text-zinc-300"
+              }`}
+            >
+              <BarChart3 className="h-4 w-4 text-indigo-400" /> Group Stage
             </button>
             <button
               onClick={() => setActiveTab("playoffs")}
@@ -186,6 +189,16 @@ export default function App() {
               {!playoffsActive && (
                 <span className="text-[8px] bg-zinc-800 text-zinc-500 px-1.5 py-0.5 font-mono uppercase tracking-widest">soon</span>
               )}
+            </button>
+            <button
+              onClick={() => setActiveTab("predictions")}
+              className={`px-5 py-4 text-xs sm:text-sm font-black uppercase tracking-widest transition-all flex items-center gap-2 border-b-4 ${
+                activeTab === "predictions"
+                  ? "border-emerald-400 text-white bg-zinc-900"
+                  : "border-transparent text-zinc-500 hover:text-zinc-300"
+              }`}
+            >
+              <Eye className="h-4 w-4 text-emerald-400" /> Predictions
             </button>
           </div>
 
@@ -209,7 +222,10 @@ export default function App() {
             <EvolutionTab models={analyzedModels} matches={matches} />
           )}
           {activeTab === "playoffs" && (
-            <PlayoffsTab playoffMatches={playoffMatches} isActive={playoffsActive} />
+            <PlayoffsTab playoffMatches={playoffMatches} isActive={playoffsActive} matches={matches} teams={teamArray} models={analyzedModels} modelPlayoffPredictions={modelPlayoffPredictions} />
+          )}
+          {activeTab === "predictions" && (
+            <PredictionsTab matches={matches} teams={teamArray} models={analyzedModels} modelPlayoffPredictions={modelPlayoffPredictions} />
           )}
         </div>
       </section>

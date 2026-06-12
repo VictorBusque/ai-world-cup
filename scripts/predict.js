@@ -66,7 +66,7 @@ async function predict(modelConfig, systemPrompt) {
       { role: "user", content: "Send me the JSON with your predictions" },
     ],
     temperature: 0,
-    max_tokens: 4096,
+    max_tokens: 8192,
   };
 
   const res = await fetch(AI_GATEWAY_URL, {
@@ -76,6 +76,7 @@ async function predict(modelConfig, systemPrompt) {
       Authorization: `Bearer ${AI_GATEWAY_KEY}`,
     },
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(120_000), // 2 min per model
   });
 
   if (!res.ok) {

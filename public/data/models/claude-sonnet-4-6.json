@@ -1,7 +1,8 @@
 {
-  "name": "Deepseek V4 Flash",
-  "provider": "Deepseek",
-  "color": "from-blue-500 to-indigo-600",
+  "model": "Claude Sonnet 4.6",
+  "name": "claude-sonnet-4-6",
+  "provider": "anthropic",
+  "color": "from-orange-400 to-amber-600",
   "predictions": {
     "g_a_1": {
       "MEX": 2,
@@ -12,7 +13,7 @@
       "CZE": 1
     },
     "g_a_3": {
-      "MEX": 3,
+      "MEX": 1,
       "KOR": 1
     },
     "g_a_4": {
@@ -20,8 +21,8 @@
       "CZE": 2
     },
     "g_a_5": {
-      "MEX": 4,
-      "CZE": 0
+      "MEX": 3,
+      "CZE": 1
     },
     "g_a_6": {
       "RSA": 1,
@@ -36,15 +37,15 @@
       "BIH": 1
     },
     "g_b_3": {
-      "CAN": 3,
+      "CAN": 2,
       "QAT": 0
     },
     "g_b_4": {
       "SUI": 2,
-      "BIH": 0
+      "BIH": 1
     },
     "g_b_5": {
-      "CAN": 2,
+      "CAN": 1,
       "BIH": 0
     },
     "g_b_6": {
@@ -52,23 +53,23 @@
       "QAT": 0
     },
     "g_c_1": {
-      "BRA": 4,
-      "MAR": 0
+      "BRA": 3,
+      "MAR": 1
     },
     "g_c_2": {
       "HAI": 0,
       "SCO": 2
     },
     "g_c_3": {
-      "BRA": 5,
+      "BRA": 4,
       "HAI": 0
     },
     "g_c_4": {
-      "MAR": 1,
+      "MAR": 2,
       "SCO": 1
     },
     "g_c_5": {
-      "BRA": 3,
+      "BRA": 2,
       "SCO": 0
     },
     "g_c_6": {
@@ -81,18 +82,18 @@
     },
     "g_d_2": {
       "AUS": 1,
-      "TUR": 2
+      "TUR": 1
     },
     "g_d_3": {
-      "USA": 3,
+      "USA": 2,
       "AUS": 1
     },
     "g_d_4": {
-      "PAR": 2,
-      "TUR": 1
+      "PAR": 1,
+      "TUR": 2
     },
     "g_d_5": {
-      "USA": 4,
+      "USA": 1,
       "TUR": 0
     },
     "g_d_6": {
@@ -104,7 +105,7 @@
       "CUW": 0
     },
     "g_e_2": {
-      "CIV": 2,
+      "CIV": 1,
       "ECU": 1
     },
     "g_e_3": {
@@ -116,88 +117,88 @@
       "ECU": 2
     },
     "g_e_5": {
-      "GER": 4,
+      "GER": 2,
       "ECU": 0
     },
     "g_e_6": {
-      "CUW": 0,
-      "CIV": 3
+      "CUW": 1,
+      "CIV": 2
     },
     "g_f_1": {
       "NED": 2,
-      "JPN": 0
+      "JPN": 1
     },
     "g_f_2": {
       "SWE": 1,
-      "TUN": 1
+      "TUN": 0
     },
     "g_f_3": {
-      "NED": 3,
-      "SWE": 0
+      "NED": 2,
+      "SWE": 1
     },
     "g_f_4": {
       "JPN": 2,
       "TUN": 0
     },
     "g_f_5": {
-      "NED": 3,
+      "NED": 1,
       "TUN": 0
     },
     "g_f_6": {
-      "JPN": 1,
-      "SWE": 2
+      "JPN": 2,
+      "SWE": 1
     },
     "g_g_1": {
-      "BEL": 3,
-      "EGY": 1
+      "BEL": 2,
+      "EGY": 0
     },
     "g_g_2": {
-      "IRN": 2,
-      "NZL": 0
+      "IRN": 0,
+      "NZL": 1
     },
     "g_g_3": {
-      "BEL": 2,
+      "BEL": 1,
       "IRN": 0
     },
     "g_g_4": {
-      "EGY": 4,
+      "EGY": 2,
       "NZL": 0
     },
     "g_g_5": {
-      "BEL": 5,
+      "BEL": 2,
       "NZL": 0
     },
     "g_g_6": {
-      "EGY": 2,
-      "IRN": 1
+      "EGY": 1,
+      "IRN": 0
     },
     "g_h_1": {
-      "ESP": 4,
+      "ESP": 3,
       "CPV": 0
     },
     "g_h_2": {
-      "KSA": 0,
+      "KSA": 1,
       "URU": 2
     },
     "g_h_3": {
-      "ESP": 3,
+      "ESP": 2,
       "KSA": 0
     },
     "g_h_4": {
-      "CPV": 0,
-      "URU": 3
+      "CPV": 1,
+      "URU": 2
     },
     "g_h_5": {
-      "ESP": 2,
-      "URU": 1
+      "ESP": 1,
+      "URU": 0
     },
     "g_h_6": {
-      "CPV": 1,
+      "CPV": 2,
       "KSA": 1
     },
     "g_i_1": {
-      "FRA": 3,
-      "SEN": 0
+      "FRA": 2,
+      "SEN": 1
     },
     "g_i_2": {
       "NOR": 2,
@@ -205,26 +206,26 @@
     },
     "g_i_3": {
       "FRA": 2,
-      "NOR": 0
+      "NOR": 1
     },
     "g_i_4": {
-      "SEN": 3,
-      "IRQ": 1
+      "SEN": 2,
+      "IRQ": 0
     },
     "g_i_5": {
-      "FRA": 4,
+      "FRA": 3,
       "IRQ": 0
     },
     "g_i_6": {
       "SEN": 1,
-      "NOR": 1
+      "NOR": 2
     },
     "g_j_1": {
       "ARG": 3,
       "ALG": 0
     },
     "g_j_2": {
-      "AUT": 2,
+      "AUT": 1,
       "JOR": 0
     },
     "g_j_3": {
@@ -232,19 +233,19 @@
       "AUT": 0
     },
     "g_j_4": {
-      "ALG": 3,
-      "JOR": 0
+      "ALG": 2,
+      "JOR": 1
     },
     "g_j_5": {
-      "ARG": 5,
+      "ARG": 2,
       "JOR": 0
     },
     "g_j_6": {
       "ALG": 1,
-      "AUT": 1
+      "AUT": 2
     },
     "g_k_1": {
-      "POR": 2,
+      "POR": 3,
       "COD": 0
     },
     "g_k_2": {
@@ -252,12 +253,12 @@
       "COL": 2
     },
     "g_k_3": {
-      "POR": 3,
+      "POR": 2,
       "UZB": 0
     },
     "g_k_4": {
       "COD": 1,
-      "COL": 1
+      "COL": 2
     },
     "g_k_5": {
       "POR": 1,
@@ -272,23 +273,23 @@
       "CRO": 0
     },
     "g_l_2": {
-      "GHA": 3,
+      "GHA": 1,
       "PAN": 0
     },
     "g_l_3": {
       "ENG": 3,
-      "GHA": 0
+      "GHA": 1
     },
     "g_l_4": {
-      "CRO": 4,
+      "CRO": 2,
       "PAN": 0
     },
     "g_l_5": {
-      "ENG": 5,
+      "ENG": 2,
       "PAN": 0
     },
     "g_l_6": {
-      "CRO": 2,
+      "CRO": 1,
       "GHA": 1
     }
   },
@@ -299,44 +300,44 @@
         "SUI": 2
       },
       "m74": {
-        "GER": 3,
-        "SCO": 0
+        "GER": 2,
+        "PAR": 0
       },
       "m75": {
         "NED": 2,
-        "MAR": 0
+        "MAR": 1
       },
       "m76": {
         "BRA": 3,
-        "SWE": 1
+        "JPN": 1
       },
       "m77": {
         "FRA": 2,
-        "IRN": 0
+        "EGY": 0
       },
       "m78": {
-        "CIV": 2,
-        "SEN": 1
+        "CIV": 1,
+        "NOR": 2
       },
       "m79": {
         "MEX": 2,
-        "NOR": 1
+        "URU": 1
       },
       "m80": {
-        "ENG": 4,
-        "COD": 0
+        "ENG": 2,
+        "SEN": 0
       },
       "m81": {
-        "USA": 3,
+        "USA": 2,
         "AUT": 1
       },
       "m82": {
-        "BEL": 3,
-        "CZE": 0
+        "BEL": 2,
+        "CPV": 0
       },
       "m83": {
-        "COL": 1,
-        "CRO": 2
+        "COL": 2,
+        "CRO": 1
       },
       "m84": {
         "ESP": 2,
@@ -344,19 +345,19 @@
       },
       "m85": {
         "CAN": 1,
-        "JPN": 2
+        "COD": 0
       },
       "m86": {
-        "ARG": 2,
-        "URU": 1
+        "ARG": 3,
+        "URU": 0
       },
       "m87": {
-        "POR": 3,
-        "GHA": 0
+        "POR": 2,
+        "NOR": 1
       },
       "m88": {
-        "PAR": 1,
-        "EGY": 2
+        "TUR": 1,
+        "GHA": 0
       }
     },
     "r16": {
@@ -365,19 +366,19 @@
         "FRA": 1
       },
       "m90": {
-        "SUI": 1,
-        "NED": 3
+        "SUI": 0,
+        "NED": 2
       },
       "m91": {
         "BRA": 2,
-        "CIV": 0
+        "NOR": 0
       },
       "m92": {
         "MEX": 1,
         "ENG": 2
       },
       "m93": {
-        "CRO": 0,
+        "COL": 1,
         "ESP": 2
       },
       "m94": {
@@ -385,51 +386,51 @@
         "BEL": 2
       },
       "m95": {
-        "ARG": 3,
-        "EGY": 0
+        "ARG": 2,
+        "TUR": 0
       },
       "m96": {
-        "JPN": 1,
+        "CAN": 0,
         "POR": 2
       }
     },
     "qf": {
       "m97": {
-        "GER": 2,
-        "NED": 1
+        "GER": 1,
+        "NED": 2
       },
       "m98": {
-        "ESP": 2,
-        "BEL": 1
+        "ESP": 1,
+        "BEL": 2
       },
       "m99": {
         "BRA": 2,
         "ENG": 1
       },
       "m100": {
-        "ARG": 3,
+        "ARG": 2,
         "POR": 1
       }
     },
     "sf": {
       "m101": {
-        "GER": 2,
-        "ESP": 1
+        "NED": 1,
+        "BEL": 2
       },
       "m102": {
-        "BRA": 1,
-        "ARG": 2
+        "BRA": 2,
+        "ARG": 3
       }
     },
     "bronze": {
       "m103": {
-        "ESP": 2,
+        "NED": 2,
         "BRA": 1
       }
     },
     "final": {
       "m104": {
-        "GER": 1,
+        "BEL": 1,
         "ARG": 2
       }
     }
