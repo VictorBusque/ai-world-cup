@@ -184,14 +184,19 @@ export async function loadData(): Promise<{
       }
     }
 
-    // Parse date/time from started_at ISO string
+    // Parse date/time from started_at ISO string (API sends UTC)
+    // Convert to the user's local timezone
     let date = "";
     let time = "";
     if (am.started_at) {
       const d = new Date(am.started_at);
-      date = d.toISOString().split("T")[0]; // "2026-06-11"
-      const timePart = d.toISOString().split("T")[1]; // "19:00:00.000Z"
-      time = timePart.substring(0, 5); // "19:00"
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      date = `${year}-${month}-${day}`;
+      const hours = String(d.getHours()).padStart(2, "0");
+      const minutes = String(d.getMinutes()).padStart(2, "0");
+      time = `${hours}:${minutes}`;
     }
 
     // Look up predictions by team code pair
