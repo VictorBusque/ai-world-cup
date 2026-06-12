@@ -8,7 +8,7 @@ const MODEL_FILES = [
   "claude-sonnet-4-6",
   "claude-opus-4-8",
   "claude-fable-5",
-  // "deepseek-v4-pro",
+  "deepseek-v4-pro",
   "deepseek-v4-flash",
   "mistral-medium-3.5",
   "glm-5.1",
