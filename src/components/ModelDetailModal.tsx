@@ -23,14 +23,17 @@ interface ModelDetailModalProps {
 }
 
 export default function ModelDetailModal({ model, matches, teams, modelPlayoffPredictions, onClose }: ModelDetailModalProps) {
-  // Get all predictions of this model
-  const modelMatches = matches.map(match => {
-    const pred = match.predictions[model.id];
-    return {
-      match,
-      pred
-    };
-  }).filter(item => item.pred !== undefined);
+  // Show ALL matches, with or without predictions. Completed matches first.
+  const modelMatches = matches.map(match => ({
+    match,
+    pred: match.predictions[model.id],
+  })).sort((a, b) => {
+    // Completed matches (with actual scores) first, then by date
+    const aCompleted = a.match.actualScore !== null ? 0 : 1;
+    const bCompleted = b.match.actualScore !== null ? 0 : 1;
+    if (aCompleted !== bCompleted) return aCompleted - bCompleted;
+    return (a.match.date + a.match.time).localeCompare(b.match.date + b.match.time);
+  });
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -79,7 +82,7 @@ export default function ModelDetailModal({ model, matches, teams, modelPlayoffPr
               Strategic Persona
             </div>
             <p className="text-xs text-zinc-200 leading-relaxed font-sans font-medium italic">
-              Model predictions loaded from JSON data.
+              {model.persona || "Model predictions loaded from JSON data."}
             </p>
           </div>
 
@@ -125,18 +128,22 @@ export default function ModelDetailModal({ model, matches, teams, modelPlayoffPr
           <div>
             <h3 className="text-[11px] uppercase font-mono tracking-wider font-extrabold text-zinc-400 mb-3 flex items-center gap-1.5">
               <Activity className="h-4 w-4 text-yellow-400" />
-              Group Stage Predictions ({modelMatches.length} Matches)
+              Group Stage Predictions ({modelMatches.filter(m => m.match.actualScore !== null).length} Played / {modelMatches.length} Total)
             </h3>
 
             <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
               {modelMatches.map(({ match, pred }) => {
-                if (!pred) return null;
-
                 const isCompleted = match.actualScore !== null;
                 
                 // Determine evaluation indicators
                 let evaluationBadge = null;
-                if (isCompleted) {
+                if (!pred) {
+                  evaluationBadge = (
+                    <span className="ml-auto px-2 py-1 text-[9px] uppercase font-black font-mono bg-zinc-800 text-zinc-600 border border-zinc-700">
+                      No Prediction
+                    </span>
+                  );
+                } else if (isCompleted) {
                   const actScore = match.actualScore!;
                   const actDiff = actScore.teamA - actScore.teamB;
                   const predDiff = pred.teamAScore - pred.teamBScore;
@@ -181,7 +188,7 @@ export default function ModelDetailModal({ model, matches, teams, modelPlayoffPr
                   >
                     <div className="flex items-center justify-between gap-4 text-xs font-sans">
                       <div className="flex flex-col gap-0.5 min-w-[100px]">
-                        <span className="text-[9px] font-mono text-zinc-550 uppercase tracking-wide">{match.group} {isCompleted ? "" : "• Upcoming"}</span>
+                        <span className="text-[9px] font-mono text-zinc-550 uppercase tracking-wide">{match.group} {isCompleted ? "• Completed" : "• Upcoming"}</span>
                         <div className="font-bold text-white uppercase text-xs">
                           {match.teamA.flag} {match.teamA.code} vs {match.teamB.flag} {match.teamB.code}
                         </div>
@@ -192,15 +199,21 @@ export default function ModelDetailModal({ model, matches, teams, modelPlayoffPr
                         {/* Prediction score bubble */}
                         <div className="text-center">
                           <span className="text-[9px] text-zinc-500 block uppercase font-mono">Forecast</span>
-                        <span className="font-mono font-bold text-yellow-450 bg-black border border-zinc-800 px-2.5 py-0.5 rounded-none block">
-                            {pred.teamAScore} - {pred.teamBScore}
-                          </span>
+                          {pred ? (
+                            <span className="font-mono font-bold text-yellow-450 bg-black border border-zinc-800 px-2.5 py-0.5 rounded-none block">
+                              {pred.teamAScore} - {pred.teamBScore}
+                            </span>
+                          ) : (
+                            <span className="font-mono font-bold text-zinc-600 bg-black border border-zinc-800 px-2.5 py-0.5 rounded-none block">
+                              —
+                            </span>
+                          )}
                         </div>
 
                         {/* Actual Score bubble */}
                         <div className="text-center">
                           <span className="text-[9px] text-zinc-500 block uppercase font-mono">Actual</span>
-                        <span className="font-mono font-black text-zinc-400 bg-black/60 border border-zinc-850 px-2.5 py-0.5 rounded-none block">
+                          <span className={`font-mono font-black bg-black/60 border px-2.5 py-0.5 rounded-none block ${isCompleted ? "text-emerald-400 border-emerald-400/30" : "text-zinc-400 border-zinc-850"}`}>
                             {isCompleted ? `${match.actualScore!.teamA}-${match.actualScore!.teamB}` : "—"}
                           </span>
                         </div>

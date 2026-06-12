@@ -102,7 +102,13 @@ export function calculateActualStandings(group: string, teams: Team[], matches: 
   });
 }
 
-export function calculatePredictedStandings(group: string, teams: Team[], matches: Match[], modelId: string): GroupStanding[] {
+export function calculatePredictedStandings(
+  group: string,
+  teams: Team[],
+  matches: Match[],
+  modelId: string,
+  rawModelPredictions?: Record<string, Record<string, number | string>>,
+): GroupStanding[] {
   const groupTeams = teams.filter(t => t.group === group);
   const standingsMap: Record<string, GroupStanding> = {};
 
@@ -114,6 +120,16 @@ export function calculatePredictedStandings(group: string, teams: Team[], matche
     };
   });
 
+  // Build a team code → team id lookup for this group
+  const codeToTeamId: Record<string, string> = {};
+  for (const t of groupTeams) {
+    codeToTeamId[t.code] = t.id;
+  }
+
+  // Track which team code pairs have already been counted from API matches
+  const countedPairs = new Set<string>();
+
+  // First: use predictions from API matches
   const groupMatches = matches.filter(m => m.group === group);
 
   groupMatches.forEach(m => {
@@ -129,8 +145,49 @@ export function calculatePredictedStandings(group: string, teams: Team[], matche
       if (pred.teamAScore > pred.teamBScore) { tA.won += 1; tA.pts += 3; tB.lost += 1; }
       else if (pred.teamBScore > pred.teamAScore) { tB.won += 1; tB.pts += 3; tA.lost += 1; }
       else { tA.drawn += 1; tB.drawn += 1; tA.pts += 1; tB.pts += 1; }
+
+      countedPairs.add(`${m.teamA.code}-${m.teamB.code}`);
+      countedPairs.add(`${m.teamB.code}-${m.teamA.code}`);
     }
   });
+
+  // Second: supplement with raw model predictions for matches not in the API
+  if (rawModelPredictions) {
+    // Derive group letter from group name: "Group H" → "h"
+    const groupLetter = group.replace(/^Group /, '').toLowerCase();
+
+    for (const [matchKey, pred] of Object.entries(rawModelPredictions)) {
+      // Match pattern: g_<letter>_<number> e.g. g_h_1
+      if (!matchKey.startsWith(`g_${groupLetter}_`)) continue;
+
+      const codes = Object.keys(pred).filter(k => typeof pred[k] === 'number');
+      if (codes.length !== 2) continue;
+
+      const pairKey = `${codes[0]}-${codes[1]}`;
+      if (countedPairs.has(pairKey)) continue; // already counted from API
+
+      const tAId = codeToTeamId[codes[0]];
+      const tBId = codeToTeamId[codes[1]];
+      const tA = tAId ? standingsMap[tAId] : undefined;
+      const tB = tBId ? standingsMap[tBId] : undefined;
+
+      if (tA && tB) {
+        const scoreA = pred[codes[0]] as number;
+        const scoreB = pred[codes[1]] as number;
+
+        tA.played += 1; tB.played += 1;
+        tA.gf += scoreA; tA.ga += scoreB;
+        tB.gf += scoreB; tB.ga += scoreA;
+
+        if (scoreA > scoreB) { tA.won += 1; tA.pts += 3; tB.lost += 1; }
+        else if (scoreB > scoreA) { tB.won += 1; tB.pts += 3; tA.lost += 1; }
+        else { tA.drawn += 1; tB.drawn += 1; tA.pts += 1; tB.pts += 1; }
+
+        countedPairs.add(pairKey);
+        countedPairs.add(`${codes[1]}-${codes[0]}`);
+      }
+    }
+  }
 
   return Object.values(standingsMap).map(s => ({ ...s, gd: s.gf - s.ga })).sort((a, b) => {
     if (b.pts !== a.pts) return b.pts - a.pts;

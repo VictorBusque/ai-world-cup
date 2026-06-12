@@ -3,18 +3,84 @@ import { Team, Match, AIModel, ModelJSON, ModelPlayoffPrediction } from "./types
 const API_URL = "https://n8n.stack.victorbusque.com/webhook/get-wc-data";
 
 // Hardcoded model registry with metadata — add new entries when you drop a new JSON
-const MODEL_FILES: { id: string; name: string; provider: string; avatarColor: string }[] = [
-  { id: "gemini-3.1-pro", name: "Gemini 3.1 Pro", provider: "Google", avatarColor: "from-blue-500 to-indigo-600" },
-  { id: "gemini-3.5-flash", name: "Gemini 3.5 Flash", provider: "Google", avatarColor: "from-cyan-400 to-blue-500" },
-  { id: "gpt-5.5", name: "GPT-5.5", provider: "OpenAI", avatarColor: "from-emerald-500 to-teal-600" },
-  { id: "claude-opus-4-8", name: "Claude Opus 4.8", provider: "Anthropic", avatarColor: "from-amber-500 to-orange-600" },
-  { id: "claude-sonnet-4-6", name: "Claude Sonnet 4.6", provider: "Anthropic", avatarColor: "from-amber-500 to-orange-600" },
-  { id: "claude-fable-5", name: "Claude Fable 5", provider: "Anthropic", avatarColor: "from-amber-500 to-orange-600" },
-  { id: "deepseek-v4-pro", name: "DeepSeek V4 Pro", provider: "DeepSeek", avatarColor: "from-sky-500 to-blue-700" },
-  { id: "deepseek-v4-flash", name: "DeepSeek V4 Flash", provider: "DeepSeek", avatarColor: "from-sky-400 to-cyan-500" },
-  { id: "mistral-medium-3.5", name: "Mistral Medium 3.5", provider: "Mistral", avatarColor: "from-orange-500 to-red-600" },
-  { id: "kimi-k2.6", name: "Kimi K2.6", provider: "Moonshot", avatarColor: "from-violet-500 to-purple-700" },
-  { id: "nemotron-3-super", name: "Nemotron 3 Super", provider: "NVIDIA", avatarColor: "from-lime-500 to-green-600" },
+const MODEL_FILES: { id: string; name: string; provider: string; avatarColor: string; persona: string }[] = [
+  {
+    id: "gemini-3.1-pro",
+    name: "Gemini 3.1 Pro",
+    provider: "Google",
+    avatarColor: "from-blue-500 to-indigo-600",
+    persona: "The veteran tactician. Gemini 3.1 Pro brings Google DeepMind's deepest multimodal reasoning — parsing text, video, and stats simultaneously with a 1M-token memory. It doubled its predecessor's ARC-AGI score and excels at nuanced, long-context analysis. A methodical strategist that leaves no data point unexamined.",
+  },
+  {
+    id: "gemini-3.5-flash",
+    name: "Gemini 3.5 Flash",
+    provider: "Google",
+    avatarColor: "from-cyan-400 to-blue-500",
+    persona: "The speed merchant. Gemini 3.5 Flash is Google's agent-first model — built not just to answer, but to act. It outperforms the larger 3.1 Pro on coding and agentic benchmarks at 4× the speed and half the cost. A fast, decisive predictor that trusts rapid pattern recognition over lengthy deliberation.",
+  },
+  {
+    id: "gpt-5.5",
+    name: "GPT-5.5",
+    provider: "OpenAI",
+    avatarColor: "from-emerald-500 to-teal-600",
+    persona: "The autonomous operator. Codenamed 'Spud,' GPT-5.5 is OpenAI's most agentic model yet — engineered for sustained, multi-step work with tool calling, error recovery, and coherent state over long interactions. A relentless executor that plans deep, adapts mid-task, and never loses the thread.",
+  },
+  {
+    id: "claude-opus-4-8",
+    name: "Claude Opus 4.8",
+    provider: "Anthropic",
+    avatarColor: "from-amber-500 to-orange-600",
+    persona: "The heavyweight craftsman. Claude Opus 4.8 is Anthropic's flagship for complex, long-running work — combining elite coding precision with careful planning and sustained agentic focus. It handles multi-hour tasks with unwavering consistency, making it the model that grinds the hardest when the stakes are highest.",
+  },
+  {
+    id: "claude-sonnet-4-6",
+    name: "Claude Sonnet 4.6",
+    provider: "Anthropic",
+    avatarColor: "from-amber-500 to-orange-600",
+    persona: "The balanced strategist. Sonnet 4.6 delivers Opus-tier intelligence at production scale — a 1M-token context window, top-tier coding, and efficient cost-performance. Recommended for high-volume tasks where you need frontier reasoning without the flagship price tag. Clinical and reliable under pressure.",
+  },
+  {
+    id: "claude-fable-5",
+    name: "Claude Fable 5",
+    provider: "Anthropic",
+    avatarColor: "from-amber-500 to-orange-600",
+    persona: "The long-horizon architect. Fable 5 is Anthropic's longest-running autonomous agent — capable of sustained work across millions of tokens without losing focus. It tops FrontierBench for coding and generalizes to unfamiliar tools out of the box. A patient builder that thinks in endgames, not just moves.",
+  },
+  {
+    id: "deepseek-v4-pro",
+    name: "DeepSeek V4 Pro",
+    provider: "DeepSeek",
+    avatarColor: "from-sky-500 to-blue-700",
+    persona: "The efficiency maximizer. DeepSeek V4 Pro is a 1.6T-parameter Mixture-of-Experts that activates only 49B per token — frontier-class coding (80.6% SWE-bench) at a fraction of the cost. Open-weight under MIT license with a 1M context window. A ruthless optimizer that delivers premium results on a budget.",
+  },
+  {
+    id: "deepseek-v4-flash",
+    name: "DeepSeek V4 Flash",
+    provider: "DeepSeek",
+    avatarColor: "from-sky-400 to-cyan-500",
+    persona: "The production workhorse. DeepSeek V4 Flash is a 284B MoE model hitting 79% on SWE-bench at just $0.28/M output tokens — the default for cost-sensitive production workloads. Open-weight, blazingly fast at 83.6 tokens/sec, and surprisingly capable for its weight class. Punches well above its price.",
+  },
+  {
+    id: "mistral-medium-3.5",
+    name: "Mistral Medium 3.5",
+    provider: "Mistral",
+    avatarColor: "from-orange-500 to-red-600",
+    persona: "The European challenger. Mistral Medium 3.5 is a dense 128B-parameter model — no MoE tricks, every parameter fires on every pass for predictable, consistent inference. Open-weight under Modified MIT, excelling at instruction-following, reasoning, and coding. A straightforward, no-nonsense predictor.",
+  },
+  {
+    id: "kimi-k2.6",
+    name: "Kimi K2.6",
+    provider: "Moonshot",
+    avatarColor: "from-violet-500 to-purple-700",
+    persona: "The swarm coordinator. Kimi K2.6 is Moonshot AI's 1T-parameter MoE flagship (32B active) — a native multimodal agent that orchestrates sub-agent swarms across long-horizon tasks. Open-weight and built for tool-using, coding-driven design, and distributed reasoning. A creative wildcard that sees patterns others miss.",
+  },
+  {
+    id: "nemotron-3-super",
+    name: "Nemotron 3 Super",
+    provider: "NVIDIA",
+    avatarColor: "from-lime-500 to-green-600",
+    persona: "The hybrid innovator. Nemotron 3 Super is NVIDIA's 120B-parameter hybrid Mamba-Transformer MoE — a novel architecture that merges linear recurrence with attention for efficient long-context reasoning. The first model to use latent MoE and multi-token prediction, purpose-built for agentic planning and tool calling.",
+  },
 ];
 
 /** API match shape from the n8n webhook */
@@ -106,6 +172,7 @@ export async function loadData(): Promise<{
       name: meta.name,
       provider: meta.provider,
       avatarColor: meta.avatarColor,
+      persona: meta.persona,
       points: 0,
       exactScores: 0,
       correctOutcomes: 0,

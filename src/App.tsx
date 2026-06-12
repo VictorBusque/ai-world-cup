@@ -24,16 +24,18 @@ export default function App() {
   const [baseModels, setBaseModels] = useState<AIModel[]>([]);
   const [matches, setMatches] = useState<Match[]>([]);
   const [selectedDiagnosticModel, setSelectedDiagnosticModel] = useState<AIModel | null>(null);
+  const [rawPredictions, setRawPredictions] = useState<Record<string, Record<string, Record<string, number | string>>>>({});
   const [playoffMatches, setPlayoffMatches] = useState<PlayoffMatch[]>([]);
   const [modelPlayoffPredictions, setModelPlayoffPredictions] = useState<ModelPlayoffPrediction[]>([]);
 
   // Bootstrap: load JSON data on mount
   React.useEffect(() => {
     loadData()
-      .then(({ teams, matches, models, playoffMatches, modelPlayoffPredictions }) => {
+      .then(({ teams, matches, models, rawPredictions, playoffMatches, modelPlayoffPredictions }) => {
         setTeams(teams);
         setBaseModels(models);
         setMatches(matches);
+        setRawPredictions(rawPredictions);
         if (playoffMatches) setPlayoffMatches(playoffMatches);
         setModelPlayoffPredictions(modelPlayoffPredictions);
         setLoading(false);
@@ -225,7 +227,7 @@ export default function App() {
             <MatchesTab matches={matches} models={analyzedModels} />
           )}
           {activeTab === "standings" && (
-            <StandingsTab matches={matches} teams={teamArray} models={analyzedModels} />
+            <StandingsTab matches={matches} teams={teamArray} models={analyzedModels} rawPredictions={rawPredictions} />
           )}
           {activeTab === "evolution" && (
             <EvolutionTab models={analyzedModels} matches={matches} />

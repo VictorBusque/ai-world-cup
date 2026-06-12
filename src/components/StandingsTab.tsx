@@ -10,12 +10,14 @@ interface StandingsTabProps {
   matches: Match[];
   teams: Team[];
   models: AIModel[];
+  rawPredictions: Record<string, Record<string, Record<string, number | string>>>;
 }
 
 export default function StandingsTab({
   matches,
   teams,
   models,
+  rawPredictions,
 }: StandingsTabProps) {
   const [selectedGroup, setSelectedGroup] = useState<string>("Group A");
   const [selectedModelId, setSelectedModelId] = useState<string>(
@@ -51,6 +53,7 @@ export default function StandingsTab({
     teamArray,
     matches,
     selectedModelId,
+    rawPredictions[selectedModelId],
   );
 
   const selectedModel = models.find((m) => m.id === selectedModelId);

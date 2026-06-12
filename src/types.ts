@@ -36,6 +36,7 @@ export interface AIModel {
   name: string;
   provider: string;
   avatarColor: string;
+  persona: string;
   points: number;
   exactScores: number;
   correctOutcomes: number;
