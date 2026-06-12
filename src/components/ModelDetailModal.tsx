@@ -1,18 +1,8 @@
 import React, { useMemo } from "react";
 import { motion } from "motion/react";
-import { Match, AIModel, Team, ModelPlayoffPrediction, BRACKET_ORDER } from "../types";
+import { Match, AIModel, Team, ModelPlayoffPrediction } from "../types";
+import { BRACKET_ORDER, ROUND_ORDER, ROUND_META, buildTeamByCodeMap } from "../constants";
 import { X, Award, Target, Sparkles, BookOpen, Clock, Activity, AlertCircle, Trophy } from "lucide-react";
-
-const ROUND_META: Record<string, { label: string; short: string }> = {
-  r32: { label: "ROUND OF 32", short: "R32" },
-  r16: { label: "ROUND OF 16", short: "R16" },
-  qf: { label: "QUARTER-FINALS", short: "QF" },
-  sf: { label: "SEMI-FINALS", short: "SF" },
-  bronze: { label: "BRONZE MATCH", short: "BR" },
-  final: { label: "FINAL", short: "F" },
-};
-
-const ROUND_ORDER = ["r32", "r16", "qf", "sf", "bronze", "final"] as const;
 
 interface ModelDetailModalProps {
   model: AIModel;
@@ -22,13 +12,12 @@ interface ModelDetailModalProps {
   onClose: () => void;
 }
 
-export default function ModelDetailModal({ model, matches, teams, modelPlayoffPredictions, onClose }: ModelDetailModalProps) {
+export default React.memo(function ModelDetailModal({ model, matches, teams, modelPlayoffPredictions, onClose }: ModelDetailModalProps) {
   // Show ALL matches, with or without predictions. Completed matches first.
   const modelMatches = matches.map(match => ({
     match,
     pred: match.predictions[model.id],
   })).sort((a, b) => {
-    // Completed matches (with actual scores) first, then by date
     const aCompleted = a.match.actualScore !== null ? 0 : 1;
     const bCompleted = b.match.actualScore !== null ? 0 : 1;
     if (aCompleted !== bCompleted) return aCompleted - bCompleted;
@@ -77,7 +66,7 @@ export default function ModelDetailModal({ model, matches, teams, modelPlayoffPr
         <div className="p-6 overflow-y-auto space-y-6">
           {/* Identity & Strategic Vibe */}
           <div className="bg-zinc-900 p-4 border-2 border-zinc-800 rounded-none space-y-1.5">
-            <div className="flex items-center gap-1.5 text-yellow-405 text-xs font-black uppercase tracking-widest font-mono">
+            <div className="flex items-center gap-1.5 text-yellow-400 text-xs font-black uppercase tracking-widest font-mono">
               <Sparkles className="h-4 w-4" />
               Strategic Persona
             </div>
@@ -92,35 +81,35 @@ export default function ModelDetailModal({ model, matches, teams, modelPlayoffPr
             <div className="bg-zinc-900 border-2 border-zinc-800 rounded-none p-3.5 text-center flex flex-col justify-between">
               <span className="text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Points</span>
               <span className="text-2xl font-black font-mono text-yellow-400 mt-1">{model.points}</span>
-              <span className="text-[9px] text-zinc-650 font-mono uppercase mt-1">Recalculated</span>
+              <span className="text-[9px] text-zinc-600 font-mono uppercase mt-1">Recalculated</span>
             </div>
 
             {/* Accuracy Card */}
             <div className="bg-zinc-900 border-2 border-zinc-800 rounded-none p-3.5 text-center flex flex-col justify-between">
               <span className="text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Accuracy</span>
               <span className="text-2xl font-black font-mono text-emerald-400 mt-1">{model.accuracy}%</span>
-              <span className="text-[9px] text-zinc-650 font-mono uppercase mt-1">Outcome %</span>
+              <span className="text-[9px] text-zinc-600 font-mono uppercase mt-1">Outcome %</span>
             </div>
 
             {/* Exact Scores */}
             <div className="bg-zinc-900 border-2 border-zinc-800 rounded-none p-3.5 text-center flex flex-col justify-between">
               <span className="text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Exact (3pts)</span>
               <span className="text-2xl font-black font-mono text-white mt-1">{model.exactScores}</span>
-              <span className="text-[9px] text-zinc-650 font-mono uppercase mt-1">Gamed Scores</span>
+              <span className="text-[9px] text-zinc-600 font-mono uppercase mt-1">Gamed Scores</span>
             </div>
 
             {/* Goal Deviation */}
             <div className="bg-zinc-900 border-2 border-zinc-800 rounded-none p-3.5 text-center flex flex-col justify-between">
               <span className="text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Goal Dev</span>
               <span className={`text-2xl font-black font-mono mt-1 ${model.avgGoalDeviation <= 1 ? "text-emerald-400" : model.avgGoalDeviation <= 2 ? "text-yellow-400" : "text-rose-400"}`}>{model.avgGoalDeviation.toFixed(2)}</span>
-              <span className="text-[9px] text-zinc-650 font-mono uppercase mt-1">Avg Off (↓ better)</span>
+              <span className="text-[9px] text-zinc-600 font-mono uppercase mt-1">Avg Off (↓ better)</span>
             </div>
 
             {/* Outcomes Only */}
             <div className="bg-zinc-900 border-2 border-zinc-800 rounded-none p-3.5 text-center flex flex-col justify-between">
               <span className="text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Outcome (1pt)</span>
               <span className="text-2xl font-black font-mono text-zinc-400 mt-1">{model.correctOutcomes - model.exactScores}</span>
-              <span className="text-[9px] text-zinc-650 font-mono uppercase mt-1">Outcome only</span>
+              <span className="text-[9px] text-zinc-600 font-mono uppercase mt-1">Outcome only</span>
             </div>
           </div>
 
@@ -135,8 +124,7 @@ export default function ModelDetailModal({ model, matches, teams, modelPlayoffPr
               {modelMatches.map(({ match, pred }) => {
                 const isCompleted = match.actualScore !== null;
                 
-                // Determine evaluation indicators
-                let evaluationBadge = null;
+                let evaluationBadge: React.ReactNode = null;
                 if (!pred) {
                   evaluationBadge = (
                     <span className="ml-auto px-2 py-1 text-[9px] uppercase font-black font-mono bg-zinc-800 text-zinc-600 border border-zinc-700">
@@ -162,7 +150,7 @@ export default function ModelDetailModal({ model, matches, teams, modelPlayoffPr
                     );
                   } else if (isOutcome) {
                     evaluationBadge = (
-                      <span className="ml-auto px-2 py-1 text-[9px] uppercase font-black font-mono bg-yellow-405 text-black">
+                      <span className="ml-auto px-2 py-1 text-[9px] uppercase font-black font-mono bg-yellow-400 text-black">
                         Outcome (+1 pt)
                       </span>
                     );
@@ -188,7 +176,7 @@ export default function ModelDetailModal({ model, matches, teams, modelPlayoffPr
                   >
                     <div className="flex items-center justify-between gap-4 text-xs font-sans">
                       <div className="flex flex-col gap-0.5 min-w-[100px]">
-                        <span className="text-[9px] font-mono text-zinc-550 uppercase tracking-wide">{match.group} {isCompleted ? "• Completed" : "• Upcoming"}</span>
+                        <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-wide">{match.group} {isCompleted ? "• Completed" : "• Upcoming"}</span>
                         <div className="font-bold text-white uppercase text-xs">
                           {match.teamA.flag} {match.teamA.code} vs {match.teamB.flag} {match.teamB.code}
                         </div>
@@ -200,7 +188,7 @@ export default function ModelDetailModal({ model, matches, teams, modelPlayoffPr
                         <div className="text-center">
                           <span className="text-[9px] text-zinc-500 block uppercase font-mono">Forecast</span>
                           {pred ? (
-                            <span className="font-mono font-bold text-yellow-450 bg-black border border-zinc-800 px-2.5 py-0.5 rounded-none block">
+                            <span className="font-mono font-bold text-yellow-400 bg-black border border-zinc-800 px-2.5 py-0.5 rounded-none block">
                               {pred.teamAScore} - {pred.teamBScore}
                             </span>
                           ) : (
@@ -213,7 +201,7 @@ export default function ModelDetailModal({ model, matches, teams, modelPlayoffPr
                         {/* Actual Score bubble */}
                         <div className="text-center">
                           <span className="text-[9px] text-zinc-500 block uppercase font-mono">Actual</span>
-                          <span className={`font-mono font-black bg-black/60 border px-2.5 py-0.5 rounded-none block ${isCompleted ? "text-emerald-400 border-emerald-400/30" : "text-zinc-400 border-zinc-850"}`}>
+                          <span className={`font-mono font-black bg-black/60 border px-2.5 py-0.5 rounded-none block ${isCompleted ? "text-emerald-400 border-emerald-400/30" : "text-zinc-400 border-zinc-800"}`}>
                             {isCompleted ? `${match.actualScore!.teamA}-${match.actualScore!.teamB}` : "—"}
                           </span>
                         </div>
@@ -243,7 +231,7 @@ export default function ModelDetailModal({ model, matches, teams, modelPlayoffPr
       </motion.div>
     </div>
   );
-}
+});
 
 function PlayoffPredictionsSection({
   modelId,
@@ -254,11 +242,7 @@ function PlayoffPredictionsSection({
   teams: Team[];
   modelPlayoffPredictions: ModelPlayoffPrediction[];
 }) {
-  const codeToTeam = useMemo(() => {
-    const m = new Map<string, Team>();
-    for (const t of teams) m.set(t.code, t);
-    return m;
-  }, [teams]);
+  const codeToTeam = useMemo(() => buildTeamByCodeMap(teams), [teams]);
 
   const mpp = modelPlayoffPredictions.find(p => p.modelId === modelId);
 
@@ -273,13 +257,11 @@ function PlayoffPredictionsSection({
     );
   }
 
-  // Derive champion and runner-up
   let champion: Team | null = null;
   let runnerUp: Team | null = null;
   if (mpp.champion) champion = codeToTeam.get(mpp.champion) ?? null;
   if (mpp.runnerUp) runnerUp = codeToTeam.get(mpp.runnerUp) ?? null;
 
-  // Count total playoff matches
   let totalPlayoffMatches = 0;
   for (const roundKey of ROUND_ORDER) {
     const roundData = mpp.rounds[roundKey];
@@ -357,7 +339,7 @@ function PlayoffPredictionsSection({
                           </div>
 
                           {/* Score */}
-                          <span className="font-mono font-bold text-yellow-450 bg-black border border-zinc-800 px-2 py-0.5 text-[11px]">
+                          <span className="font-mono font-bold text-yellow-400 bg-black border border-zinc-800 px-2 py-0.5 text-[11px]">
                             {m.teamAScore} - {m.teamBScore}
                           </span>
 

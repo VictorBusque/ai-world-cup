@@ -1,4 +1,4 @@
-import { Team, Match, AIModel, ModelJSON, ModelPlayoffPrediction } from "./types";
+import { Team, Match, AIModel, ModelJSON, ModelPlayoffPrediction, PlayoffMatch } from "./types";
 
 const API_URL = "https://n8n.stack.victorbusque.com/webhook/get-wc-data";
 
@@ -106,7 +106,7 @@ export async function loadData(): Promise<{
   matches: Match[];
   models: AIModel[];
   rawPredictions: Record<string, Record<string, Record<string, number | string>>>;
-  playoffMatches: never[];
+  playoffMatches: PlayoffMatch[];
   modelPlayoffPredictions: ModelPlayoffPrediction[];
 }> {
   const baseUrl = import.meta.env.BASE_URL;
@@ -122,10 +122,14 @@ export async function loadData(): Promise<{
 
   const { teams }: { teams: Record<string, Team> } = await teamsRes.json();
 
-  // Build code → Team lookup
+  // Build code → Team lookup (including alias mapping for known FIFA/IOC code differences)
+  const ALT_CODES: Record<string, string> = { "URY": "URU" }; // FIFA uses URY, IOC uses URU
   const codeToTeam: Record<string, Team> = {};
   for (const team of Object.values(teams)) {
     codeToTeam[team.code] = team;
+  }
+  for (const [alias, canonical] of Object.entries(ALT_CODES)) {
+    if (codeToTeam[canonical]) codeToTeam[alias] = codeToTeam[canonical];
   }
 
   // ── Parse API match data ──────────────────────────────────────────────
@@ -188,6 +192,10 @@ export async function loadData(): Promise<{
   // ── Build prediction lookup by team code pair ─────────────────────────
   // Key: "TEAMACODE-TEAMBCODE" (same order as model JSON entry)
   // Value: { teamAScore, teamBScore, summary? }
+  const ALT_CODE_REVERSE: Record<string, string> = {}; // canonical → alias
+  for (const [alias, canonical] of Object.entries(ALT_CODES)) {
+    ALT_CODE_REVERSE[canonical] = alias;
+  }
   const predLookup: Record<string, Record<string, { teamAScore: number; teamBScore: number; summary?: string }>> = {};
 
   for (let i = 0; i < models.length; i++) {
@@ -214,14 +222,43 @@ export async function loadData(): Promise<{
         ...(typeof pred["summary"] === "string" ? { summary: pred["summary"] as string } : {}),
       };
 
-      predLookup[model.id][`${codes[0]}-${codes[1]}`] = entry;
-
-      // Reverse ordering
-      predLookup[model.id][`${codes[1]}-${codes[0]}`] = {
+      // Store with canonical codes (from model JSON)
+      const canonicalKey = `${codes[0]}-${codes[1]}`;
+      const reverseCanonicalKey = `${codes[1]}-${codes[0]}`;
+      predLookup[model.id][canonicalKey] = entry;
+      predLookup[model.id][reverseCanonicalKey] = {
         teamAScore: entry.teamBScore,
         teamBScore: entry.teamAScore,
         ...(entry.summary ? { summary: entry.summary } : {}),
       };
+
+      // Also add entries with alternate codes (e.g. URY→URU) so API lookups work
+      const altKey0 = ALT_CODE_REVERSE[codes[0]];
+      const altKey1 = ALT_CODE_REVERSE[codes[1]];
+      if (altKey0) {
+        predLookup[model.id][`${altKey0}-${codes[1]}`] = entry;
+        predLookup[model.id][`${codes[1]}-${altKey0}`] = {
+          teamAScore: entry.teamBScore,
+          teamBScore: entry.teamAScore,
+          ...(entry.summary ? { summary: entry.summary } : {}),
+        };
+      }
+      if (altKey1) {
+        predLookup[model.id][`${codes[0]}-${altKey1}`] = entry;
+        predLookup[model.id][`${altKey1}-${codes[0]}`] = {
+          teamAScore: entry.teamBScore,
+          teamBScore: entry.teamAScore,
+          ...(entry.summary ? { summary: entry.summary } : {}),
+        };
+      }
+      if (altKey0 && altKey1) {
+        predLookup[model.id][`${altKey0}-${altKey1}`] = entry;
+        predLookup[model.id][`${altKey1}-${altKey0}`] = {
+          teamAScore: entry.teamBScore,
+          teamBScore: entry.teamAScore,
+          ...(entry.summary ? { summary: entry.summary } : {}),
+        };
+      }
     }
   }
 
@@ -372,5 +409,5 @@ export async function loadData(): Promise<{
     });
   }
 
-  return { teams, matches, models, rawPredictions, playoffMatches: [] as never[], modelPlayoffPredictions };
+  return { teams, matches, models, rawPredictions, playoffMatches: [] as PlayoffMatch[], modelPlayoffPredictions };
 }

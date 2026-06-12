@@ -1,6 +1,7 @@
 import express from "express";
 import path from "path";
 import dns from "dns";
+import cors from "cors";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 
@@ -10,6 +11,7 @@ dns.setDefaultResultOrder("ipv4first");
 const app = express();
 const PORT = 3000;
 
+app.use(cors());
 app.use(express.json());
 
 // Lazy-initialized Gemini API client

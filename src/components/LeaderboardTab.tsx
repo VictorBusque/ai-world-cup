@@ -1,3 +1,4 @@
+import React from "react";
 import { motion } from "motion/react";
 import { AIModel, Match } from "../types";
 import { Award, Target, Hash, Sparkles, BookOpen, AlertCircle } from "lucide-react";
@@ -5,10 +6,11 @@ import { Award, Target, Hash, Sparkles, BookOpen, AlertCircle } from "lucide-rea
 interface LeaderboardTabProps {
   models: AIModel[];
   matches: Match[];
+  totalGroupMatches: number;
   onSelectModel: (model: AIModel) => void;
 }
 
-export default function LeaderboardTab({ models, matches, onSelectModel }: LeaderboardTabProps) {
+export default React.memo(function LeaderboardTab({ models, matches, totalGroupMatches, onSelectModel }: LeaderboardTabProps) {
   const completedCount = matches.filter(m => m.actualScore !== null).length;
 
   return (
@@ -51,11 +53,11 @@ export default function LeaderboardTab({ models, matches, onSelectModel }: Leade
           </div>
           <div className="flex items-center justify-between gap-4 text-xs font-mono">
             <div>
-              <span className="text-zinc-550 text-[10px] block uppercase font-bold tracking-wider">Completed</span>
-              <span className="text-white text-lg font-black">{completedCount} <span className="text-xs text-zinc-500">/ 24</span></span>
+              <span className="text-zinc-500 text-[10px] block uppercase font-bold tracking-wider">Completed</span>
+              <span className="text-white text-lg font-black">{completedCount} <span className="text-xs text-zinc-500">/ {totalGroupMatches}</span></span>
             </div>
             <div className="text-right">
-              <span className="text-zinc-550 text-[10px] block uppercase font-bold tracking-wider">Live Status</span>
+              <span className="text-zinc-500 text-[10px] block uppercase font-bold tracking-wider">Live Status</span>
               <span className="text-emerald-400 text-xs font-black flex items-center gap-1 justify-end uppercase tracking-wider">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                 SIMULATOR ENGAGED
@@ -83,7 +85,7 @@ export default function LeaderboardTab({ models, matches, onSelectModel }: Leade
             </p>
           </div>
           <div className="text-xs flex items-center justify-between text-zinc-900 font-mono border-t border-zinc-200 pt-3 mt-4">
-            <span className="text-[9px] font-black uppercase tracking-wider text-zinc-650">Peak Accuracy:</span>
+            <span className="text-[9px] font-black uppercase tracking-wider text-zinc-500">Peak Accuracy:</span>
             <span className="font-display text-2xl text-emerald-600 font-black">{models[0]?.accuracy}%</span>
           </div>
         </div>
@@ -224,4 +226,4 @@ export default function LeaderboardTab({ models, matches, onSelectModel }: Leade
       </div>
     </div>
   );
-}
+});

@@ -1,27 +1,12 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { motion } from "motion/react";
 import { AIModel, Match } from "../types";
+import { MODEL_COLORS } from "../constants";
 import { TrendingUp } from "lucide-react";
 
 interface EvolutionTabProps {
   models: AIModel[];
   matches: Match[];
-}
-
-// Map Tailwind gradient classes to SVG-friendly hex colors
-function getColorFromGradient(gradientClass: string): string {
-  const colorMap: Record<string, string> = {
-    "from-orange-500": "#f97316",
-    "from-orange-400": "#fb923c",
-    "from-amber-500": "#f59e0b",
-    "from-green-500": "#76B900",
-    "from-teal-400": "#2dd4bf",
-    "from-teal-600": "#0d9488",
-    "from-blue-700": "#1d4ed8",
-    "from-gray-400": "#9ca3af",
-  };
-  const fromClass = gradientClass.split(" ")[0];
-  return colorMap[fromClass] || "#a1a1aa";
 }
 
 interface EvolutionPoint {
@@ -42,7 +27,7 @@ function buildEvolutionData(models: AIModel[], matches: Match[]): {
 
   const points: EvolutionPoint[] = [];
 
-  completedMatches.forEach((match, idx) => {
+  completedMatches.forEach((match) => {
     models.forEach(model => {
       const pred = match.predictions[model.id];
       if (!pred || !match.actualScore) return;
@@ -60,9 +45,9 @@ function buildEvolutionData(models: AIModel[], matches: Match[]): {
       else if (isCorrectOutcome) cumulative[model.id] += 1;
     });
 
-    const label = `${match.teamA.code} ${actScoreFormatter(match.actualScore)} ${match.teamB.code}`;
+    const label = `${match.teamA.code} ${match.actualScore!.teamA}-${match.actualScore!.teamB} ${match.teamB.code}`;
     points.push({
-      matchIndex: idx,
+      matchIndex: points.length,
       matchId: match.id,
       matchLabel: label,
       cumulativePoints: { ...cumulative },
@@ -72,12 +57,7 @@ function buildEvolutionData(models: AIModel[], matches: Match[]): {
   return { points, modelIds };
 }
 
-function actScoreFormatter(score: { teamA: number; teamB: number } | null): string {
-  if (!score) return "-";
-  return `${score.teamA}-${score.teamB}`;
-}
-
-export default function EvolutionTab({ models, matches }: EvolutionTabProps) {
+export default React.memo(function EvolutionTab({ models, matches }: EvolutionTabProps) {
   const { points, modelIds } = useMemo(() => buildEvolutionData(models, matches), [models, matches]);
 
   if (points.length === 0) {
@@ -109,7 +89,7 @@ export default function EvolutionTab({ models, matches }: EvolutionTabProps) {
   // Build path data for each model
   const modelPaths = modelIds.map(modelId => {
     const model = models.find(m => m.id === modelId)!;
-    const color = getColorFromGradient(model.avatarColor);
+    const color = MODEL_COLORS[modelId] || "#a1a1aa";
 
     const pathData = points.map((p, i) => {
       const x = chartPadding.left + (i / Math.max(points.length - 1, 1)) * chartWidth;
@@ -118,8 +98,6 @@ export default function EvolutionTab({ models, matches }: EvolutionTabProps) {
     }).join(" ");
 
     // Area under the line
-    const lastPoint = points[points.length - 1];
-    const firstPoint = points[0];
     const lastX = chartPadding.left + ((points.length - 1) / Math.max(points.length - 1, 1)) * chartWidth;
     const firstX = chartPadding.left;
     const baseY = chartPadding.top + chartHeight;
@@ -133,6 +111,7 @@ export default function EvolutionTab({ models, matches }: EvolutionTabProps) {
       return { x, y, points: p.cumulativePoints[modelId], matchLabel: p.matchLabel };
     });
 
+    const lastPoint = points[points.length - 1];
     const finalPoints = lastPoint.cumulativePoints[modelId];
 
     return { modelId, model, color, pathData, areaData, dots, finalPoints };
@@ -142,7 +121,7 @@ export default function EvolutionTab({ models, matches }: EvolutionTabProps) {
   modelPaths.sort((a, b) => b.finalPoints - a.finalPoints);
 
   // Y axis ticks
-  const yTicks = [];
+  const yTicks: number[] = [];
   const yTickStep = Math.max(1, Math.ceil(yMax / 8));
   for (let v = 0; v <= yMax; v += yTickStep) {
     yTicks.push(v);
@@ -206,7 +185,6 @@ export default function EvolutionTab({ models, matches }: EvolutionTabProps) {
             {points.map((p, i) => {
               if (i % labelInterval !== 0 && i !== points.length - 1) return null;
               const x = chartPadding.left + (i / Math.max(points.length - 1, 1)) * chartWidth;
-              // Rotate text for readability
               return (
                 <g key={`x-${p.matchId}`}>
                   <line x1={x} y1={chartPadding.top + chartHeight} x2={x} y2={chartPadding.top + chartHeight + 6} stroke="#3f3f46" strokeWidth="1" />
@@ -394,4 +372,4 @@ export default function EvolutionTab({ models, matches }: EvolutionTabProps) {
       </div>
     </div>
   );
-}
+});

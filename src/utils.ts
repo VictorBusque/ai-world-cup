@@ -17,11 +17,13 @@ export function analyzePredictions(matches: Match[], models: AIModel[]): AIModel
     let totalPredGoals = 0;
     let totalGoalDeviation = 0;
     let completedWithPred = 0;
+    let matchesWithPred = 0;
 
     matches.forEach(match => {
       const pred = match.predictions[model.id];
       if (pred) {
         totalPredGoals += (pred.teamAScore + pred.teamBScore);
+        matchesWithPred += 1;
       }
 
       if (match.actualScore && pred) {
@@ -44,14 +46,13 @@ export function analyzePredictions(matches: Match[], models: AIModel[]): AIModel
           model.correctOutcomes += 1;
         }
 
-        // Track goal deviation for completed matches
         totalGoalDeviation += Math.abs(pred.teamAScore - actScore.teamA) + Math.abs(pred.teamBScore - actScore.teamB);
         completedWithPred += 1;
       }
     });
 
-    model.avgPredictedGoals = +(totalPredGoals / Math.max(1, matches.length)).toFixed(2);
-    model.accuracy = totalCompleted > 0 ? Math.round((model.correctOutcomes / totalCompleted) * 100) : 100;
+    model.avgPredictedGoals = +(totalPredGoals / Math.max(1, matchesWithPred)).toFixed(2);
+    model.accuracy = totalCompleted > 0 ? Math.round((model.correctOutcomes / totalCompleted) * 100) : 0;
     model.avgGoalDeviation = completedWithPred > 0 ? +(totalGoalDeviation / completedWithPred).toFixed(2) : 0;
   });
 
@@ -120,16 +121,13 @@ export function calculatePredictedStandings(
     };
   });
 
-  // Build a team code → team id lookup for this group
   const codeToTeamId: Record<string, string> = {};
   for (const t of groupTeams) {
     codeToTeamId[t.code] = t.id;
   }
 
-  // Track which team code pairs have already been counted from API matches
   const countedPairs = new Set<string>();
 
-  // First: use predictions from API matches
   const groupMatches = matches.filter(m => m.group === group);
 
   groupMatches.forEach(m => {
@@ -151,20 +149,17 @@ export function calculatePredictedStandings(
     }
   });
 
-  // Second: supplement with raw model predictions for matches not in the API
   if (rawModelPredictions) {
-    // Derive group letter from group name: "Group H" → "h"
     const groupLetter = group.replace(/^Group /, '').toLowerCase();
 
     for (const [matchKey, pred] of Object.entries(rawModelPredictions)) {
-      // Match pattern: g_<letter>_<number> e.g. g_h_1
       if (!matchKey.startsWith(`g_${groupLetter}_`)) continue;
 
       const codes = Object.keys(pred).filter(k => typeof pred[k] === 'number');
       if (codes.length !== 2) continue;
 
       const pairKey = `${codes[0]}-${codes[1]}`;
-      if (countedPairs.has(pairKey)) continue; // already counted from API
+      if (countedPairs.has(pairKey)) continue;
 
       const tAId = codeToTeamId[codes[0]];
       const tBId = codeToTeamId[codes[1]];

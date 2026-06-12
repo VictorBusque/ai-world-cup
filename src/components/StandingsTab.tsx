@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Match, Team, AIModel } from "../types";
 import {
   calculateActualStandings,
@@ -13,7 +13,7 @@ interface StandingsTabProps {
   rawPredictions: Record<string, Record<string, Record<string, number | string>>>;
 }
 
-export default function StandingsTab({
+export default React.memo(function StandingsTab({
   matches,
   teams,
   models,
@@ -21,23 +21,14 @@ export default function StandingsTab({
 }: StandingsTabProps) {
   const [selectedGroup, setSelectedGroup] = useState<string>("Group A");
   const [selectedModelId, setSelectedModelId] = useState<string>(
-    models[0]?.id || "gemini-3-pro",
+    models[0]?.id || "",
   );
 
-  const groups = [
-    "Group A",
-    "Group B",
-    "Group C",
-    "Group D",
-    "Group E",
-    "Group F",
-    "Group G",
-    "Group H",
-    "Group I",
-    "Group J",
-    "Group K",
-    "Group L",
-  ];
+  // Derive groups dynamically from team data
+  const groups = useMemo(() => {
+    const uniqueGroups = Array.from(new Set(teams.map(t => t.group))).filter(Boolean).sort();
+    return uniqueGroups;
+  }, [teams]);
 
   // Team list as array
   const teamArray = Object.values(teams);
@@ -71,13 +62,13 @@ export default function StandingsTab({
   return (
     <div className="space-y-6">
       {/* Top Controls Bar */}
-      <div className="bg-zinc-90 w-full border-4 border-zinc-400 bg-zinc-900 p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="w-full border-4 border-zinc-400 bg-zinc-900 p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Group Selector */}
         <div className="flex flex-col gap-1.5">
           <span className="text-[10px] uppercase font-mono text-zinc-500 font-extrabold tracking-widest">
             Select World Cup Group
           </span>
-          <div className="flex bg-black p-1 border border-zinc-805 self-start">
+          <div className="flex bg-black p-1 border border-zinc-800 self-start flex-wrap">
             {groups.map((group) => (
               <button
                 key={group}
@@ -129,7 +120,7 @@ export default function StandingsTab({
                 Based on submitted mock / simulated results
               </p>
             </div>
-            <span className="px-2 py-0.5 text-[10px] font-mono font-black bg-zinc-800 border border-zinc-750 text-yellow-400 uppercase tracking-widest">
+            <span className="px-2 py-0.5 text-[10px] font-mono font-black bg-zinc-800 border border-zinc-700 text-yellow-400 uppercase tracking-widest">
               {selectedGroup} LIVE
             </span>
           </div>
@@ -234,7 +225,7 @@ export default function StandingsTab({
                 derived purely from this model's predictions
               </p>
             </div>
-            <span className="px-2 py-0.5 text-[10px] font-mono font-black bg-zinc-800 border border-zinc-750 text-emerald-400 uppercase tracking-widest">
+            <span className="px-2 py-0.5 text-[10px] font-mono font-black bg-zinc-800 border border-zinc-700 text-emerald-400 uppercase tracking-widest">
               MODEL FORECAST
             </span>
           </div>
@@ -362,7 +353,7 @@ export default function StandingsTab({
           <HelpCircle className="h-5 w-5 shrink-0" />
           How to read this comparison?
         </h4>
-        <p className="text-xs text-zinc-405 leading-relaxed font-sans">
+        <p className="text-xs text-zinc-400 leading-relaxed font-sans">
           The <span className="text-white font-bold">Actual Standings</span>{" "}
           illustrates the current group leaderboard based on simulated live
           scores. The{" "}
@@ -375,4 +366,4 @@ export default function StandingsTab({
       </div>
     </div>
   );
-}
+});

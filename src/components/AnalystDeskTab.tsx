@@ -1,4 +1,4 @@
-import { useState, useTransition } from "react";
+import React, { useState, useTransition } from "react";
 import { motion } from "motion/react";
 import { AIModel, Match } from "../types";
 import { Sparkles, Megaphone, Terminal, Newspaper, AlertTriangle, ArrowRight, BookOpen } from "lucide-react";
@@ -8,7 +8,7 @@ interface AnalystDeskTabProps {
   matches: Match[];
 }
 
-export default function AnalystDeskTab({ models, matches }: AnalystDeskTabProps) {
+export default React.memo(function AnalystDeskTab({ models, matches }: AnalystDeskTabProps) {
   const [summaryText, setSummaryText] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -19,12 +19,10 @@ export default function AnalystDeskTab({ models, matches }: AnalystDeskTabProps)
     setError(null);
     startTransition(async () => {
       try {
-        // Build concise textual representation of the models standings
         const modelStandingText = models.map((m, idx) => 
           `${idx + 1}. ${m.name} (${m.provider}): ${m.points} pts, ${m.accuracy}% accuracy, ${m.exactScores} exact scores, ${m.avgGoalDeviation.toFixed(2)} avg goal deviation.`
         ).join("\n");
 
-        // Build a brief matches status text
         const upcomingMatchesText = matches.filter(m => m.actualScore === null).map(m => 
           `- ${m.teamA.name} vs ${m.teamB.name} (${m.group})`
         ).slice(0, 5).join("\n");
@@ -50,18 +48,17 @@ export default function AnalystDeskTab({ models, matches }: AnalystDeskTabProps)
     });
   };
 
-  // Fun sports loading steps
   const loadingSteps = [
-    "Compiling points metrics across 24 group stage fixtures...",
+    "Compiling points metrics across group stage fixtures...",
     "Querying Gemini 3.5 Flash server-side engine...",
-    "Evaluating statistical discrepancy between DeepSeek & Gemini...",
+    "Evaluating statistical discrepancy between models...",
     "Drafting tactical editorial column for the Leaderboard brief..."
   ];
 
   return (
     <div className="space-y-6">
       {/* Intro Desk Banner */}
-      <div className="bg-zinc-90 w-full border-4 border-zinc-800 bg-zinc-900 p-6 relative rounded-none overflow-hidden">
+      <div className="w-full border-4 border-zinc-800 bg-zinc-900 p-6 relative rounded-none overflow-hidden">
         <div className="max-w-2xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-black border border-zinc-800 text-yellow-400 text-xs font-black uppercase tracking-widest mb-4">
             <Newspaper className="h-3.5 w-3.5" />
@@ -78,7 +75,7 @@ export default function AnalystDeskTab({ models, matches }: AnalystDeskTabProps)
             <button
               onClick={handleFetchBriefing}
               disabled={isPending}
-              className="px-5 py-3 bg-yellow-400 hover:bg-yellow-300 disabled:bg-zinc-800 text-black font-extrabold uppercase text-[11px] tracking-widest transition-all"
+              className="flex items-center gap-2 px-5 py-3 bg-yellow-400 hover:bg-yellow-300 disabled:bg-zinc-800 text-black font-extrabold uppercase text-[11px] tracking-widest transition-all"
             >
               {isPending ? (
                 <>
@@ -105,7 +102,7 @@ export default function AnalystDeskTab({ models, matches }: AnalystDeskTabProps)
           </div>
           <div>
             <span className="text-white font-display text-xl uppercase tracking-wider block">Drafting live model briefing...</span>
-            <div className="text-[10px] text-zinc-550 mt-1 font-mono max-w-sm mx-auto h-8 flex items-center justify-center uppercase tracking-wider">
+            <div className="text-[10px] text-zinc-500 mt-1 font-mono max-w-sm mx-auto h-8 flex items-center justify-center uppercase tracking-wider">
               <motion.div
                 key={Date.now()}
                 initial={{ opacity: 0, y: 5 }}
@@ -118,14 +115,14 @@ export default function AnalystDeskTab({ models, matches }: AnalystDeskTabProps)
           </div>
         </div>
       ) : error ? (
-        <div className="bg-rose-950/20 text-rose-450 p-6 border-4 border-rose-900 flex items-start gap-3 rounded-none">
-          <AlertTriangle className="h-6 w-6 shrink-0 mt-0.5 text-rose-450" />
+        <div className="bg-rose-950/20 text-rose-400 p-6 border-4 border-rose-900 flex items-start gap-3 rounded-none">
+          <AlertTriangle className="h-6 w-6 shrink-0 mt-0.5 text-rose-400" />
           <div>
             <h4 className="font-display text-lg uppercase tracking-wider text-white">Server Connection Issue</h4>
             <p className="text-xs text-rose-300 mt-1 leading-relaxed font-mono uppercase tracking-wide">
               {error}
             </p>
-            <p className="text-[10px] text-zinc-550 mt-3 font-mono uppercase tracking-wider">
+            <p className="text-[10px] text-zinc-500 mt-3 font-mono uppercase tracking-wider">
               Ensure GEMINI_API_KEY environment variable is defined in Settings Secrets panel.
             </p>
           </div>
@@ -147,7 +144,6 @@ export default function AnalystDeskTab({ models, matches }: AnalystDeskTabProps)
           {/* Render Markdown Paragraphs beautifully */}
           <div className="prose prose-invert max-w-none text-zinc-300 leading-relaxed font-sans space-y-5">
             {summaryText.split("\n\n").map((para, pIdx) => {
-              // Simple markdown parser rules for final output design
               if (para.startsWith("#")) {
                 const cleanHeader = para.replace(/#/g, "").trim();
                 return (
@@ -173,7 +169,6 @@ export default function AnalystDeskTab({ models, matches }: AnalystDeskTabProps)
               return (
                 <p key={pIdx} className="text-xs md:text-sm text-zinc-300 font-sans leading-relaxed">
                   {para.split("\n").map((line, lIdx) => {
-                    // Minimal markdown bold parsing
                     const parts = line.split("**");
                     if (parts.length > 2) {
                       return (
@@ -205,4 +200,4 @@ export default function AnalystDeskTab({ models, matches }: AnalystDeskTabProps)
       )}
     </div>
   );
-}
+});

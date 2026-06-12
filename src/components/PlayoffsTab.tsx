@@ -1,35 +1,16 @@
 import React, { useMemo, useState } from "react";
-import { Team, AIModel, PlayoffRound, ModelPlayoffPrediction, BRACKET_ORDER } from "../types";
-import { Trophy, ChevronLeft, ChevronRight, Users, Medal } from "lucide-react";
+import { Team, AIModel, Match, ModelPlayoffPrediction, PlayoffMatch } from "../types";
+import { BRACKET_ORDER, ROUND_ORDER, ROUND_META, ROUND_COUNTS, buildTeamByCodeMap } from "../constants";
+import { Trophy, Users } from "lucide-react";
 
 interface PlayoffsTabProps {
-  matches: never[];
+  matches: Match[];
   teams: Team[];
   models: AIModel[];
-  playoffMatches: never[];
+  playoffMatches: PlayoffMatch[];
   isActive: boolean;
   modelPlayoffPredictions: ModelPlayoffPrediction[];
 }
-
-const ROUND_ORDER = ["r32", "r16", "qf", "sf", "bronze", "final"] as const;
-
-const ROUND_META: Record<string, { label: string; short: string }> = {
-  r32: { label: "ROUND OF 32", short: "R32" },
-  r16: { label: "ROUND OF 16", short: "R16" },
-  qf: { label: "QUARTER-FINALS", short: "QF" },
-  sf: { label: "SEMI-FINALS", short: "SF" },
-  bronze: { label: "BRONZE MATCH", short: "3RD" },
-  final: { label: "FINAL", short: "F" },
-};
-
-const ROUND_COUNTS: Record<string, number> = {
-  r32: 16,
-  r16: 8,
-  qf: 4,
-  sf: 2,
-  bronze: 1,
-  final: 1,
-};
 
 interface BracketMatch {
   id: string;
@@ -52,12 +33,6 @@ interface ModelBracket {
   matches: BracketMatch[];
 }
 
-function buildTeamByCodeMap(teams: Team[]): Map<string, Team> {
-  const m = new Map<string, Team>();
-  for (const t of teams) m.set(t.code, t);
-  return m;
-}
-
 function buildModelBrackets(
   allTeams: Team[],
   models: AIModel[],
@@ -74,7 +49,6 @@ function buildModelBrackets(
       const roundData = mpp.rounds[roundKey];
       if (!roundData) continue;
 
-      // Sort matches by bracket topology order so adjacent pairs feed into the next round
       const order = BRACKET_ORDER[roundKey] ?? [];
       const sortedMatchIds = Object.keys(roundData).sort(
         (a, b) => order.indexOf(a) - order.indexOf(b)
@@ -94,13 +68,11 @@ function buildModelBrackets(
       }
     }
 
-    // Resolve champion & runner-up
     let champion: Team | null = null;
     let runnerUp: Team | null = null;
     if (mpp.champion) champion = codeToTeam.get(mpp.champion) ?? null;
     if (mpp.runnerUp) runnerUp = codeToTeam.get(mpp.runnerUp) ?? null;
 
-    // Resolve bronze winner
     let bronzeWinner: Team | null = null;
     const bronzeData = mpp.rounds["bronze"];
     if (bronzeData) {
@@ -110,7 +82,6 @@ function buildModelBrackets(
       }
     }
 
-    // Final score string
     let finalScore: string | null = null;
     const finalData = mpp.rounds["final"];
     if (finalData) {
@@ -132,7 +103,7 @@ function buildModelBrackets(
   });
 }
 
-export default function PlayoffsTab({ teams, models, modelPlayoffPredictions }: PlayoffsTabProps) {
+export default React.memo(function PlayoffsTab({ teams, models, modelPlayoffPredictions }: PlayoffsTabProps) {
   const [selectedModelIndex, setSelectedModelIndex] = useState(0);
 
   const modelBrackets = useMemo(
@@ -419,7 +390,7 @@ export default function PlayoffsTab({ teams, models, modelPlayoffPredictions }: 
       </div>
     </div>
   );
-}
+});
 
 function PredictedBracketMatch({
   match,

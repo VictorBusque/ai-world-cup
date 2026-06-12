@@ -1,9 +1,10 @@
-import { useMemo } from "react";
-import { Team, AIModel, ModelPlayoffPrediction } from "../types";
+import React, { useMemo } from "react";
+import { Match, Team, AIModel, ModelPlayoffPrediction } from "../types";
+import { buildTeamByCodeMap } from "../constants";
 import { Trophy, Medal, Crown, TrendingUp, BarChart3, Zap } from "lucide-react";
 
 interface PredictionsTabProps {
-  matches: never[];
+  matches: Match[];
   teams: Team[];
   models: AIModel[];
   modelPlayoffPredictions: ModelPlayoffPrediction[];
@@ -20,13 +21,7 @@ interface ModelPrediction {
   finalScore: string | null;
 }
 
-function buildTeamByCodeMap(teams: Team[]): Map<string, Team> {
-  const m = new Map<string, Team>();
-  for (const t of teams) m.set(t.code, t);
-  return m;
-}
-
-export default function PredictionsTab({ teams, models, modelPlayoffPredictions }: PredictionsTabProps) {
+export default React.memo(function PredictionsTab({ teams, models, modelPlayoffPredictions }: PredictionsTabProps) {
   const codeToTeam = useMemo(() => buildTeamByCodeMap(teams), [teams]);
 
   const modelPredictions: ModelPrediction[] = useMemo(() => {
@@ -35,11 +30,9 @@ export default function PredictionsTab({ teams, models, modelPlayoffPredictions 
     return modelPlayoffPredictions.map((mpp) => {
       const model = modelMap.get(mpp.modelId);
 
-      // Resolve champion & runner-up from the model's playoff final
       const champion = mpp.champion ? codeToTeam.get(mpp.champion) ?? null : null;
       const runnerUp = mpp.runnerUp ? codeToTeam.get(mpp.runnerUp) ?? null : null;
 
-      // Resolve bronze winner
       let bronzeWinner: Team | null = null;
       const bronzeData = mpp.rounds["bronze"];
       if (bronzeData) {
@@ -49,7 +42,6 @@ export default function PredictionsTab({ teams, models, modelPlayoffPredictions 
         }
       }
 
-      // Final score
       let finalScore: string | null = null;
       const finalData = mpp.rounds["final"];
       if (finalData) {
@@ -101,7 +93,6 @@ export default function PredictionsTab({ teams, models, modelPlayoffPredictions 
   const consensusChampion = championVotes[0];
   const maxVotes = championVotes[0]?.count || 1;
 
-  // The other finalist: team with most finalist appearances that is NOT the consensus champion
   const otherFinalist = useMemo(
     () => finalistVotes.find(fv => !consensusChampion || fv.team.id !== consensusChampion.team.id) ?? null,
     [finalistVotes, consensusChampion]
@@ -337,4 +328,4 @@ export default function PredictionsTab({ teams, models, modelPlayoffPredictions 
       )}
     </div>
   );
-}
+});

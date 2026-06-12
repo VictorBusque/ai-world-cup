@@ -94,14 +94,6 @@ export interface PlayoffMatch {
   predictions: Record<string, { teamAScore: number; teamBScore: number }>;
 }
 
-/** Parsed playoff predictions for a single model */
-export interface ModelPlayoffPrediction {
-  modelId: string;
-  rounds: Record<string, Record<string, { teamA: string; teamAScore: number; teamB: string; teamBScore: number; summary?: string }>>;
-  champion: string | null; // team code
-  runnerUp: string | null; // team code
-}
-
 export const PLAYOFF_ROUNDS: PlayoffRound[] = [
   "Round of 32",
   "Round of 16",
@@ -119,3 +111,13 @@ export const BRACKET_ORDER: Record<string, string[]> = {
   bronze: ["m103"],
   final: ["m104"],
 };
+
+/** Parsed playoff predictions for a single model */
+export interface ModelPlayoffPrediction {
+  modelId: string;
+  rounds: Record<string, Record<string, { teamA: string; teamAScore: number; teamB: string; teamBScore: number; summary?: string }>>;
+  champion: string | null; // team code
+  runnerUp: string | null; // team code
+}
+
+

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Match, AIModel } from "../types";
 import {
@@ -11,12 +11,17 @@ interface MatchesTabProps {
   models: AIModel[];
 }
 
-export default function MatchesTab({ matches, models }: MatchesTabProps) {
+export default React.memo(function MatchesTab({ matches, models }: MatchesTabProps) {
   const [selectedGroup, setSelectedGroup] = useState<string>("All");
   const [selectedStatus, setSelectedStatus] = useState<string>("All");
   const [expandedMatchId, setExpandedMatchId] = useState<string | null>(null);
 
-  const groups = ["All", "Group A", "Group B", "Group C", "Group D"];
+  // Derive groups dynamically from match data
+  const groups = useMemo(() => {
+    const uniqueGroups = Array.from(new Set(matches.map(m => m.group))).filter(Boolean).sort();
+    return ["All", ...uniqueGroups];
+  }, [matches]);
+
   const statuses = ["All", "Completed", "Upcoming"];
 
   // Filter & sort matches by date then time
@@ -73,19 +78,19 @@ export default function MatchesTab({ matches, models }: MatchesTabProps) {
     } else if (isOutcome) {
       return { label: "Outcome Only (+1 PT)", bg: "bg-yellow-500/10 border-yellow-500 text-yellow-400" };
     } else {
-      return { label: "Incorrect (0 PTS)", bg: "bg-zinc-950 border-zinc-850 text-zinc-600" };
+      return { label: "Incorrect (0 PTS)", bg: "bg-zinc-950 border-zinc-800 text-zinc-600" };
     }
   };
 
   return (
     <div className="space-y-6">
       {/* Filters HUD */}
-      <div className="bg-zinc-90 w-full border-4 border-zinc-800 p-5 flex flex-wrap items-center justify-between gap-4">
+      <div className="w-full border-4 border-zinc-800 bg-zinc-900 p-5 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-6 flex-wrap">
           {/* Groups */}
           <div className="flex flex-col gap-1.5">
             <span className="text-[10px] uppercase font-mono text-zinc-500 font-extrabold tracking-widest">Group Filter</span>
-            <div className="flex items-center gap-1 bg-black p-1 border border-zinc-800">
+            <div className="flex items-center gap-1 bg-black p-1 border border-zinc-800 flex-wrap">
               {groups.map(group => (
                 <button
                   key={group}
@@ -159,7 +164,7 @@ export default function MatchesTab({ matches, models }: MatchesTabProps) {
                 }`}
               >
                 {/* Match Header Info */}
-                <div className="px-5 py-3 border-b-2 border-zinc-800 bg-black flex items-center justify-between text-[11px] text-zinc-450 font-mono font-bold">
+                <div className="px-5 py-3 border-b-2 border-zinc-800 bg-black flex items-center justify-between text-[11px] text-zinc-500 font-mono font-bold">
                   <div className="flex items-center gap-3">
                     <span className="px-2 py-0.5 bg-zinc-800 text-yellow-400 border border-zinc-700 text-[10px] uppercase font-black">
                       {match.group}
@@ -169,7 +174,7 @@ export default function MatchesTab({ matches, models }: MatchesTabProps) {
                     </span>
                   </div>
                   <span className="flex items-center gap-1 uppercase tracking-wider text-zinc-500">
-                    <MapPin className="h-3.5 w-3.5 text-zinc-650" /> {match.venue}
+                    <MapPin className="h-3.5 w-3.5 text-zinc-600" /> {match.venue}
                   </span>
                 </div>
 
@@ -209,7 +214,7 @@ export default function MatchesTab({ matches, models }: MatchesTabProps) {
                       <span className="text-5xl filter drop-shadow select-none shrink-0">{match.teamB.flag}</span>
                       <div>
                         <span className="font-display text-2xl uppercase tracking-tight text-white block truncate leading-none">{match.teamB.name}</span>
-                        <span className="text-[10px] text-zinc-500 font-mono selector uppercase tracking-widest block mt-0.5">{match.teamB.code} • GROUP SEED</span>
+                        <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest block mt-0.5">{match.teamB.code} • GROUP SEED</span>
                       </div>
                     </div>
                   </div>
@@ -230,7 +235,7 @@ export default function MatchesTab({ matches, models }: MatchesTabProps) {
                   </div>
                 </div>
 
-                {/* Compare AI Predictions Strip in collapsed state */}
+                {/* Compare AI Predictions Strip in collapsed mode */}
                 {!isExpanded && (
                   <div className="px-5 py-3 bg-zinc-950 border-t-2 border-zinc-800 flex flex-wrap items-center gap-y-1.5 gap-x-4 text-[11px] text-zinc-400">
                     <span className="font-mono text-[9px] uppercase font-black tracking-widest text-yellow-400">AI predictions:</span>
@@ -247,7 +252,7 @@ export default function MatchesTab({ matches, models }: MatchesTabProps) {
                             className={`px-2.5 py-1 font-mono border-2 ${
                               evalStats 
                                 ? evalStats.bg.replace("text-", "border-").replace("bg-", "bg-opacity-5 ") 
-                                : "bg-black border-zinc-850"
+                                : "bg-black border-zinc-800"
                             }`}
                           >
                             <span className="text-zinc-500 font-sans mr-1 text-[10px] uppercase font-bold">{model.name}:</span>
@@ -328,4 +333,4 @@ export default function MatchesTab({ matches, models }: MatchesTabProps) {
       </div>
     </div>
   );
-}
+});

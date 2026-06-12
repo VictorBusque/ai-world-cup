@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import { AnimatePresence } from "motion/react";
 import { Match, AIModel, Team, ModelPlayoffPrediction, PlayoffMatch } from "./types";
 import { loadData } from "./data";
@@ -10,12 +10,56 @@ import StandingsTab from "./components/StandingsTab";
 import EvolutionTab from "./components/EvolutionTab";
 import PlayoffsTab from "./components/PlayoffsTab";
 import PredictionsTab from "./components/PredictionsTab";
+import AnalystDeskTab from "./components/AnalystDeskTab";
 import ModelDetailModal from "./components/ModelDetailModal";
 
-import { Award, Swords, BarChart3, TrendingUp, Trophy, Eye } from "lucide-react";
+import { Award, Swords, BarChart3, TrendingUp, Trophy, Eye, Newspaper, RefreshCw } from "lucide-react";
 
+// ── Error Boundary ──────────────────────────────────────────────────────────
+import type { ReactNode } from "react";
+
+type EBProps = { children: ReactNode };
+type EBState = { hasError: boolean; error: Error | null };
+
+class ErrorBoundary extends React.Component<EBProps, EBState> {
+  public state: EBState = { hasError: false, error: null };
+
+  public static getDerivedStateFromError(error: Error): EBState {
+    return { hasError: true, error };
+  }
+
+  public componentDidCatch(error: Error, info: React.ErrorInfo) {
+    console.error("ErrorBoundary caught:", error, info);
+  }
+
+  public render(): ReactNode {
+    if (this.state.hasError) {
+      return (
+        <main className="min-h-screen bg-[#050505] text-white flex items-center justify-center">
+          <div className="text-center space-y-4 max-w-md px-6">
+            <div className="text-6xl">💥</div>
+            <div className="font-display text-2xl uppercase tracking-wider text-white">Something went wrong</div>
+            <div className="text-xs text-red-400 font-mono whitespace-pre-wrap">{this.state.error?.message}</div>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-white text-black text-xs font-black uppercase tracking-widest hover:bg-zinc-200 transition-colors"
+            >
+              Reload Page
+            </button>
+          </div>
+        </main>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+// ── Tab type ────────────────────────────────────────────────────────────────
+type TabId = "leaderboard" | "matches" | "standings" | "evolution" | "playoffs" | "predictions" | "analyst";
+
+// ── Main App ────────────────────────────────────────────────────────────────
 export default function App() {
-  const [activeTab, setActiveTab] = useState<"leaderboard" | "matches" | "standings" | "evolution" | "playoffs" | "predictions">("leaderboard");
+  const [activeTab, setActiveTab] = useState<TabId>("leaderboard");
 
   // Async data loading state
   const [loading, setLoading] = useState(true);
@@ -27,9 +71,10 @@ export default function App() {
   const [rawPredictions, setRawPredictions] = useState<Record<string, Record<string, Record<string, number | string>>>>({});
   const [playoffMatches, setPlayoffMatches] = useState<PlayoffMatch[]>([]);
   const [modelPlayoffPredictions, setModelPlayoffPredictions] = useState<ModelPlayoffPrediction[]>([]);
+  const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
 
   // Bootstrap: load JSON data on mount
-  React.useEffect(() => {
+  useEffect(() => {
     loadData()
       .then(({ teams, matches, models, rawPredictions, playoffMatches, modelPlayoffPredictions }) => {
         setTeams(teams);
@@ -38,6 +83,7 @@ export default function App() {
         setRawPredictions(rawPredictions);
         if (playoffMatches) setPlayoffMatches(playoffMatches);
         setModelPlayoffPredictions(modelPlayoffPredictions);
+        setLastRefreshed(new Date());
         setLoading(false);
       })
       .catch(err => {
@@ -45,6 +91,43 @@ export default function App() {
         setLoadError(err.message);
         setLoading(false);
       });
+  }, []);
+
+  // Poll for score updates every 15 minutes during match windows (18:00–04:59 local)
+  useEffect(() => {
+    const POLL_INTERVAL_MS = 15 * 60 * 1000; // 15 minutes
+
+    const isDuringMatchWindow = () => {
+      const hour = new Date().getHours();
+      return hour >= 18 || hour < 5;
+    };
+
+    const pollData = async () => {
+      if (!isDuringMatchWindow()) return;
+      try {
+        const data = await loadData();
+        setMatches(data.matches);
+        setModelPlayoffPredictions(data.modelPlayoffPredictions);
+        setLastRefreshed(new Date());
+      } catch (err) {
+        console.warn("Poll refresh failed:", err);
+      }
+    };
+
+    const interval = setInterval(pollData, POLL_INTERVAL_MS);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Manual refresh
+  const handleManualRefresh = useCallback(async () => {
+    try {
+      const data = await loadData();
+      setMatches(data.matches);
+      setModelPlayoffPredictions(data.modelPlayoffPredictions);
+      setLastRefreshed(new Date());
+    } catch (err) {
+      console.warn("Manual refresh failed:", err);
+    }
   }, []);
 
   const analyzedModels = useMemo(() => {
@@ -56,9 +139,20 @@ export default function App() {
   const globalAccuracyMax = analyzedModels.length > 0 ? Math.max(...analyzedModels.map(m => m.accuracy)) : 0;
   const globalGoalDevMin = analyzedModels.length > 0 ? Math.min(...analyzedModels.filter(m => m.avgGoalDeviation > 0).map(m => m.avgGoalDeviation)) : 0;
 
-  // Determine if playoffs are active (all group matches have scores)
+  // Count group-stage matches only
+  const groupStageMatchCount = useMemo(() => {
+    return matches.filter(m =>
+      !m.group.startsWith("Round") && !m.group.startsWith("Q") &&
+      !m.group.startsWith("S") && !m.group.startsWith("Final")
+    ).length;
+  }, [matches]);
+
+  // Determine if playoffs are active
   const playoffsActive = useMemo(() => {
-    const groupMatches = matches.filter(m => !m.group.startsWith("Round") && !m.group.startsWith("Q") && !m.group.startsWith("S") && !m.group.startsWith("Final"));
+    const groupMatches = matches.filter(m =>
+      !m.group.startsWith("Round") && !m.group.startsWith("Q") &&
+      !m.group.startsWith("S") && !m.group.startsWith("Final")
+    );
     return groupMatches.length > 0 && groupMatches.every(m => m.actualScore !== null);
   }, [matches]);
 
@@ -97,169 +191,166 @@ export default function App() {
 
   const teamArray: Team[] = Object.values(teams);
 
+  const tabs: { id: TabId; label: string; icon: React.ReactNode; accent: string }[] = [
+    { id: "leaderboard", label: "Leaderboard", icon: <Award className="h-4 w-4 text-yellow-400" />, accent: "border-yellow-400" },
+    { id: "matches", label: "Matches", icon: <Swords className="h-4 w-4 text-emerald-400" />, accent: "border-emerald-400" },
+    { id: "evolution", label: "Evolution", icon: <TrendingUp className="h-4 w-4 text-yellow-400" />, accent: "border-yellow-400" },
+    { id: "standings", label: "Group Stage", icon: <BarChart3 className="h-4 w-4 text-indigo-400" />, accent: "border-indigo-400" },
+    { id: "playoffs", label: "Playoffs", icon: <Trophy className="h-4 w-4 text-yellow-400" />, accent: "border-yellow-400" },
+    { id: "predictions", label: "Predictions", icon: <Eye className="h-4 w-4 text-emerald-400" />, accent: "border-emerald-400" },
+    { id: "analyst", label: "Analyst Desk", icon: <Newspaper className="h-4 w-4 text-sky-400" />, accent: "border-sky-400" },
+  ];
+
   return (
-    <main className="min-h-screen bg-[#050505] text-white flex flex-col font-sans selection:bg-white selection:text-black relative overflow-x-hidden">
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#141414_1px,transparent_1px),linear-gradient(to_bottom,#141414_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_80%,transparent_100%)] pointer-events-none opacity-40"></div>
+    <ErrorBoundary>
+      <main className="min-h-screen bg-[#050505] text-white flex flex-col font-sans selection:bg-white selection:text-black relative overflow-x-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#141414_1px,transparent_1px),linear-gradient(to_bottom,#141414_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_80%,transparent_100%)] pointer-events-none opacity-40"></div>
 
-      <div className="bg-zinc-950 border-b border-zinc-900 px-4 py-2 text-center text-[10px] text-zinc-500 font-mono tracking-wider uppercase flex items-center justify-center gap-2 z-10">
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span>World Cup AI Predictor Dashboard • {baseModels.length} Models Loaded</span>
-      </div>
+        <div className="bg-zinc-950 border-b border-zinc-900 px-4 py-2 text-center text-[10px] text-zinc-500 font-mono tracking-wider uppercase flex items-center justify-center gap-2 z-10">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>World Cup AI Predictor Dashboard • {baseModels.length} Models Loaded</span>
+          <span className="mx-2 text-zinc-700">|</span>
+          <span>Last refreshed: {lastRefreshed.toLocaleTimeString()}</span>
+          <button
+            onClick={handleManualRefresh}
+            className="ml-2 p-0.5 hover:text-white transition-colors"
+            title="Refresh data now"
+          >
+            <RefreshCw className="h-3 w-3" />
+          </button>
+        </div>
 
-      <header className="border-b-4 border-white bg-black p-6 sm:p-8 relative z-10">
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-          <div className="flex flex-col">
-            <h1 className="font-display text-5xl sm:text-8xl leading-[0.85] tracking-tighter uppercase">
-              WORLD CUP<br/>
-              <span className="text-zinc-500">AI PREDICTOR</span>
-            </h1>
-            <div className="flex flex-wrap gap-3 mt-4">
-              <span className="bg-white text-black px-3 py-1 text-xs font-black uppercase tracking-widest">
-                Group Stage
+        <header className="border-b-4 border-white bg-black p-6 sm:p-8 relative z-10">
+          <div className="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+            <div className="flex flex-col">
+              <h1 className="font-display text-5xl sm:text-8xl leading-[0.85] tracking-tighter uppercase">
+                WORLD CUP<br/>
+                <span className="text-zinc-500">AI PREDICTOR</span>
+              </h1>
+              <div className="flex flex-wrap gap-3 mt-4">
+                <span className="bg-white text-black px-3 py-1 text-xs font-black uppercase tracking-widest">
+                  Group Stage
+                </span>
+                <span className="border border-zinc-700 px-3 py-1 text-xs font-bold text-zinc-400 uppercase tracking-widest">
+                  {matches.length} Matches • {baseModels.length} Models
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row sm:items-end gap-6 sm:gap-12">
+              <div className="text-left lg:text-right">
+                <div className="text-xs font-black text-zinc-500 uppercase tracking-wider mb-1">Global Accuracy Max</div>
+                <div className="text-5xl font-display text-emerald-400 accent-green tracking-tight leading-none">
+                  {globalAccuracyMax > 0 ? `${globalAccuracyMax}%` : "N/A"}
+                </div>
+              </div>
+
+              <div className="text-left lg:text-right">
+                <div className="text-xs font-black text-zinc-500 uppercase tracking-wider mb-1">Best Goal Dev</div>
+                <div className="text-5xl font-display text-sky-400 tracking-tight leading-none">
+                  {globalGoalDevMin > 0 ? globalGoalDevMin.toFixed(2) : "N/A"}
+                </div>
+              </div>
+
+              <div className="text-left lg:text-right">
+                <div className="text-xs font-black text-zinc-500 uppercase tracking-wider mb-1">Top Machine Points</div>
+                <div className="text-5xl font-display text-yellow-400 leading-none">
+                  {highestScore} PTS
+                </div>
+                <div className="text-[10px] uppercase font-mono text-zinc-400 mt-2 block">
+                  Leader Model: <span className="text-white font-bold">{leadingModelName}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <section className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 flex flex-col space-y-8 relative z-10">
+          <div className="border-b-2 border-zinc-800 flex items-center justify-between flex-wrap gap-2">
+            <div className="flex flex-wrap -mb-[2px]">
+              {tabs.map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`px-5 py-4 text-xs sm:text-sm font-black uppercase tracking-widest transition-all flex items-center gap-2 border-b-4 ${
+                    activeTab === tab.id
+                      ? `${tab.accent} text-white bg-zinc-900`
+                      : tab.id === "playoffs" && !playoffsActive
+                        ? "border-transparent text-zinc-500 hover:text-zinc-300"
+                        : "border-transparent text-zinc-500 hover:text-zinc-300"
+                  }`}
+                >
+                  {tab.icon} {tab.label}
+                  {tab.id === "playoffs" && !playoffsActive && (
+                    <span className="text-[8px] bg-zinc-800 text-zinc-500 px-1.5 py-0.5 font-mono uppercase tracking-widest">soon</span>
+                  )}
+                </button>
+              ))}
+            </div>
+
+            <div className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-1.5 bg-zinc-950 border border-zinc-900 px-3 py-1.5 mb-2 md:mb-0">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              READ ONLY
+            </div>
+          </div>
+
+          <div className="flex-1">
+            {activeTab === "leaderboard" && (
+              <LeaderboardTab
+                models={analyzedModels}
+                matches={matches}
+                totalGroupMatches={groupStageMatchCount}
+                onSelectModel={setSelectedDiagnosticModel}
+              />
+            )}
+            {activeTab === "matches" && (
+              <MatchesTab matches={matches} models={analyzedModels} />
+            )}
+            {activeTab === "standings" && (
+              <StandingsTab matches={matches} teams={teamArray} models={analyzedModels} rawPredictions={rawPredictions} />
+            )}
+            {activeTab === "evolution" && (
+              <EvolutionTab models={analyzedModels} matches={matches} />
+            )}
+            {activeTab === "playoffs" && (
+              <PlayoffsTab
+                playoffMatches={playoffMatches}
+                isActive={playoffsActive}
+                matches={matches}
+                teams={teamArray}
+                models={analyzedModels}
+                modelPlayoffPredictions={modelPlayoffPredictions}
+              />
+            )}
+            {activeTab === "predictions" && (
+              <PredictionsTab matches={matches} teams={teamArray} models={analyzedModels} modelPlayoffPredictions={modelPlayoffPredictions} />
+            )}
+            {activeTab === "analyst" && (
+              <AnalystDeskTab models={analyzedModels} matches={matches} />
+            )}
+          </div>
+        </section>
+
+        <AnimatePresence>
+          {selectedDiagnosticModel && (
+            <ModelDetailModal model={selectedDiagnosticModel} matches={matches} teams={teamArray} modelPlayoffPredictions={modelPlayoffPredictions} onClose={() => setSelectedDiagnosticModel(null)} />
+          )}
+        </AnimatePresence>
+
+        <footer className="bg-black border-t-2 border-zinc-800 py-6 mt-12 text-zinc-500">
+          <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6 text-xs font-mono">
+            <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
+              WORLD PREDICTOR TAPE • Read Only Dashboard
+            </div>
+            <div className="flex items-center gap-4 overflow-hidden max-w-lg">
+              <span className="text-yellow-400 shrink-0 font-black uppercase text-[10px] tracking-wider">LAST SCORES:</span>
+              <span className="text-white text-[11px] font-semibold tracking-wider whitespace-nowrap overflow-ellipsis overflow-hidden">
+                {completedScoresTicker}
               </span>
-              <span className="border border-zinc-700 px-3 py-1 text-xs font-bold text-zinc-400 uppercase tracking-widest">
-                {matches.length} Matches • {baseModels.length} Models
-              </span>
             </div>
           </div>
-
-          <div className="flex flex-col sm:flex-row sm:items-end gap-6 sm:gap-12">
-            <div className="text-left lg:text-right">
-              <div className="text-xs font-black text-zinc-500 uppercase tracking-wider mb-1">Global Accuracy Max</div>
-              <div className="text-5xl font-display text-emerald-400 accent-green tracking-tight leading-none">
-                {globalAccuracyMax > 0 ? `${globalAccuracyMax}%` : "N/A"}
-              </div>
-            </div>
-
-            <div className="text-left lg:text-right">
-              <div className="text-xs font-black text-zinc-500 uppercase tracking-wider mb-1">Best Goal Dev</div>
-              <div className="text-5xl font-display text-sky-400 tracking-tight leading-none">
-                {globalGoalDevMin > 0 ? globalGoalDevMin.toFixed(2) : "N/A"}
-              </div>
-            </div>
-
-            <div className="text-left lg:text-right">
-              <div className="text-xs font-black text-zinc-500 uppercase tracking-wider mb-1">Top Machine Points</div>
-              <div className="text-5xl font-display text-yellow-400 leading-none">
-                {highestScore} PTS
-              </div>
-              <div className="text-[10px] uppercase font-mono text-zinc-400 mt-2 block">
-                Leader Model: <span className="text-white font-bold">{leadingModelName}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <section className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 flex flex-col space-y-8 relative z-10">
-        <div className="border-b-2 border-zinc-800 flex items-center justify-between flex-wrap gap-2">
-          <div className="flex flex-wrap -mb-[2px]">
-            <button
-              onClick={() => setActiveTab("leaderboard")}
-              className={`px-5 py-4 text-xs sm:text-sm font-black uppercase tracking-widest transition-all flex items-center gap-2 border-b-4 ${
-                activeTab === "leaderboard" ? "border-yellow-400 text-white bg-zinc-900" : "border-transparent text-zinc-500 hover:text-zinc-300"
-              }`}
-            >
-              <Award className="h-4 w-4 text-yellow-400" /> Leaderboard
-            </button>
-            <button
-              onClick={() => setActiveTab("matches")}
-              className={`px-5 py-4 text-xs sm:text-sm font-black uppercase tracking-widest transition-all flex items-center gap-2 border-b-4 ${
-                activeTab === "matches" ? "border-emerald-400 text-white bg-zinc-900" : "border-transparent text-zinc-500 hover:text-zinc-300"
-              }`}
-            >
-              <Swords className="h-4 w-4 text-emerald-400" /> Matches
-            </button>
-            <button
-              onClick={() => setActiveTab("evolution")}
-              className={`px-5 py-4 text-xs sm:text-sm font-black uppercase tracking-widest transition-all flex items-center gap-2 border-b-4 ${
-                activeTab === "evolution" ? "border-yellow-400 text-white bg-zinc-900" : "border-transparent text-zinc-500 hover:text-zinc-300"
-              }`}
-            >
-              <TrendingUp className="h-4 w-4 text-yellow-400" /> Evolution
-            </button>
-            <button
-              onClick={() => setActiveTab("standings")}
-              className={`px-5 py-4 text-xs sm:text-sm font-black uppercase tracking-widest transition-all flex items-center gap-2 border-b-4 ${
-                activeTab === "standings" ? "border-indigo-400 text-white bg-zinc-900" : "border-transparent text-zinc-500 hover:text-zinc-300"
-              }`}
-            >
-              <BarChart3 className="h-4 w-4 text-indigo-400" /> Group Stage
-            </button>
-            <button
-              onClick={() => setActiveTab("playoffs")}
-              className={`px-5 py-4 text-xs sm:text-sm font-black uppercase tracking-widest transition-all flex items-center gap-2 border-b-4 ${
-                activeTab === "playoffs"
-                  ? "border-yellow-400 text-white bg-zinc-900"
-                  : playoffsActive
-                    ? "border-transparent text-yellow-400 hover:text-white"
-                    : "border-transparent text-zinc-500 hover:text-zinc-300"
-              }`}
-            >
-              <Trophy className="h-4 w-4 text-yellow-400" /> Playoffs
-              {!playoffsActive && (
-                <span className="text-[8px] bg-zinc-800 text-zinc-500 px-1.5 py-0.5 font-mono uppercase tracking-widest">soon</span>
-              )}
-            </button>
-            <button
-              onClick={() => setActiveTab("predictions")}
-              className={`px-5 py-4 text-xs sm:text-sm font-black uppercase tracking-widest transition-all flex items-center gap-2 border-b-4 ${
-                activeTab === "predictions"
-                  ? "border-emerald-400 text-white bg-zinc-900"
-                  : "border-transparent text-zinc-500 hover:text-zinc-300"
-              }`}
-            >
-              <Eye className="h-4 w-4 text-emerald-400" /> Predictions
-            </button>
-          </div>
-
-          <div className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-1.5 bg-zinc-950 border border-zinc-900 px-3 py-1.5 mb-2 md:mb-0">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            READ ONLY
-          </div>
-        </div>
-
-        <div className="flex-1">
-          {activeTab === "leaderboard" && (
-            <LeaderboardTab models={analyzedModels} matches={matches} onSelectModel={setSelectedDiagnosticModel} />
-          )}
-          {activeTab === "matches" && (
-            <MatchesTab matches={matches} models={analyzedModels} />
-          )}
-          {activeTab === "standings" && (
-            <StandingsTab matches={matches} teams={teamArray} models={analyzedModels} rawPredictions={rawPredictions} />
-          )}
-          {activeTab === "evolution" && (
-            <EvolutionTab models={analyzedModels} matches={matches} />
-          )}
-          {activeTab === "playoffs" && (
-            <PlayoffsTab playoffMatches={playoffMatches} isActive={playoffsActive} matches={matches} teams={teamArray} models={analyzedModels} modelPlayoffPredictions={modelPlayoffPredictions} />
-          )}
-          {activeTab === "predictions" && (
-            <PredictionsTab matches={matches} teams={teamArray} models={analyzedModels} modelPlayoffPredictions={modelPlayoffPredictions} />
-          )}
-        </div>
-      </section>
-
-      <AnimatePresence>
-        {selectedDiagnosticModel && (
-          <ModelDetailModal model={selectedDiagnosticModel} matches={matches} teams={teamArray} modelPlayoffPredictions={modelPlayoffPredictions} onClose={() => setSelectedDiagnosticModel(null)} />
-        )}
-      </AnimatePresence>
-
-      <footer className="bg-black border-t-2 border-zinc-800 py-6 mt-12 text-zinc-500">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6 text-xs font-mono">
-          <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
-            WORLD PREDICTOR TAPE • Read Only Dashboard
-          </div>
-          <div className="flex items-center gap-4 overflow-hidden max-w-lg">
-            <span className="text-yellow-400 shrink-0 font-black uppercase text-[10px] tracking-wider">LAST SCORES:</span>
-            <span className="text-white text-[11px] font-semibold tracking-wider whitespace-nowrap overflow-ellipsis overflow-hidden">
-              {completedScoresTicker}
-            </span>
-          </div>
-        </div>
-      </footer>
-    </main>
+        </footer>
+      </main>
+    </ErrorBoundary>
   );
 }
