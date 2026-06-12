@@ -119,6 +119,7 @@ export default function LeaderboardTab({ models, matches, onSelectModel }: Leade
                 <th className="py-4 px-4 text-center font-black">Exact (3pt)</th>
                 <th className="py-4 px-4 text-center font-black">Outcome (1pt)</th>
                 <th className="py-4 px-4 text-center font-black">Avg Goals</th>
+                <th className="py-4 px-4 text-center font-black">Goal Dev</th>
                 <th className="py-4 px-5 font-black">Provider</th>
               </tr>
             </thead>
@@ -199,6 +200,13 @@ export default function LeaderboardTab({ models, matches, onSelectModel }: Leade
                     {/* Avg Goals */}
                     <td className="py-4 px-4 text-center font-mono text-sm text-zinc-500">
                       {model.avgPredictedGoals}
+                    </td>
+
+                    {/* Goal Deviation */}
+                    <td className="py-4 px-4 text-center font-mono text-sm">
+                      <span className={model.avgGoalDeviation <= 1 ? "text-emerald-400" : model.avgGoalDeviation <= 2 ? "text-yellow-400" : "text-rose-400"}>
+                        {model.avgGoalDeviation.toFixed(2)}
+                      </span>
                     </td>
 
                     {/* Provider */}

@@ -51,6 +51,8 @@ export default function App() {
 
   const highestScore = analyzedModels[0]?.points ?? 0;
   const leadingModelName = analyzedModels[0]?.name ?? "None";
+  const globalAccuracyMax = analyzedModels.length > 0 ? Math.max(...analyzedModels.map(m => m.accuracy)) : 0;
+  const globalGoalDevMin = analyzedModels.length > 0 ? Math.min(...analyzedModels.filter(m => m.avgGoalDeviation > 0).map(m => m.avgGoalDeviation)) : 0;
 
   // Determine if playoffs are active (all group matches have scores)
   const playoffsActive = useMemo(() => {
@@ -123,7 +125,14 @@ export default function App() {
             <div className="text-left lg:text-right">
               <div className="text-xs font-black text-zinc-500 uppercase tracking-wider mb-1">Global Accuracy Max</div>
               <div className="text-5xl font-display text-emerald-400 accent-green tracking-tight leading-none">
-                {highestScore > 0 ? `${Math.round(highestScore * 5.5)}%` : "N/A"}
+                {globalAccuracyMax > 0 ? `${globalAccuracyMax}%` : "N/A"}
+              </div>
+            </div>
+
+            <div className="text-left lg:text-right">
+              <div className="text-xs font-black text-zinc-500 uppercase tracking-wider mb-1">Best Goal Dev</div>
+              <div className="text-5xl font-display text-sky-400 tracking-tight leading-none">
+                {globalGoalDevMin > 0 ? globalGoalDevMin.toFixed(2) : "N/A"}
               </div>
             </div>
 
@@ -232,7 +241,7 @@ export default function App() {
 
       <AnimatePresence>
         {selectedDiagnosticModel && (
-          <ModelDetailModal model={selectedDiagnosticModel} matches={matches} onClose={() => setSelectedDiagnosticModel(null)} />
+          <ModelDetailModal model={selectedDiagnosticModel} matches={matches} teams={teamArray} modelPlayoffPredictions={modelPlayoffPredictions} onClose={() => setSelectedDiagnosticModel(null)} />
         )}
       </AnimatePresence>
 

@@ -53,6 +53,7 @@ export interface AIModel {
   exactScores: number;
   correctOutcomes: number;
   accuracy: number;
+  avgGoalDeviation: number;
   avgPredictedGoals: number;
 }
 

@@ -25,7 +25,7 @@ const MODELS = [
 
   // DeepSeek
   { model: "deepseek-v4-flash", file: "deepseek-v4-flash" },
-  { model: "deepseek-v4-pro", file: "deepseek-v4-pro" },
+  // { model: "deepseek-v4-pro", file: "deepseek-v4-pro" },
 
   // Mistral
   { model: "mistral-medium-3-5", file: "mistral-medium-3.5" },
@@ -62,11 +62,19 @@ async function predict(modelConfig, systemPrompt) {
   const body = {
     model,
     messages: [
-      { role: "system", content: systemPrompt },
-      { role: "user", content: "Send me the JSON with your predictions" },
+      {
+        role: "system",
+        content: `You are running as model '${model}'.\n${systemPrompt}`,
+      },
+      {
+        role: "user",
+        content:
+          "Generate your complete World Cup 2026 predictions now. " +
+          "Fill every group-stage match and every playoff round exactly " +
+          "as instructed. Ensure playoff brackets are internally consistent " +
+          "with your group-stage results.",
+      },
     ],
-    temperature: 0,
-    max_tokens: 8192,
   };
 
   const res = await fetch(AI_GATEWAY_URL, {

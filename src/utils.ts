@@ -6,7 +6,8 @@ export function analyzePredictions(matches: Match[], models: AIModel[]): AIModel
     points: 0,
     exactScores: 0,
     correctOutcomes: 0,
-    accuracy: 0
+    accuracy: 0,
+    avgGoalDeviation: 0
   }));
 
   const completedMatches = matches.filter(m => m.actualScore !== null);
@@ -14,6 +15,8 @@ export function analyzePredictions(matches: Match[], models: AIModel[]): AIModel
 
   updatedModels.forEach(model => {
     let totalPredGoals = 0;
+    let totalGoalDeviation = 0;
+    let completedWithPred = 0;
 
     matches.forEach(match => {
       const pred = match.predictions[model.id];
@@ -40,17 +43,23 @@ export function analyzePredictions(matches: Match[], models: AIModel[]): AIModel
           model.points += 1;
           model.correctOutcomes += 1;
         }
+
+        // Track goal deviation for completed matches
+        totalGoalDeviation += Math.abs(pred.teamAScore - actScore.teamA) + Math.abs(pred.teamBScore - actScore.teamB);
+        completedWithPred += 1;
       }
     });
 
     model.avgPredictedGoals = +(totalPredGoals / Math.max(1, matches.length)).toFixed(2);
     model.accuracy = totalCompleted > 0 ? Math.round((model.correctOutcomes / totalCompleted) * 100) : 100;
+    model.avgGoalDeviation = completedWithPred > 0 ? +(totalGoalDeviation / completedWithPred).toFixed(2) : 0;
   });
 
   return updatedModels.sort((a, b) => {
     if (b.points !== a.points) return b.points - a.points;
     if (b.accuracy !== a.accuracy) return b.accuracy - a.accuracy;
     if (b.exactScores !== a.exactScores) return b.exactScores - a.exactScores;
+    if (a.avgGoalDeviation !== b.avgGoalDeviation) return a.avgGoalDeviation - b.avgGoalDeviation;
     return a.name.localeCompare(b.name);
   });
 }

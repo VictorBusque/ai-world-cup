@@ -3,7 +3,7 @@ import { Team, Match, AIModel, TournamentJSON, TournamentMatchJSON, ModelJSON, M
 // Hardcoded model file registry — add a new entry when you drop a new JSON
 const MODEL_FILES = [
   "gemini-3.1-pro",
-  // "gemini-3.5-flash",
+  "gemini-3.5-flash",
   "gpt-5.5",
   "claude-sonnet-4-6",
   "claude-opus-4-8",
@@ -65,6 +65,7 @@ export async function loadData(): Promise<{
       exactScores: 0,
       correctOutcomes: 0,
       accuracy: 0,
+      avgGoalDeviation: 0,
       avgPredictedGoals: 0,
     });
 

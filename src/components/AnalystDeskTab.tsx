@@ -21,7 +21,7 @@ export default function AnalystDeskTab({ models, matches }: AnalystDeskTabProps)
       try {
         // Build concise textual representation of the models standings
         const modelStandingText = models.map((m, idx) => 
-          `${idx + 1}. ${m.name} (${m.provider}): ${m.points} pts, ${m.accuracy}% accuracy, ${m.exactScores} exact scores.`
+          `${idx + 1}. ${m.name} (${m.provider}): ${m.points} pts, ${m.accuracy}% accuracy, ${m.exactScores} exact scores, ${m.avgGoalDeviation.toFixed(2)} avg goal deviation.`
         ).join("\n");
 
         // Build a brief matches status text

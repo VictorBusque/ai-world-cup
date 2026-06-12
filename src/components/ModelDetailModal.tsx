@@ -1,14 +1,28 @@
+import React, { useMemo } from "react";
 import { motion } from "motion/react";
-import { Match, AIModel } from "../types";
-import { X, Award, Target, Sparkles, BookOpen, Clock, Activity, AlertCircle } from "lucide-react";
+import { Match, AIModel, Team, ModelPlayoffPrediction } from "../types";
+import { X, Award, Target, Sparkles, BookOpen, Clock, Activity, AlertCircle, Trophy } from "lucide-react";
+
+const ROUND_META: Record<string, { label: string; short: string }> = {
+  r32: { label: "ROUND OF 32", short: "R32" },
+  r16: { label: "ROUND OF 16", short: "R16" },
+  qf: { label: "QUARTER-FINALS", short: "QF" },
+  sf: { label: "SEMI-FINALS", short: "SF" },
+  bronze: { label: "BRONZE MATCH", short: "BR" },
+  final: { label: "FINAL", short: "F" },
+};
+
+const ROUND_ORDER = ["r32", "r16", "qf", "sf", "bronze", "final"] as const;
 
 interface ModelDetailModalProps {
   model: AIModel;
   matches: Match[];
+  teams: Team[];
+  modelPlayoffPredictions: ModelPlayoffPrediction[];
   onClose: () => void;
 }
 
-export default function ModelDetailModal({ model, matches, onClose }: ModelDetailModalProps) {
+export default function ModelDetailModal({ model, matches, teams, modelPlayoffPredictions, onClose }: ModelDetailModalProps) {
   // Get all predictions of this model
   const modelMatches = matches.map(match => {
     const pred = match.predictions[model.id];
@@ -70,7 +84,7 @@ export default function ModelDetailModal({ model, matches, onClose }: ModelDetai
           </div>
 
           {/* Quick Stats Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             {/* Points Card */}
             <div className="bg-zinc-900 border-2 border-zinc-800 rounded-none p-3.5 text-center flex flex-col justify-between">
               <span className="text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Points</span>
@@ -92,6 +106,13 @@ export default function ModelDetailModal({ model, matches, onClose }: ModelDetai
               <span className="text-[9px] text-zinc-650 font-mono uppercase mt-1">Gamed Scores</span>
             </div>
 
+            {/* Goal Deviation */}
+            <div className="bg-zinc-900 border-2 border-zinc-800 rounded-none p-3.5 text-center flex flex-col justify-between">
+              <span className="text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Goal Dev</span>
+              <span className={`text-2xl font-black font-mono mt-1 ${model.avgGoalDeviation <= 1 ? "text-emerald-400" : model.avgGoalDeviation <= 2 ? "text-yellow-400" : "text-rose-400"}`}>{model.avgGoalDeviation.toFixed(2)}</span>
+              <span className="text-[9px] text-zinc-650 font-mono uppercase mt-1">Avg Off (↓ better)</span>
+            </div>
+
             {/* Outcomes Only */}
             <div className="bg-zinc-900 border-2 border-zinc-800 rounded-none p-3.5 text-center flex flex-col justify-between">
               <span className="text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Outcome (1pt)</span>
@@ -100,11 +121,11 @@ export default function ModelDetailModal({ model, matches, onClose }: ModelDetai
             </div>
           </div>
 
-          {/* Forecast Predictions History */}
+          {/* Group Stage Predictions History */}
           <div>
             <h3 className="text-[11px] uppercase font-mono tracking-wider font-extrabold text-zinc-400 mb-3 flex items-center gap-1.5">
               <Activity className="h-4 w-4 text-yellow-400" />
-              Full Predictions ledger ({modelMatches.length} Matches)
+              Group Stage Predictions ({modelMatches.length} Matches)
             </h3>
 
             <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
@@ -190,6 +211,9 @@ export default function ModelDetailModal({ model, matches, onClose }: ModelDetai
               })}
             </div>
           </div>
+
+          {/* Playoff Predictions */}
+          <PlayoffPredictionsSection modelId={model.id} teams={teams} modelPlayoffPredictions={modelPlayoffPredictions} />
         </div>
 
         {/* Modal Footer */}
@@ -197,6 +221,145 @@ export default function ModelDetailModal({ model, matches, onClose }: ModelDetai
           <span>AI WORLD CUP PREDICTOR PLAYGROUND</span>
         </div>
       </motion.div>
+    </div>
+  );
+}
+
+function PlayoffPredictionsSection({
+  modelId,
+  teams,
+  modelPlayoffPredictions,
+}: {
+  modelId: string;
+  teams: Team[];
+  modelPlayoffPredictions: ModelPlayoffPrediction[];
+}) {
+  const codeToTeam = useMemo(() => {
+    const m = new Map<string, Team>();
+    for (const t of teams) m.set(t.code, t);
+    return m;
+  }, [teams]);
+
+  const mpp = modelPlayoffPredictions.find(p => p.modelId === modelId);
+
+  if (!mpp || Object.keys(mpp.rounds).length === 0) {
+    return (
+      <div className="bg-zinc-900 border-2 border-zinc-800 p-4">
+        <div className="flex items-center gap-2 text-zinc-500">
+          <Trophy className="h-4 w-4" />
+          <span className="text-[11px] uppercase font-mono tracking-wider font-extrabold">No Playoff Predictions Available</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Derive champion and runner-up
+  let champion: Team | null = null;
+  let runnerUp: Team | null = null;
+  if (mpp.champion) champion = codeToTeam.get(mpp.champion) ?? null;
+  if (mpp.runnerUp) runnerUp = codeToTeam.get(mpp.runnerUp) ?? null;
+
+  // Count total playoff matches
+  let totalPlayoffMatches = 0;
+  for (const roundKey of ROUND_ORDER) {
+    const roundData = mpp.rounds[roundKey];
+    if (roundData) totalPlayoffMatches += Object.keys(roundData).length;
+  }
+
+  return (
+    <div className="space-y-3">
+      <h3 className="text-[11px] uppercase font-mono tracking-wider font-extrabold text-zinc-400 flex items-center gap-1.5">
+        <Trophy className="h-4 w-4 text-yellow-400" />
+        Playoff Bracket ({totalPlayoffMatches} Matches)
+      </h3>
+
+      {/* Champion / Runner-Up strip */}
+      {champion && (
+        <div className="bg-gradient-to-br from-yellow-400/10 via-zinc-900 to-zinc-900 border-2 border-yellow-400/30 p-4 flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-3">
+            <span className="text-4xl">{champion.flag}</span>
+            <div>
+              <div className="text-[9px] font-mono text-yellow-400 uppercase tracking-widest">Predicted Champion</div>
+              <div className="font-display text-xl uppercase tracking-tight text-white">{champion.name}</div>
+            </div>
+          </div>
+          {runnerUp && (
+            <>
+              <div className="text-lg text-zinc-600 font-display">VS</div>
+              <div className="flex items-center gap-3">
+                <span className="text-3xl opacity-60">{runnerUp.flag}</span>
+                <div>
+                  <div className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">Runner-Up</div>
+                  <div className="font-display text-base uppercase tracking-tight text-zinc-400">{runnerUp.name}</div>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
+      {/* Playoff rounds */}
+      <div className="space-y-4 max-h-72 overflow-y-auto pr-1">
+        {ROUND_ORDER.map(roundKey => {
+          const roundData = mpp.rounds[roundKey];
+          if (!roundData || Object.keys(roundData).length === 0) return null;
+          const meta = ROUND_META[roundKey];
+
+          const sortedMatchIds = Object.keys(roundData).sort((a, b) => {
+            const numA = parseInt(a.replace("m", ""), 10);
+            const numB = parseInt(b.replace("m", ""), 10);
+            return numA - numB;
+          });
+
+          return (
+            <div key={roundKey}>
+              <div className="text-[10px] font-mono text-yellow-400 uppercase tracking-widest font-black mb-2 border-b border-zinc-800 pb-1">
+                {meta.label}
+              </div>
+              <div className="space-y-1.5">
+                {sortedMatchIds.map(matchId => {
+                  const m = roundData[matchId];
+                  const teamA = codeToTeam.get(m.teamA);
+                  const teamB = codeToTeam.get(m.teamB);
+                  const winnerIsA = m.teamAScore > m.teamBScore;
+
+                  return (
+                    <div
+                      key={matchId}
+                      className="bg-zinc-900 p-2.5 border border-zinc-800 flex items-center justify-between gap-3 text-xs font-sans"
+                    >
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        {/* Team A */}
+                        <div className={`flex items-center gap-1.5 ${winnerIsA ? "text-emerald-400" : "text-white"}`}>
+                          <span className="text-sm">{teamA?.flag ?? "🏳️"}</span>
+                          <span className="font-bold uppercase text-[11px] tracking-wider">{teamA?.code ?? m.teamA}</span>
+                          {winnerIsA && <span className="text-[8px] font-mono">✓</span>}
+                        </div>
+
+                        {/* Score */}
+                        <span className="font-mono font-bold text-yellow-450 bg-black border border-zinc-800 px-2 py-0.5 text-[11px]">
+                          {m.teamAScore} - {m.teamBScore}
+                        </span>
+
+                        {/* Team B */}
+                        <div className={`flex items-center gap-1.5 ${!winnerIsA ? "text-emerald-400" : "text-white"}`}>
+                          <span className="text-sm">{teamB?.flag ?? "🏳️"}</span>
+                          <span className="font-bold uppercase text-[11px] tracking-wider">{teamB?.code ?? m.teamB}</span>
+                          {!winnerIsA && <span className="text-[8px] font-mono">✓</span>}
+                        </div>
+                      </div>
+
+                      <span className="px-2 py-1 text-[9px] uppercase font-black font-mono bg-zinc-800 text-zinc-400 border border-zinc-700 shrink-0">
+                        Predicted
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
