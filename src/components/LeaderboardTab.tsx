@@ -14,21 +14,21 @@ export default React.memo(function LeaderboardTab({ models, matches, totalGroupM
   const completedCount = matches.filter(m => m.status === "FINISHED" && m.actualScore !== null).length;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
         {/* Points System Summary */}
-        <div id="points-system-card" className="bg-zinc-900 border-l-4 border-yellow-400 p-5 relative overflow-hidden flex flex-col justify-between">
+        <div id="points-system-card" className="bg-zinc-900 border-l-4 border-yellow-400 p-4 sm:p-5 relative overflow-hidden flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-2 mb-2 text-yellow-400 font-display">
               <Sparkles className="h-4 w-4" />
               <h3 className="text-xs uppercase tracking-widest font-bold">Forecasting Rules</h3>
             </div>
-            <p className="text-xs text-zinc-400 leading-relaxed mb-4">
+            <p className="text-[11px] sm:text-xs text-zinc-400 leading-relaxed mb-3 sm:mb-4">
               AI models predict the exact final scoreline. High accuracy is rewarded through a professional points pool.
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-3 text-xs bg-zinc-950 p-3 border border-zinc-800">
+          <div className="grid grid-cols-2 gap-3 text-xs bg-zinc-950 p-2.5 sm:p-3 border border-zinc-800">
             <div>
               <div className="text-yellow-400 font-bold font-mono uppercase tracking-wider text-[11px]">3 Points</div>
               <div className="text-[10px] text-zinc-500 uppercase">Exact Score (e.g. 2-1)</div>
@@ -41,24 +41,24 @@ export default React.memo(function LeaderboardTab({ models, matches, totalGroupM
         </div>
 
         {/* Tournament Info */}
-        <div id="tournament-info-card" className="bg-zinc-900 border-2 border-zinc-800 p-5 relative overflow-hidden flex flex-col justify-between">
+        <div id="tournament-info-card" className="bg-zinc-900 border-2 border-zinc-800 p-4 sm:p-5 relative overflow-hidden flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-2 mb-2 text-emerald-400 font-display">
               <Target className="h-4 w-4" />
               <h3 className="text-xs uppercase tracking-widest font-black">Tournament Status</h3>
             </div>
-            <p className="text-xs text-zinc-400 leading-relaxed mb-4">
+            <p className="text-[11px] sm:text-xs text-zinc-400 leading-relaxed mb-3 sm:mb-4">
               Active tracking of group-stage fixtures. Current calculations update immediately upon any score update.
             </p>
           </div>
           <div className="flex items-center justify-between gap-4 text-xs font-mono">
             <div>
               <span className="text-zinc-500 text-[10px] block uppercase font-bold tracking-wider">Completed</span>
-              <span className="text-white text-lg font-black">{completedCount} <span className="text-xs text-zinc-500">/ {totalGroupMatches}</span></span>
+              <span className="text-white text-base sm:text-lg font-black">{completedCount} <span className="text-xs text-zinc-500">/ {totalGroupMatches}</span></span>
             </div>
             <div className="text-right">
               <span className="text-zinc-500 text-[10px] block uppercase font-bold tracking-wider">Live Status</span>
-              <span className="text-emerald-400 text-xs font-black flex items-center gap-1 justify-end uppercase tracking-wider">
+              <span className="text-emerald-400 text-[10px] sm:text-xs font-black flex items-center gap-1 justify-end uppercase tracking-wider">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                 SIMULATOR ENGAGED
               </span>
@@ -67,7 +67,7 @@ export default React.memo(function LeaderboardTab({ models, matches, totalGroupM
         </div>
 
         {/* Prediction Insights - Highly styled white panel */}
-        <div id="prediction-insights-card" className="bg-white text-black p-5 relative flex flex-col justify-between border-t-4 border-black shadow-lg">
+        <div id="prediction-insights-card" className="bg-white text-black p-4 sm:p-5 relative flex flex-col justify-between border-t-4 border-black shadow-lg sm:col-span-2 md:col-span-1">
           <div>
             <div className="flex items-center justify-between mb-2">
               <span className="bg-black text-white px-2 py-0.5 text-[9px] font-black uppercase tracking-widest">
@@ -77,7 +77,7 @@ export default React.memo(function LeaderboardTab({ models, matches, totalGroupM
                 Forecast Peak
               </span>
             </div>
-            <h3 className="font-display text-4xl uppercase tracking-tight leading-none mt-2 text-zinc-900">
+            <h3 className="font-display text-3xl sm:text-4xl uppercase tracking-tight leading-none mt-2 text-zinc-900">
               {models[0]?.name || "None"}
             </h3>
             <p className="text-[11px] text-zinc-700 leading-normal font-sans font-bold mt-1 max-w-xs">
@@ -91,26 +91,83 @@ export default React.memo(function LeaderboardTab({ models, matches, totalGroupM
         </div>
       </div>
 
-      {/* Leaderboard Section - Striking and Heavy */}
-      <div id="leaderboard-table-container" className="border-4 border-zinc-800 bg-zinc-950 p-6 rounded-none shadow-2xl">
-        <div className="border-b-4 border-white pb-4 mb-6 flex items-center justify-between flex-wrap gap-4">
+      {/* Leaderboard Section */}
+      <div id="leaderboard-table-container" className="border-4 border-zinc-800 bg-zinc-950 p-3 sm:p-6 rounded-none shadow-2xl">
+        <div className="border-b-4 border-white pb-3 sm:pb-4 mb-4 sm:mb-6 flex items-center justify-between flex-wrap gap-3 sm:gap-4">
           <div>
-            <h2 className="font-display text-4xl uppercase tracking-tighter text-white italic">
+            <h2 className="font-display text-2xl sm:text-4xl uppercase tracking-tighter text-white italic">
               Model Leaderboard
             </h2>
-            <p className="text-xs text-zinc-400 mt-1 uppercase tracking-wider font-mono">
+            <p className="text-[9px] sm:text-xs text-zinc-400 mt-1 uppercase tracking-wider font-mono">
               COMPILING MULTI-MODEL PREDICTION RATINGS
             </p>
           </div>
-          <div className="text-xs text-zinc-300 bg-zinc-900 px-3 py-2 border border-zinc-800 flex items-center gap-2">
-            <AlertCircle className="h-4 w-4 text-yellow-400 shrink-0" />
-            <span className="font-mono text-[10px] uppercase font-bold tracking-wider">
-              Click model to inspect full playbook & predict ledger
+          <div className="text-xs text-zinc-300 bg-zinc-900 px-2 sm:px-3 py-2 border border-zinc-800 flex items-center gap-1.5 sm:gap-2">
+            <AlertCircle className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-400 shrink-0" />
+            <span className="font-mono text-[9px] sm:text-[10px] uppercase font-bold tracking-wider">
+              {typeof window !== 'undefined' && window.innerWidth < 640 ? 'Tap model' : 'Click model to inspect full playbook'}
             </span>
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        {/* Mobile: Card Layout */}
+        <div className="sm:hidden space-y-2">
+          {models.map((model, index) => {
+            const isLeader = index === 0;
+            return (
+              <motion.div
+                key={model.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.04 }}
+                onClick={() => onSelectModel(model)}
+                className={`cursor-pointer active:bg-zinc-800 transition-all p-3 border-l-4 ${
+                  isLeader
+                    ? "bg-zinc-900/60 border-yellow-400"
+                    : "border-zinc-800 opacity-90 hover:opacity-100 bg-zinc-900/30"
+                }`}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className={`font-display text-xl leading-none shrink-0 ${
+                      isLeader ? "text-yellow-400" : index === 1 ? "text-zinc-400" : index === 2 ? "text-amber-600" : "text-zinc-600"
+                    }`}>
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <div className={`w-2.5 h-2.5 shrink-0 bg-gradient-to-r ${model.avatarColor}`}></div>
+                    <span className="font-extrabold text-[13px] text-white uppercase truncate">{model.name}</span>
+                  </div>
+                  <span className="text-base font-black text-white font-mono bg-black px-2 py-0.5 border border-zinc-800 shrink-0 ml-2">
+                    {model.points}
+                  </span>
+                </div>
+                <div className="grid grid-cols-4 gap-2 text-center text-[10px]">
+                  <div>
+                    <div className="text-zinc-500 uppercase font-mono text-[9px]">Acc%</div>
+                    <div className="text-emerald-400 font-black font-mono">{model.accuracy}%</div>
+                  </div>
+                  <div>
+                    <div className="text-zinc-500 uppercase font-mono text-[9px]">Exact</div>
+                    <div className="text-yellow-500 font-black font-mono">{model.exactScores}</div>
+                  </div>
+                  <div>
+                    <div className="text-zinc-500 uppercase font-mono text-[9px]">Outcome</div>
+                    <div className="text-zinc-300 font-black font-mono">{model.correctOutcomes - model.exactScores}</div>
+                  </div>
+                  <div>
+                    <div className="text-zinc-500 uppercase font-mono text-[9px]">GoalDev</div>
+                    <div className={`font-black font-mono ${model.avgGoalDeviation <= 1 ? "text-emerald-400" : model.avgGoalDeviation <= 2 ? "text-yellow-400" : "text-rose-400"}`}>
+                      {model.avgGoalDeviation.toFixed(2)}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* Desktop: Table Layout */}
+        <div className="hidden sm:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-zinc-900 text-zinc-400 text-[10px] uppercase font-mono tracking-widest border-b-2 border-zinc-800">

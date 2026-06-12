@@ -56,26 +56,26 @@ export default React.memo(function AnalystDeskTab({ models, matches }: AnalystDe
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Intro Desk Banner */}
-      <div className="w-full border-4 border-zinc-800 bg-zinc-900 p-6 relative rounded-none overflow-hidden">
+      <div className="w-full border-2 sm:border-4 border-zinc-800 bg-zinc-900 p-4 sm:p-6 relative rounded-none overflow-hidden">
         <div className="max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-black border border-zinc-800 text-yellow-400 text-xs font-black uppercase tracking-widest mb-4">
-            <Newspaper className="h-3.5 w-3.5" />
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 bg-black border border-zinc-800 text-yellow-400 text-[10px] sm:text-xs font-black uppercase tracking-widest mb-3 sm:mb-4">
+            <Newspaper className="h-3 sm:h-3.5 w-3 sm:w-3.5" />
             AI Editorial Desk
           </div>
-          <h2 className="font-display text-4xl uppercase tracking-tight text-white italic leading-tight">
+          <h2 className="font-display text-2xl sm:text-4xl uppercase tracking-tight text-white italic leading-tight">
             World Cup AI Predictor Briefings
           </h2>
-          <p className="text-xs text-zinc-400 leading-relaxed mt-2 uppercase tracking-wide font-mono">
-            Query Gemini's analyst panel to summarize the standings, evaluate tactical variances, and draft a professional journal playground report!
+          <p className="text-[11px] sm:text-xs text-zinc-400 leading-relaxed mt-2 uppercase tracking-wide font-mono">
+            Query Gemini's analyst panel to summarize the standings, evaluate tactical variances, and draft a professional report!
           </p>
 
-          <div className="mt-5 flex flex-wrap gap-3">
+          <div className="mt-4 sm:mt-5 flex flex-wrap gap-3">
             <button
               onClick={handleFetchBriefing}
               disabled={isPending}
-              className="flex items-center gap-2 px-5 py-3 bg-yellow-400 hover:bg-yellow-300 disabled:bg-zinc-800 text-black font-extrabold uppercase text-[11px] tracking-widest transition-all"
+              className="flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 bg-yellow-400 hover:bg-yellow-300 disabled:bg-zinc-800 text-black font-extrabold uppercase text-[10px] sm:text-[11px] tracking-widest transition-all"
             >
               {isPending ? (
                 <>

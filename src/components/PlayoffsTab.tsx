@@ -137,14 +137,14 @@ export default React.memo(function PlayoffsTab({ teams, models, modelPlayoffPred
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="bg-zinc-900 border-l-4 border-yellow-400 p-5">
+      <div className="bg-zinc-900 border-l-4 border-yellow-400 p-4 sm:p-5">
         <div className="flex items-center gap-2 mb-2 text-yellow-400">
           <Trophy className="h-4 w-4" />
-          <h3 className="text-xs uppercase tracking-widest font-black">Predicted Playoff Brackets</h3>
+          <h3 className="text-[11px] sm:text-xs uppercase tracking-widest font-black">Predicted Playoff Brackets</h3>
         </div>
-        <p className="text-xs text-zinc-400 leading-relaxed">
+        <p className="text-[11px] sm:text-xs text-zinc-400 leading-relaxed">
           Each model provided explicit playoff predictions with scores for every knockout round.
           These are the <span className="text-white font-bold">actual predicted matchups and results</span> from each AI model,
           not derived from group stage standings.
@@ -153,21 +153,21 @@ export default React.memo(function PlayoffsTab({ teams, models, modelPlayoffPred
 
       {/* Consensus Champion Strip */}
       {championVotes.length > 0 && (
-        <div className="bg-gradient-to-br from-yellow-400/10 via-zinc-900 to-zinc-900 border-2 border-yellow-400/30 p-5">
+        <div className="bg-gradient-to-br from-yellow-400/10 via-zinc-900 to-zinc-900 border-2 border-yellow-400/30 p-4 sm:p-5">
           <div className="flex items-center gap-2 mb-3">
             <Trophy className="h-4 w-4 text-yellow-400" />
-            <span className="text-xs uppercase font-black text-yellow-400 tracking-widest">AI Consensus Playoff Champion</span>
+            <span className="text-[10px] sm:text-xs uppercase font-black text-yellow-400 tracking-widest">AI Consensus Playoff Champion</span>
           </div>
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4">
             {championVotes.slice(0, 3).map((entry, i) => (
-              <div key={entry.team.id} className={`flex items-center gap-3 ${i === 0 ? "bg-zinc-950 border-2 border-yellow-400/40 p-3" : "bg-zinc-950 border border-zinc-800 p-2"}`}>
-                <span className="text-3xl">{entry.team.flag}</span>
+              <div key={entry.team.id} className={`flex items-center gap-2 sm:gap-3 ${i === 0 ? "bg-zinc-950 border-2 border-yellow-400/40 p-2 sm:p-3" : "bg-zinc-950 border border-zinc-800 p-2"}`}>
+                <span className="text-2xl sm:text-3xl">{entry.team.flag}</span>
                 <div>
-                  <div className={`font-display text-lg uppercase tracking-tight ${i === 0 ? "text-yellow-400" : "text-zinc-300"}`}>
+                  <div className={`font-display text-base sm:text-lg uppercase tracking-tight ${i === 0 ? "text-yellow-400" : "text-zinc-300"}`}>
                     {entry.team.name}
                   </div>
-                  <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
-                    {entry.count}/{models.length} models {i === 0 ? "• Consensus pick" : ""}
+                  <div className="text-[9px] sm:text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
+                    {entry.count}/{models.length} {i === 0 ? "• Consensus" : ""}
                   </div>
                 </div>
               </div>
@@ -195,24 +195,24 @@ export default React.memo(function PlayoffsTab({ teams, models, modelPlayoffPred
       )}
 
       {/* Model Selector */}
-      <div className="bg-zinc-900 border-2 border-zinc-800 p-4">
+      <div className="bg-zinc-900 border-2 border-zinc-800 p-3 sm:p-4">
         <div className="flex items-center gap-2 mb-3">
           <Users className="h-4 w-4 text-zinc-400" />
-          <span className="text-xs uppercase font-black text-zinc-400 tracking-widest">Select Model to View Bracket</span>
+          <span className="text-[10px] sm:text-xs uppercase font-black text-zinc-400 tracking-widest">Select Model</span>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1.5 sm:gap-2">
           {modelBrackets.map((mb, i) => (
             <button
               key={mb.modelId}
               onClick={() => setSelectedModelIndex(i)}
-              className={`flex items-center gap-2 px-3 py-2 text-xs font-black uppercase tracking-wider border-2 transition-all ${
+              className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-black uppercase tracking-wider border-2 transition-all ${
                 i === selectedModelIndex
                   ? "bg-white text-black border-white"
                   : "bg-zinc-950 text-zinc-400 border-zinc-800 hover:border-zinc-600 hover:text-white"
               }`}
             >
               <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: mb.avatarColor }} />
-              {mb.modelName}
+              <span className="truncate max-w-[80px] sm:max-w-none">{mb.modelName}</span>
               {mb.champion && (
                 <span className="text-sm">{mb.champion.flag}</span>
               )}
@@ -223,26 +223,26 @@ export default React.memo(function PlayoffsTab({ teams, models, modelPlayoffPred
 
       {/* Selected Model's Champion */}
       {selected && selected.champion && (
-        <div className="bg-zinc-900 border-2 border-yellow-400/20 p-5 flex flex-col sm:flex-row items-center gap-6">
-          <div className="flex items-center gap-4">
-            <span className="text-6xl">{selected.champion.flag}</span>
+        <div className="bg-zinc-900 border-2 border-yellow-400/20 p-4 sm:p-5 flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <span className="text-4xl sm:text-6xl">{selected.champion.flag}</span>
             <div>
-              <div className="text-[10px] font-mono text-yellow-400 uppercase tracking-widest mb-1">
-                {selected.modelName}'s Predicted Champion
+              <div className="text-[9px] sm:text-[10px] font-mono text-yellow-400 uppercase tracking-widest mb-1">
+                {selected.modelName}'s Champion
               </div>
-              <div className="font-display text-3xl uppercase tracking-tight text-white">
+              <div className="font-display text-xl sm:text-3xl uppercase tracking-tight text-white">
                 {selected.champion.name}
               </div>
             </div>
           </div>
           {selected.runnerUp && (
             <>
-              <div className="text-2xl text-zinc-600 font-display">VS</div>
-              <div className="flex items-center gap-4">
-                <span className="text-5xl opacity-60">{selected.runnerUp.flag}</span>
+              <div className="text-xl sm:text-2xl text-zinc-600 font-display">VS</div>
+              <div className="flex items-center gap-3 sm:gap-4">
+                <span className="text-3xl sm:text-5xl opacity-60">{selected.runnerUp.flag}</span>
                 <div>
-                  <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-1">Runner-Up</div>
-                  <div className="font-display text-xl uppercase tracking-tight text-zinc-400">
+                  <div className="text-[9px] sm:text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-1">Runner-Up</div>
+                  <div className="font-display text-base sm:text-xl uppercase tracking-tight text-zinc-400">
                     {selected.runnerUp.name}
                   </div>
                 </div>
@@ -251,12 +251,12 @@ export default React.memo(function PlayoffsTab({ teams, models, modelPlayoffPred
           )}
           {selected.bronzeWinner && (
             <>
-              <div className="text-2xl text-zinc-700 font-display">🥉</div>
-              <div className="flex items-center gap-3">
-                <span className="text-4xl opacity-50">{selected.bronzeWinner.flag}</span>
+              <div className="text-xl sm:text-2xl text-zinc-700 font-display">🥉</div>
+              <div className="flex items-center gap-2 sm:gap-3">
+                <span className="text-2xl sm:text-4xl opacity-50">{selected.bronzeWinner.flag}</span>
                 <div>
-                  <div className="text-[10px] font-mono text-zinc-600 uppercase tracking-widest mb-1">Bronze</div>
-                  <div className="font-display text-lg uppercase tracking-tight text-zinc-500">
+                  <div className="text-[9px] sm:text-[10px] font-mono text-zinc-600 uppercase tracking-widest mb-1">Bronze</div>
+                  <div className="font-display text-sm sm:text-lg uppercase tracking-tight text-zinc-500">
                     {selected.bronzeWinner.name}
                   </div>
                 </div>
@@ -268,8 +268,8 @@ export default React.memo(function PlayoffsTab({ teams, models, modelPlayoffPred
 
       {/* Bracket Display */}
       {selected && (
-        <div className="overflow-x-auto pb-4">
-          <div className="min-w-[900px]">
+        <div className="overflow-x-auto pb-4 -mx-4 sm:mx-0 px-4 sm:px-0">
+          <div className="min-w-[700px] sm:min-w-[900px]">
             <div className="flex items-stretch gap-0">
               {ROUND_ORDER.map((roundKey, ri) => {
                 const count = ROUND_COUNTS[roundKey];

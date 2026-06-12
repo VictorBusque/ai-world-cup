@@ -109,14 +109,14 @@ export default React.memo(function PredictionsTab({ teams, models, modelPlayoffP
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="bg-zinc-900 border-l-4 border-yellow-400 p-5 relative overflow-hidden">
+      <div className="bg-zinc-900 border-l-4 border-yellow-400 p-4 sm:p-5 relative overflow-hidden">
         <div className="flex items-center gap-2 mb-2 text-yellow-400">
           <Trophy className="h-4 w-4" />
-          <h3 className="text-xs uppercase tracking-widest font-black">Predicted Champion & Final</h3>
+          <h3 className="text-[11px] sm:text-xs uppercase tracking-widest font-black">Predicted Champion & Final</h3>
         </div>
-        <p className="text-xs text-zinc-400 leading-relaxed">
+        <p className="text-[11px] sm:text-xs text-zinc-400 leading-relaxed">
           Each model provided explicit playoff predictions. The champion and runner-up shown here come from each model's
           predicted <span className="text-white font-bold">final match result</span>, not derived from group stage standings.
         </p>
@@ -124,21 +124,21 @@ export default React.memo(function PredictionsTab({ teams, models, modelPlayoffP
 
       {/* Consensus Champion Card */}
       {consensusChampion && (
-        <div className="bg-gradient-to-br from-yellow-400/10 via-zinc-900 to-zinc-900 border-2 border-yellow-400/30 p-6 relative overflow-hidden">
-          <div className="absolute top-0 right-0 text-[120px] leading-none opacity-5 font-display select-none">
+        <div className="bg-gradient-to-br from-yellow-400/10 via-zinc-900 to-zinc-900 border-2 border-yellow-400/30 p-4 sm:p-6 relative overflow-hidden">
+          <div className="absolute top-0 right-0 text-[80px] sm:text-[120px] leading-none opacity-5 font-display select-none">
             🏆
           </div>
-          <div className="flex items-center gap-2 mb-4">
-            <Crown className="h-5 w-5 text-yellow-400" />
-            <span className="text-xs uppercase font-black text-yellow-400 tracking-widest">AI Consensus Champion</span>
+          <div className="flex items-center gap-2 mb-3 sm:mb-4">
+            <Crown className="h-4 sm:h-5 w-4 sm:w-5 text-yellow-400" />
+            <span className="text-[10px] sm:text-xs uppercase font-black text-yellow-400 tracking-widest">AI Consensus Champion</span>
           </div>
-          <div className="flex items-center gap-6 mb-4">
-            <span className="text-6xl">{consensusChampion.team.flag}</span>
+          <div className="flex items-center gap-4 sm:gap-6 mb-3 sm:mb-4">
+            <span className="text-4xl sm:text-6xl">{consensusChampion.team.flag}</span>
             <div>
-              <div className="font-display text-4xl sm:text-5xl uppercase tracking-tight">
+              <div className="font-display text-2xl sm:text-4xl md:text-5xl uppercase tracking-tight">
                 {consensusChampion.team.name}
               </div>
-              <div className="text-sm text-zinc-400 mt-1">
+              <div className="text-[11px] sm:text-sm text-zinc-400 mt-1">
                 {consensusChampion.count} of {models.length} models predict this champion
               </div>
             </div>
@@ -174,31 +174,31 @@ export default React.memo(function PredictionsTab({ teams, models, modelPlayoffP
       )}
 
       {/* Consensus Finalists */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-zinc-900 border-2 border-zinc-800 p-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+        <div className="bg-zinc-900 border-2 border-zinc-800 p-4 sm:p-5">
           <div className="flex items-center gap-2 mb-3">
             <Medal className="h-4 w-4 text-emerald-400" />
-            <span className="text-xs uppercase font-black text-emerald-400 tracking-widest">Most Predicted Finalists</span>
+            <span className="text-[10px] sm:text-xs uppercase font-black text-emerald-400 tracking-widest">Most Predicted Finalists</span>
           </div>
-          <p className="text-[10px] text-zinc-500 mb-4">Teams appearing most often as champion or runner-up across all models</p>
-          <div className="space-y-2">
+          <p className="text-[9px] sm:text-[10px] text-zinc-500 mb-3 sm:mb-4">Teams appearing most as champion or runner-up</p>
+          <div className="space-y-1.5 sm:space-y-2">
             {finalistVotes.slice(0, 8).map((entry, i) => (
-              <div key={entry.team.id} className="flex items-center gap-3 bg-zinc-950 p-2 border border-zinc-800">
-                <span className="text-[10px] font-mono text-zinc-600 w-4 text-right">{i + 1}</span>
-                <span className="text-lg">{entry.team.flag}</span>
-                <span className="text-xs font-bold text-zinc-300 flex-1 truncate">{entry.team.name}</span>
-                <span className="text-xs font-mono font-bold text-emerald-400">{entry.count}/{models.length}</span>
+              <div key={entry.team.id} className="flex items-center gap-2 sm:gap-3 bg-zinc-950 p-1.5 sm:p-2 border border-zinc-800">
+                <span className="text-[9px] sm:text-[10px] font-mono text-zinc-600 w-4 text-right">{i + 1}</span>
+                <span className="text-base sm:text-lg">{entry.team.flag}</span>
+                <span className="text-[11px] sm:text-xs font-bold text-zinc-300 flex-1 truncate">{entry.team.name}</span>
+                <span className="text-[10px] sm:text-xs font-mono font-bold text-emerald-400">{entry.count}/{models.length}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="bg-zinc-900 border-2 border-zinc-800 p-5">
+        <div className="bg-zinc-900 border-2 border-zinc-800 p-4 sm:p-5">
           <div className="flex items-center gap-2 mb-3">
             <BarChart3 className="h-4 w-4 text-indigo-400" />
-            <span className="text-xs uppercase font-black text-indigo-400 tracking-widest">Champion Vote Breakdown</span>
+            <span className="text-[10px] sm:text-xs uppercase font-black text-indigo-400 tracking-widest">Champion Vote Breakdown</span>
           </div>
-          <p className="text-[10px] text-zinc-500 mb-4">Which team each model predicts as champion</p>
+          <p className="text-[9px] sm:text-[10px] text-zinc-500 mb-3 sm:mb-4">Which team each model predicts as champion</p>
           <div className="space-y-2">
             {championVotes.map((entry) => {
               const pct = Math.round((entry.count / models.length) * 100);
@@ -297,30 +297,30 @@ export default React.memo(function PredictionsTab({ teams, models, modelPlayoffP
 
       {/* Predicted Final Visualization */}
       {consensusChampion && otherFinalist && (
-        <div className="bg-gradient-to-br from-zinc-900 via-zinc-900 to-yellow-400/5 border-2 border-zinc-700 p-6">
-          <div className="flex items-center gap-2 mb-6">
+        <div className="bg-gradient-to-br from-zinc-900 via-zinc-900 to-yellow-400/5 border-2 border-zinc-700 p-4 sm:p-6">
+          <div className="flex items-center gap-2 mb-4 sm:mb-6">
             <TrendingUp className="h-4 w-4 text-yellow-400" />
-            <span className="text-xs uppercase font-black text-yellow-400 tracking-widest">Most Predicted Final</span>
+            <span className="text-[10px] sm:text-xs uppercase font-black text-yellow-400 tracking-widest">Most Predicted Final</span>
           </div>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-10">
             <div className="text-center">
-              <span className="text-6xl block mb-2">{consensusChampion.team.flag}</span>
-              <div className="font-display text-2xl uppercase tracking-tight text-white">
+              <span className="text-4xl sm:text-6xl block mb-2">{consensusChampion.team.flag}</span>
+              <div className="font-display text-xl sm:text-2xl uppercase tracking-tight text-white">
                 {consensusChampion.team.name}
               </div>
-              <div className="text-[10px] uppercase font-mono text-yellow-400 tracking-widest mt-1">Champion ({consensusChampion.count} votes)</div>
+              <div className="text-[9px] sm:text-[10px] uppercase font-mono text-yellow-400 tracking-widest mt-1">Champion ({consensusChampion.count} votes)</div>
             </div>
             <div className="flex flex-col items-center gap-1">
-              <span className="font-display text-4xl text-zinc-600">VS</span>
-              <span className="text-[10px] font-mono text-zinc-600 uppercase tracking-widest">Predicted Final</span>
+              <span className="font-display text-3xl sm:text-4xl text-zinc-600">VS</span>
+              <span className="text-[9px] sm:text-[10px] font-mono text-zinc-600 uppercase tracking-widest">Predicted Final</span>
             </div>
             <div className="text-center">
-              <span className="text-6xl block mb-2">{otherFinalist.team.flag}</span>
-              <div className="font-display text-2xl uppercase tracking-tight text-zinc-300">
+              <span className="text-4xl sm:text-6xl block mb-2">{otherFinalist.team.flag}</span>
+              <div className="font-display text-xl sm:text-2xl uppercase tracking-tight text-zinc-300">
                 {otherFinalist.team.name}
               </div>
-              <div className="text-[10px] uppercase font-mono text-zinc-400 tracking-widest mt-1">
-                Finalist ({otherFinalist.count} finalist appearances)
+              <div className="text-[9px] sm:text-[10px] uppercase font-mono text-zinc-400 tracking-widest mt-1">
+                Finalist ({otherFinalist.count} appearances)
               </div>
             </div>
           </div>

@@ -131,26 +131,26 @@ export default React.memo(function EvolutionTab({ models, matches }: EvolutionTa
   const labelInterval = points.length <= 10 ? 1 : points.length <= 20 ? 2 : Math.ceil(points.length / 12);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="border-4 border-zinc-800 bg-zinc-950 p-6 shadow-2xl">
-        <div className="border-b-4 border-white pb-4 mb-6">
-          <div className="flex items-center gap-3">
-            <TrendingUp className="h-5 w-5 text-yellow-400" />
-            <h2 className="font-display text-4xl uppercase tracking-tighter text-white italic">
+      <div className="border-2 sm:border-4 border-zinc-800 bg-zinc-950 p-3 sm:p-6 shadow-2xl">
+        <div className="border-b-2 sm:border-b-4 border-white pb-3 sm:pb-4 mb-4 sm:mb-6">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-400" />
+            <h2 className="font-display text-2xl sm:text-4xl uppercase tracking-tighter text-white italic">
               Points Evolution
             </h2>
           </div>
-          <p className="text-xs text-zinc-400 mt-1 uppercase tracking-wider font-mono">
-            CUMULATIVE POINTS PROGRESSION AFTER EACH COMPLETED MATCH • {points.length} MATCHES PLAYED
+          <p className="text-[9px] sm:text-xs text-zinc-400 mt-1 uppercase tracking-wider font-mono">
+            CUMULATIVE POINTS • {points.length} MATCHES PLAYED
           </p>
         </div>
 
         {/* SVG Chart */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto -mx-3 sm:mx-0">
           <svg
             viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-            className="w-full min-w-[600px] h-auto"
+            className="w-full min-w-[500px] sm:min-w-[600px] h-auto"
             style={{ maxHeight: "500px" }}
           >
             {/* Grid lines */}
@@ -286,8 +286,8 @@ export default React.memo(function EvolutionTab({ models, matches }: EvolutionTa
         </div>
 
         {/* Legend */}
-        <div className="mt-6 pt-4 border-t border-zinc-800">
-          <div className="flex flex-wrap gap-4 justify-center">
+        <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-zinc-800">
+          <div className="flex flex-wrap gap-2 sm:gap-4 justify-center">
             {modelPaths.map(mp => (
               <div
                 key={mp.modelId}
@@ -310,13 +310,13 @@ export default React.memo(function EvolutionTab({ models, matches }: EvolutionTa
       </div>
 
       {/* Match-by-Match Breakdown Table */}
-      <div className="border-2 border-zinc-800 bg-zinc-950 p-6">
-        <div className="border-b border-zinc-700 pb-3 mb-4">
-          <h3 className="font-display text-xl uppercase tracking-tighter text-white">
+      <div className="border-2 border-zinc-800 bg-zinc-950 p-3 sm:p-6">
+        <div className="border-b border-zinc-700 pb-2 sm:pb-3 mb-3 sm:mb-4">
+          <h3 className="font-display text-base sm:text-xl uppercase tracking-tighter text-white">
             Match-by-Match Breakdown
           </h3>
-          <p className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1">
-            Cumulative points after each completed fixture
+          <p className="text-[9px] sm:text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1">
+            Cumulative points after each fixture
           </p>
         </div>
 

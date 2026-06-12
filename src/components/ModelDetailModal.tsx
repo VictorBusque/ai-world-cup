@@ -41,86 +41,80 @@ export default React.memo(function ModelDetailModal({ model, matches, teams, mod
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
         transition={{ type: "spring", duration: 0.3 }}
-        className="bg-black border-4 border-zinc-400 shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col z-10 rounded-none"
+        className="bg-black border-2 sm:border-4 border-zinc-400 shadow-2xl w-full max-w-2xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden flex flex-col z-10 rounded-none mx-auto"
       >
         {/* Modal Header */}
-        <div className="p-5 border-b-2 border-zinc-800 bg-zinc-900 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className={`w-4 h-4 shrink-0 bg-gradient-to-r ${model.avatarColor}`}></div>
-            <div>
-              <h2 className="font-display text-xl uppercase tracking-wider text-white italic">{model.name} Playbook</h2>
-              <p className="text-[10px] font-mono uppercase tracking-wider text-zinc-400">
+        <div className="p-3 sm:p-5 border-b-2 border-zinc-800 bg-zinc-900 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div className={`w-3 sm:w-4 h-3 sm:h-4 shrink-0 bg-gradient-to-r ${model.avatarColor}`}></div>
+            <div className="min-w-0">
+              <h2 className="font-display text-base sm:text-xl uppercase tracking-wider text-white italic truncate">{model.name} Playbook</h2>
+              <p className="text-[9px] sm:text-[10px] font-mono uppercase tracking-wider text-zinc-400">
                 {model.provider}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 px-2.5 bg-zinc-800 hover:bg-yellow-400 hover:text-black text-white font-mono uppercase text-xs font-black tracking-widest border border-zinc-700 transition-colors"
+            className="p-1 px-2 sm:px-2.5 bg-zinc-800 hover:bg-yellow-400 hover:text-black text-white font-mono uppercase text-[10px] sm:text-xs font-black tracking-widest border border-zinc-700 transition-colors shrink-0"
           >
-            CLOSE [X]
+            ✕
           </button>
         </div>
 
         {/* Modal Content */}
-        <div className="p-6 overflow-y-auto space-y-6">
+        <div className="p-3 sm:p-6 overflow-y-auto space-y-4 sm:space-y-6">
           {/* Identity & Strategic Vibe */}
-          <div className="bg-zinc-900 p-4 border-2 border-zinc-800 rounded-none space-y-1.5">
-            <div className="flex items-center gap-1.5 text-yellow-400 text-xs font-black uppercase tracking-widest font-mono">
-              <Sparkles className="h-4 w-4" />
+          <div className="bg-zinc-900 p-3 sm:p-4 border-2 border-zinc-800 rounded-none space-y-1.5">
+            <div className="flex items-center gap-1.5 text-yellow-400 text-[10px] sm:text-xs font-black uppercase tracking-widest font-mono">
+              <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               Strategic Persona
             </div>
-            <p className="text-xs text-zinc-200 leading-relaxed font-sans font-medium italic">
+            <p className="text-[11px] sm:text-xs text-zinc-200 leading-relaxed font-sans font-medium italic">
               {model.persona || "Model predictions loaded from JSON data."}
             </p>
           </div>
 
           {/* Quick Stats Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-            {/* Points Card */}
-            <div className="bg-zinc-900 border-2 border-zinc-800 rounded-none p-3.5 text-center flex flex-col justify-between">
-              <span className="text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Points</span>
-              <span className="text-2xl font-black font-mono text-yellow-400 mt-1">{model.points}</span>
-              <span className="text-[9px] text-zinc-600 font-mono uppercase mt-1">Recalculated</span>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3">
+            <div className="bg-zinc-900 border-2 border-zinc-800 rounded-none p-2.5 sm:p-3.5 text-center flex flex-col justify-between">
+              <span className="text-[9px] sm:text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Points</span>
+              <span className="text-xl sm:text-2xl font-black font-mono text-yellow-400 mt-1">{model.points}</span>
             </div>
 
             {/* Accuracy Card */}
-            <div className="bg-zinc-900 border-2 border-zinc-800 rounded-none p-3.5 text-center flex flex-col justify-between">
-              <span className="text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Accuracy</span>
-              <span className="text-2xl font-black font-mono text-emerald-400 mt-1">{model.accuracy}%</span>
-              <span className="text-[9px] text-zinc-600 font-mono uppercase mt-1">Outcome %</span>
+            <div className="bg-zinc-900 border-2 border-zinc-800 rounded-none p-2.5 sm:p-3.5 text-center flex flex-col justify-between">
+              <span className="text-[9px] sm:text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Accuracy</span>
+              <span className="text-xl sm:text-2xl font-black font-mono text-emerald-400 mt-1">{model.accuracy}%</span>
             </div>
 
             {/* Exact Scores */}
-            <div className="bg-zinc-900 border-2 border-zinc-800 rounded-none p-3.5 text-center flex flex-col justify-between">
-              <span className="text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Exact (3pts)</span>
-              <span className="text-2xl font-black font-mono text-white mt-1">{model.exactScores}</span>
-              <span className="text-[9px] text-zinc-600 font-mono uppercase mt-1">Gamed Scores</span>
+            <div className="bg-zinc-900 border-2 border-zinc-800 rounded-none p-2.5 sm:p-3.5 text-center flex flex-col justify-between">
+              <span className="text-[9px] sm:text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Exact (3pts)</span>
+              <span className="text-xl sm:text-2xl font-black font-mono text-white mt-1">{model.exactScores}</span>
             </div>
 
             {/* Goal Deviation */}
-            <div className="bg-zinc-900 border-2 border-zinc-800 rounded-none p-3.5 text-center flex flex-col justify-between">
-              <span className="text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Goal Dev</span>
-              <span className={`text-2xl font-black font-mono mt-1 ${model.avgGoalDeviation <= 1 ? "text-emerald-400" : model.avgGoalDeviation <= 2 ? "text-yellow-400" : "text-rose-400"}`}>{model.avgGoalDeviation.toFixed(2)}</span>
-              <span className="text-[9px] text-zinc-600 font-mono uppercase mt-1">Avg Off (↓ better)</span>
+            <div className="bg-zinc-900 border-2 border-zinc-800 rounded-none p-2.5 sm:p-3.5 text-center flex flex-col justify-between">
+              <span className="text-[9px] sm:text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Goal Dev</span>
+              <span className={`text-xl sm:text-2xl font-black font-mono mt-1 ${model.avgGoalDeviation <= 1 ? "text-emerald-400" : model.avgGoalDeviation <= 2 ? "text-yellow-400" : "text-rose-400"}`}>{model.avgGoalDeviation.toFixed(2)}</span>
             </div>
 
             {/* Outcomes Only */}
-            <div className="bg-zinc-900 border-2 border-zinc-800 rounded-none p-3.5 text-center flex flex-col justify-between">
-              <span className="text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Outcome (1pt)</span>
-              <span className="text-2xl font-black font-mono text-zinc-400 mt-1">{model.correctOutcomes - model.exactScores}</span>
-              <span className="text-[9px] text-zinc-600 font-mono uppercase mt-1">Outcome only</span>
+            <div className="bg-zinc-900 border-2 border-zinc-800 rounded-none p-2.5 sm:p-3.5 text-center flex flex-col justify-between col-span-2 sm:col-span-1">
+              <span className="text-[9px] sm:text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Outcome (1pt)</span>
+              <span className="text-xl sm:text-2xl font-black font-mono text-zinc-400 mt-1">{model.correctOutcomes - model.exactScores}</span>
             </div>
           </div>
 
           {/* Group Stage Predictions History */}
           <div>
-            <h3 className="text-[11px] uppercase font-mono tracking-wider font-extrabold text-zinc-400 mb-3 flex items-center gap-1.5">
-              <Activity className="h-4 w-4 text-yellow-400" />
-              Group Stage Predictions ({modelMatches.filter(m => m.match.status === "FINISHED" && m.match.actualScore !== null).length} Played / {modelMatches.length} Total)
+            <h3 className="text-[10px] sm:text-[11px] uppercase font-mono tracking-wider font-extrabold text-zinc-400 mb-2 sm:mb-3 flex items-center gap-1.5">
+              <Activity className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-yellow-400" />
+              Group Stage ({modelMatches.filter(m => m.match.status === "FINISHED" && m.match.actualScore !== null).length}/{modelMatches.length})
             </h3>
 
-            <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
+            <div className="space-y-2 max-h-52 sm:max-h-60 overflow-y-auto pr-1">
               {modelMatches.map(({ match, pred }) => {
                 const isCompleted = match.status === "FINISHED" && match.actualScore !== null;
                 const isLive = match.isLive && match.actualScore !== null;
@@ -173,27 +167,27 @@ export default React.memo(function ModelDetailModal({ model, matches, teams, mod
                 return (
                   <div
                     key={match.id}
-                    className="bg-zinc-900 p-3 rounded-none border border-zinc-800"
+                    className="bg-zinc-900 p-2 sm:p-3 rounded-none border border-zinc-800"
                   >
-                    <div className="flex items-center justify-between gap-4 text-xs font-sans">
-                      <div className="flex flex-col gap-0.5 min-w-[100px]">
-                        <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-wide">{match.group} {isCompleted ? "• Completed" : isLive ? "• Live" : "• Upcoming"}</span>
-                        <div className="font-bold text-white uppercase text-xs">
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4 text-xs font-sans">
+                      <div className="flex flex-col gap-0.5 min-w-0">
+                        <span className="text-[8px] sm:text-[9px] font-mono text-zinc-500 uppercase tracking-wide">{match.group} {isCompleted ? "• Done" : isLive ? "• Live" : "• Soon"}</span>
+                        <div className="font-bold text-white uppercase text-[11px] sm:text-xs">
                           {match.teamA.flag} {match.teamA.code} vs {match.teamB.flag} {match.teamB.code}
                         </div>
                       </div>
 
                       {/* Scores Comparison Block */}
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-2 sm:gap-4">
                         {/* Prediction score bubble */}
                         <div className="text-center">
-                          <span className="text-[9px] text-zinc-500 block uppercase font-mono">Forecast</span>
+                          <span className="text-[8px] sm:text-[9px] text-zinc-500 block uppercase font-mono">Pred</span>
                           {pred ? (
-                            <span className="font-mono font-bold text-yellow-400 bg-black border border-zinc-800 px-2.5 py-0.5 rounded-none block">
-                              {pred.teamAScore} - {pred.teamBScore}
+                            <span className="font-mono font-bold text-yellow-400 bg-black border border-zinc-800 px-1.5 sm:px-2.5 py-0.5 rounded-none block text-[11px]">
+                              {pred.teamAScore}-{pred.teamBScore}
                             </span>
                           ) : (
-                            <span className="font-mono font-bold text-zinc-600 bg-black border border-zinc-800 px-2.5 py-0.5 rounded-none block">
+                            <span className="font-mono font-bold text-zinc-600 bg-black border border-zinc-800 px-1.5 sm:px-2.5 py-0.5 rounded-none block">
                               —
                             </span>
                           )}
@@ -201,8 +195,8 @@ export default React.memo(function ModelDetailModal({ model, matches, teams, mod
 
                         {/* Actual Score bubble */}
                         <div className="text-center">
-                          <span className="text-[9px] text-zinc-500 block uppercase font-mono">Actual</span>
-                          <span className={`font-mono font-black bg-black/60 border px-2.5 py-0.5 rounded-none block ${(isCompleted || isLive) ? (isLive ? "text-red-400 border-red-400/30" : "text-emerald-400 border-emerald-400/30") : "text-zinc-400 border-zinc-800"}`}>
+                          <span className="text-[8px] sm:text-[9px] text-zinc-500 block uppercase font-mono">Actual</span>
+                          <span className={`font-mono font-black bg-black/60 border px-1.5 sm:px-2.5 py-0.5 rounded-none block text-[11px] ${(isCompleted || isLive) ? (isLive ? "text-red-400 border-red-400/30" : "text-emerald-400 border-emerald-400/30") : "text-zinc-400 border-zinc-800"}`}>
                             {(isCompleted || isLive) ? `${match.actualScore!.teamA}-${match.actualScore!.teamB}` : "—"}
                           </span>
                         </div>
@@ -226,8 +220,8 @@ export default React.memo(function ModelDetailModal({ model, matches, teams, mod
         </div>
 
         {/* Modal Footer */}
-        <div className="p-4 border-t-2 border-zinc-800 bg-zinc-900 flex justify-end text-[9px] text-zinc-500 font-mono uppercase tracking-widest font-black">
-          <span>AI WORLD CUP PREDICTOR PLAYGROUND</span>
+        <div className="p-3 sm:p-4 border-t-2 border-zinc-800 bg-zinc-900 flex justify-end text-[8px] sm:text-[9px] text-zinc-500 font-mono uppercase tracking-widest font-black">
+          <span>AI WORLD CUP PREDICTOR</span>
         </div>
       </motion.div>
     </div>

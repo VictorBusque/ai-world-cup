@@ -206,59 +206,60 @@ export default function App() {
       <main className="min-h-screen bg-[#050505] text-white flex flex-col font-sans selection:bg-white selection:text-black relative overflow-x-hidden">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#141414_1px,transparent_1px),linear-gradient(to_bottom,#141414_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_80%,transparent_100%)] pointer-events-none opacity-40"></div>
 
-        <div className="bg-zinc-950 border-b border-zinc-900 px-4 py-2 text-center text-[10px] text-zinc-500 font-mono tracking-wider uppercase flex items-center justify-center gap-2 z-10">
+        <div className="bg-zinc-950 border-b border-zinc-900 px-3 sm:px-4 py-2 text-center text-[10px] text-zinc-500 font-mono tracking-wider uppercase flex items-center justify-center gap-1 sm:gap-2 z-10 flex-wrap">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>World Cup AI Predictor Dashboard • {baseModels.length} Models Loaded</span>
-          <span className="mx-2 text-zinc-700">|</span>
-          <span>Last refreshed: {lastRefreshed.toLocaleTimeString()}</span>
+          <span className="hidden sm:inline">World Cup AI Predictor Dashboard • {baseModels.length} Models Loaded</span>
+          <span className="sm:hidden">AI World Cup • {baseModels.length} Models</span>
+          <span className="mx-1 sm:mx-2 text-zinc-700">|</span>
+          <span className="hidden sm:inline">Last refreshed: {lastRefreshed.toLocaleTimeString()}</span>
           <button
             onClick={handleManualRefresh}
-            className="ml-2 p-0.5 hover:text-white transition-colors"
+            className="ml-1 sm:ml-2 p-0.5 hover:text-white transition-colors"
             title="Refresh data now"
           >
             <RefreshCw className="h-3 w-3" />
           </button>
         </div>
 
-        <header className="border-b-4 border-white bg-black p-6 sm:p-8 relative z-10">
-          <div className="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <header className="border-b-4 border-white bg-black p-4 sm:p-6 md:p-8 relative z-10">
+          <div className="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-end justify-between gap-4 sm:gap-6">
             <div className="flex flex-col">
-              <h1 className="font-display text-5xl sm:text-8xl leading-[0.85] tracking-tighter uppercase">
+              <h1 className="font-display text-4xl sm:text-5xl md:text-8xl leading-[0.85] tracking-tighter uppercase">
                 WORLD CUP<br/>
                 <span className="text-zinc-500">AI PREDICTOR</span>
               </h1>
-              <div className="flex flex-wrap gap-3 mt-4">
-                <span className="bg-white text-black px-3 py-1 text-xs font-black uppercase tracking-widest">
+              <div className="flex flex-wrap gap-2 sm:gap-3 mt-3 sm:mt-4">
+                <span className="bg-white text-black px-2 sm:px-3 py-1 text-[10px] sm:text-xs font-black uppercase tracking-widest">
                   Group Stage
                 </span>
-                <span className="border border-zinc-700 px-3 py-1 text-xs font-bold text-zinc-400 uppercase tracking-widest">
+                <span className="border border-zinc-700 px-2 sm:px-3 py-1 text-[10px] sm:text-xs font-bold text-zinc-400 uppercase tracking-widest">
                   {matches.length} Matches • {baseModels.length} Models
                 </span>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row sm:items-end gap-6 sm:gap-12">
-              <div className="text-left lg:text-right">
-                <div className="text-xs font-black text-zinc-500 uppercase tracking-wider mb-1">Global Accuracy Max</div>
-                <div className="text-5xl font-display text-emerald-400 accent-green tracking-tight leading-none">
+            <div className="grid grid-cols-3 sm:flex sm:flex-row sm:items-end gap-3 sm:gap-12">
+              <div className="text-left sm:text-left lg:text-right">
+                <div className="text-[9px] sm:text-xs font-black text-zinc-500 uppercase tracking-wider mb-1">Accuracy Max</div>
+                <div className="text-2xl sm:text-4xl md:text-5xl font-display text-emerald-400 accent-green tracking-tight leading-none">
                   {globalAccuracyMax > 0 ? `${globalAccuracyMax}%` : "N/A"}
                 </div>
               </div>
 
-              <div className="text-left lg:text-right">
-                <div className="text-xs font-black text-zinc-500 uppercase tracking-wider mb-1">Best Goal Dev</div>
-                <div className="text-5xl font-display text-sky-400 tracking-tight leading-none">
+              <div className="text-left sm:text-left lg:text-right">
+                <div className="text-[9px] sm:text-xs font-black text-zinc-500 uppercase tracking-wider mb-1">Best Goal Dev</div>
+                <div className="text-2xl sm:text-4xl md:text-5xl font-display text-sky-400 tracking-tight leading-none">
                   {globalGoalDevMin > 0 ? globalGoalDevMin.toFixed(2) : "N/A"}
                 </div>
               </div>
 
-              <div className="text-left lg:text-right">
-                <div className="text-xs font-black text-zinc-500 uppercase tracking-wider mb-1">Top Machine Points</div>
-                <div className="text-5xl font-display text-yellow-400 leading-none">
+              <div className="text-left sm:text-left lg:text-right">
+                <div className="text-[9px] sm:text-xs font-black text-zinc-500 uppercase tracking-wider mb-1">Top Points</div>
+                <div className="text-2xl sm:text-4xl md:text-5xl font-display text-yellow-400 leading-none">
                   {highestScore} PTS
                 </div>
-                <div className="text-[10px] uppercase font-mono text-zinc-400 mt-2 block">
-                  Leader Model: <span className="text-white font-bold">{leadingModelName}</span>
+                <div className="text-[9px] sm:text-[10px] uppercase font-mono text-zinc-400 mt-1 sm:mt-2 block truncate">
+                  <span className="hidden sm:inline">Leader Model: </span><span className="text-white font-bold">{leadingModelName}</span>
                 </div>
               </div>
             </div>
@@ -266,13 +267,13 @@ export default function App() {
         </header>
 
         <section className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 flex flex-col space-y-8 relative z-10">
-          <div className="border-b-2 border-zinc-800 flex items-center justify-between flex-wrap gap-2">
-            <div className="flex flex-wrap -mb-[2px]">
+          <div className="border-b-2 border-zinc-800 flex items-start sm:items-center justify-between flex-wrap gap-0 sm:gap-2">
+            <div className="flex flex-wrap -mb-[2px] gap-0">
               {tabs.map(tab => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-5 py-4 text-xs sm:text-sm font-black uppercase tracking-widest transition-all flex items-center gap-2 border-b-4 ${
+                  className={`px-2.5 sm:px-5 py-3 sm:py-4 text-[10px] sm:text-sm font-black uppercase tracking-wider sm:tracking-widest transition-all flex items-center gap-1 sm:gap-2 border-b-4 whitespace-nowrap ${
                     activeTab === tab.id
                       ? `${tab.accent} text-white bg-zinc-900`
                       : tab.id === "playoffs" && !playoffsActive
@@ -280,15 +281,15 @@ export default function App() {
                         : "border-transparent text-zinc-500 hover:text-zinc-300"
                   }`}
                 >
-                  {tab.icon} {tab.label}
+                  {tab.icon} <span className="hidden xs:inline sm:inline">{tab.label}</span><span className="xs:hidden sm:hidden">{tab.label.split(' ')[0]}</span>
                   {tab.id === "playoffs" && !playoffsActive && (
-                    <span className="text-[8px] bg-zinc-800 text-zinc-500 px-1.5 py-0.5 font-mono uppercase tracking-widest">soon</span>
+                    <span className="text-[7px] sm:text-[8px] bg-zinc-800 text-zinc-500 px-1 sm:px-1.5 py-0.5 font-mono uppercase tracking-widest">soon</span>
                   )}
                 </button>
               ))}
             </div>
 
-            <div className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-1.5 bg-zinc-950 border border-zinc-900 px-3 py-1.5 mb-2 md:mb-0">
+            <div className="hidden sm:flex text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest items-center gap-1.5 bg-zinc-950 border border-zinc-900 px-3 py-1.5 mb-2 md:mb-0">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
               READ ONLY
             </div>
@@ -337,14 +338,14 @@ export default function App() {
           )}
         </AnimatePresence>
 
-        <footer className="bg-black border-t-2 border-zinc-800 py-6 mt-12 text-zinc-500">
-          <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6 text-xs font-mono">
-            <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
-              WORLD PREDICTOR TAPE • Read Only Dashboard
+        <footer className="bg-black border-t-2 border-zinc-800 py-4 sm:py-6 mt-12 text-zinc-500">
+          <div className="max-w-7xl mx-auto px-3 sm:px-4 flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-6 text-xs font-mono">
+            <div className="text-[9px] sm:text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
+              WORLD PREDICTOR TAPE
             </div>
-            <div className="flex items-center gap-4 overflow-hidden max-w-lg">
-              <span className="text-yellow-400 shrink-0 font-black uppercase text-[10px] tracking-wider">LAST SCORES:</span>
-              <span className="text-white text-[11px] font-semibold tracking-wider whitespace-nowrap overflow-ellipsis overflow-hidden">
+            <div className="flex items-center gap-2 sm:gap-4 overflow-hidden w-full md:w-auto md:max-w-lg">
+              <span className="text-yellow-400 shrink-0 font-black uppercase text-[9px] sm:text-[10px] tracking-wider">SCORES:</span>
+              <span className="text-white text-[10px] sm:text-[11px] font-semibold tracking-wider whitespace-nowrap overflow-ellipsis overflow-hidden">
                 {completedScoresTicker}
               </span>
             </div>
