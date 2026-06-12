@@ -1,0 +1,6 @@
+{
+  "name": "AI World Cup Predictor",
+  "description": "An interactive World Cup prediction leaderboard comparing forecasting accuracy across top AI models like GPT-5.5, Gemini 3.1 Pro, Opus 4.8, Fable 5, and DeepSeek v4.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
