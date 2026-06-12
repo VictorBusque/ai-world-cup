@@ -53,7 +53,8 @@ export interface Match {
   date: string;
   time: string;
   venue: string;
-  status: "FINISHED" | "IN_PLAY" | "TIMED" | string;
+  status: "FINISHED" | "IN_PLAY" | "PAUSED" | "TIMED" | string;
+  isLive: boolean;
   actualScore: { teamA: number; teamB: number } | null;
   predictions: Record<string, { teamAScore: number; teamBScore: number; summary?: string }>;
 }

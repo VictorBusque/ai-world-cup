@@ -18,8 +18,8 @@ export default React.memo(function ModelDetailModal({ model, matches, teams, mod
     match,
     pred: match.predictions[model.id],
   })).sort((a, b) => {
-    const aCompleted = a.match.status === "FINISHED" && a.match.actualScore !== null ? 0 : (a.match.status === "IN_PLAY" ? 1 : 2);
-    const bCompleted = b.match.status === "FINISHED" && b.match.actualScore !== null ? 0 : (b.match.status === "IN_PLAY" ? 1 : 2);
+    const aCompleted = a.match.status === "FINISHED" && a.match.actualScore !== null ? 0 : (a.match.isLive ? 1 : 2);
+    const bCompleted = b.match.status === "FINISHED" && b.match.actualScore !== null ? 0 : (b.match.isLive ? 1 : 2);
     if (aCompleted !== bCompleted) return aCompleted - bCompleted;
     return (a.match.date + a.match.time).localeCompare(b.match.date + b.match.time);
   });
@@ -123,7 +123,7 @@ export default React.memo(function ModelDetailModal({ model, matches, teams, mod
             <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
               {modelMatches.map(({ match, pred }) => {
                 const isCompleted = match.status === "FINISHED" && match.actualScore !== null;
-                const isLive = match.status === "IN_PLAY" && match.actualScore !== null;
+                const isLive = match.isLive && match.actualScore !== null;
                 
                 let evaluationBadge: React.ReactNode = null;
                 if (!pred) {

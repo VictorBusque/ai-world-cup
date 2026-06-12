@@ -23,11 +23,11 @@ export default React.memo(function AnalystDeskTab({ models, matches }: AnalystDe
           `${idx + 1}. ${m.name} (${m.provider}): ${m.points} pts, ${m.accuracy}% accuracy, ${m.exactScores} exact scores, ${m.avgGoalDeviation.toFixed(2)} avg goal deviation.`
         ).join("\n");
 
-        const upcomingMatchesText = matches.filter(m => m.actualScore === null && m.status !== "IN_PLAY").map(m => 
+        const upcomingMatchesText = matches.filter(m => m.actualScore === null && !m.isLive).map(m => 
           `- ${m.teamA.name} vs ${m.teamB.name} (${m.group})`
         ).slice(0, 5).join("\n");
 
-        const matchSummaryText = `Total matches: ${matches.length}. Completed matches: ${completedCount}. Live matches: ${matches.filter(m => m.status === "IN_PLAY").length}. Upcoming matches: ${matches.filter(m => m.actualScore === null && m.status !== "IN_PLAY").length}.\nFirst few upcoming matches:\n${upcomingMatchesText}`;
+        const matchSummaryText = `Total matches: ${matches.length}. Completed matches: ${completedCount}. Live matches: ${matches.filter(m => m.isLive).length}. Upcoming matches: ${matches.filter(m => m.actualScore === null && !m.isLive).length}.\nFirst few upcoming matches:\n${upcomingMatchesText}`;
 
         const response = await fetch("/api/gemini/summarize", {
           method: "POST",

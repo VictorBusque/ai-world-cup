@@ -31,8 +31,8 @@ export default React.memo(function MatchesTab({ matches, models }: MatchesTabPro
       const statusMatches = 
         selectedStatus === "All" || 
         (selectedStatus === "Completed" && match.status === "FINISHED" && match.actualScore !== null) ||
-        (selectedStatus === "Live" && match.status === "IN_PLAY") ||
-        (selectedStatus === "Upcoming" && match.actualScore === null && match.status !== "IN_PLAY");
+        (selectedStatus === "Live" && match.isLive) ||
+        (selectedStatus === "Upcoming" && match.actualScore === null && !match.isLive);
       return groupMatches && statusMatches;
     })
     .sort((a, b) => {
@@ -202,7 +202,7 @@ export default React.memo(function MatchesTab({ matches, models }: MatchesTabPro
                           <span className="text-4xl md:text-5xl font-display text-white tracking-widest leading-none">
                             {match.actualScore.teamB}
                           </span>
-                          {match.status === "IN_PLAY" && (
+                          {match.isLive && (
                             <span className="ml-2 px-2 py-0.5 bg-red-600 text-white text-[10px] font-black uppercase tracking-wider animate-pulse">
                               Live
                             </span>

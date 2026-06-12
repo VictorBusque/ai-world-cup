@@ -281,7 +281,7 @@ export async function loadData(): Promise<{
 
     // Parse actualScore: "2-0" → {teamA:2, teamB:0}, "-" → null
     let actualScore: { teamA: number; teamB: number } | null = null;
-    const isLiveOrFinished = am.status === "FINISHED" || am.status === "IN_PLAY";
+    const isLiveOrFinished = am.status !== "TIMED";
     if (am.score && am.score !== "-" && isLiveOrFinished) {
       const parts = am.score.split("-");
       if (parts.length === 2 && !isNaN(parseInt(parts[0])) && !isNaN(parseInt(parts[1]))) {
@@ -318,18 +318,21 @@ export async function loadData(): Promise<{
     // "GROUP_STAGE:GROUP_A:MEX-RSA" → keep as-is for uniqueness
     const id = am.match_id || String(am.id);
 
-    return {
-      id,
-      group,
-      teamA,
-      teamB,
-      date,
-      time,
-      venue: "", // API doesn't provide venue yet
-      status: am.status || "TIMED",
-      actualScore,
-      predictions,
-    };
+  const isLive = (status: string) => status !== "FINISHED" && status !== "TIMED";
+
+  return {
+    id,
+    group,
+    teamA,
+    teamB,
+    date,
+    time,
+    venue: "", // API doesn't provide venue yet
+    status: am.status || "TIMED",
+    isLive: isLive(am.status),
+    actualScore,
+    predictions,
+  };
   }).filter(Boolean) as Match[];
 
   // ── Parse playoff predictions (unchanged, uses model JSON keys directly) ──
