@@ -20,12 +20,13 @@ An interactive dashboard that pits the world's top AI models against each other 
 
 ## ✨ Features
 
-- **Leaderboard** — Rank 11 AI models by prediction accuracy (exact score = 3 pts, correct outcome = 1 pt).
+- **Leaderboard** — Rank 12 AI models by prediction accuracy (exact score = 3 pts, correct outcome = 1 pt).
 - **Match-by-Match** — Drill into every game to see how each model predicted vs. reality.
 - **Standings Comparison** — Compare real group standings vs. each model's projected standings.
 - **Evolution Chart** — Track how models rise and fall over the course of the tournament.
 - **Playoff Bracket** — Knockout-stage predictions (activates once group stage completes).
-- **AI Commentary** — Gemini-powered tactical breakdowns and newsletter-style summaries.
+- **Predictions** — Each model's pick for champion, runner-up, and bronze winner.
+- **AI Commentary** — Gemini-powered tactical breakdowns comparing how the models diverge on each match.
 - **Dark, data-dense UI** — Built with Tailwind CSS, Lucide icons, and Motion for animations.
 
 ## 🤖 Models Competing
@@ -33,17 +34,17 @@ An interactive dashboard that pits the world's top AI models against each other 
 | Model | Provider |
 |-------|----------|
 | GPT-5.5 | OpenAI |
-| Claude Sonnet 4.6 | Anthropic |
 | Claude Opus 4.8 | Anthropic |
+| Claude Sonnet 4.6 | Anthropic |
 | Claude Fable 5 | Anthropic |
 | Gemini 3.1 Pro | Google |
 | Gemini 3.5 Flash | Google |
-| DeepSeek v4 Flash | DeepSeek |
-| DeepSeek v4 Pro | DeepSeek |
-| Mistral Medium 3.5 | Mistral AI |
-| GLM 5.1 | Z.AI |
-| Kimi K2.6 | Moonshot AI |
-| Nemotron 3 Ultra | NVIDIA |
+| DeepSeek V4 Pro | DeepSeek |
+| DeepSeek V4 Flash | DeepSeek |
+| Mistral Medium 3.5 | Mistral |
+| Kimi K2.6 | Moonshot |
+| Nemotron 3 Super | NVIDIA |
+| GLM 5.2 | Zhipu AI |
 
 ## 🚀 Quick Start
 
@@ -86,15 +87,14 @@ bun run start
 │   ├── tournament.json          # Teams, groups, match schedule & scores
 │   └── models/                  # One JSON per AI model with predictions
 ├── scripts/
-│   ├── predict.js               # Script to query AI models via an OpenAI-compatible gateway
-│   ├── prediction_prompt.md     # System prompt sent to models
-│   └── prediction-template.json # JSON template for predictions
+│   └── predict.py               # Python script to query AI models via an OpenAI-compatible gateway (system prompt embedded)
 ├── server.ts                    # Express + Vite dev server (also Gemini API proxy)
 ├── src/
 │   ├── App.tsx                  # Main app shell, tabs, header
 │   ├── main.tsx                 # React entry point
 │   ├── data.ts                  # Data loader (fetches tournament + model JSONs)
 │   ├── utils.ts                 # Scoring, standings calculations
+│   ├── constants.ts             # Round metadata, model colors, team helpers
 │   ├── types.ts                 # TypeScript interfaces
 │   ├── index.css                # Tailwind base styles
 │   └── components/
@@ -103,8 +103,8 @@ bun run start
 │       ├── StandingsTab.tsx
 │       ├── EvolutionTab.tsx
 │       ├── PlayoffsTab.tsx
-│       ├── ModelDetailModal.tsx
-│       └── AnalystDeskTab.tsx
+│       ├── PredictionsTab.tsx
+│       └── ModelDetailModal.tsx
 ├── package.json
 ├── vite.config.ts
 └── tsconfig.json
@@ -112,23 +112,31 @@ bun run start
 
 ## 🧪 Generating Predictions
 
-The `scripts/predict.js` script sends the tournament template to each AI model via an OpenAI-compatible API gateway and saves predictions as JSON files.
+The `scripts/predict.py` script sends the tournament context (system prompt embedded in the file) to each AI model via an OpenAI-compatible API gateway, using Pydantic structured outputs with per-match reasoning. It runs the group stage first, then the playoffs round by round.
+
+### Prerequisites
+
+- Python ≥ 3.10
+- Install deps: `pip install openai pydantic`
+
+### Run
 
 ```bash
-# Set your API gateway key
-export AI_GATEWAY_KEY="your-key-here"
+# Set your gateway API key
+export API_KEY="your-key-here"
 
-# Run predictions (skips models that already have files)
-bun run scripts/predict.js
+# Generate predictions for one or more models (by gateway model id)
+python scripts/predict.py gpt-5.5 claude-opus-4-8 gemini-3.1-pro
 ```
 
-To re-run a specific model, delete its JSON file from `public/data/models/` first.
+Output is written to `scripts/predictions/<model>.json` (existing files are skipped). Copy the generated files into `public/data/models/` so the dashboard loads them. To re-run a model, delete its output file first.
 
 ## 🏗️ Tech Stack
 
 - **Frontend:** React 19, TypeScript, Tailwind CSS 4, Motion (Framer Motion), Lucide React
 - **Backend:** Express.js, Vite middleware (dev) / static serving (prod)
 - **AI Integration:** Google Gemini API (commentary), OpenAI-compatible gateway (predictions)
+- **Predictions Tooling:** Python with the OpenAI SDK and Pydantic structured outputs
 - **Build:** Vite 6, Bun
 
 ## 🤝 Contributing
@@ -141,10 +149,6 @@ Please read the [Contributing Guide](CONTRIBUTING.md) to get started.
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
-
-- All the AI models and their creators for participating in this experiment.
-- Built with [Google AI Studio](https://ai.google.dev/) as a starting point.
 - Tournament data sourced from official FIFA 2026 World Cup announcements.
 
 ---
