@@ -10,10 +10,9 @@ import StandingsTab from "./components/StandingsTab";
 import EvolutionTab from "./components/EvolutionTab";
 import PlayoffsTab from "./components/PlayoffsTab";
 import PredictionsTab from "./components/PredictionsTab";
-import AnalystDeskTab from "./components/AnalystDeskTab";
 import ModelDetailModal from "./components/ModelDetailModal";
 
-import { Award, Swords, BarChart3, TrendingUp, Trophy, Eye, Newspaper, RefreshCw } from "lucide-react";
+import { Award, Swords, BarChart3, TrendingUp, Trophy, Eye, RefreshCw } from "lucide-react";
 
 // ── Error Boundary ──────────────────────────────────────────────────────────
 import type { ReactNode } from "react";
@@ -55,7 +54,7 @@ class ErrorBoundary extends React.Component<EBProps, EBState> {
 }
 
 // ── Tab type ────────────────────────────────────────────────────────────────
-type TabId = "leaderboard" | "matches" | "standings" | "evolution" | "playoffs" | "predictions" | "analyst";
+type TabId = "leaderboard" | "matches" | "standings" | "evolution" | "playoffs" | "predictions";
 
 // ── Main App ────────────────────────────────────────────────────────────────
 export default function App() {
@@ -198,7 +197,6 @@ export default function App() {
     { id: "standings", label: "Group Stage", icon: <BarChart3 className="h-4 w-4 text-indigo-400" />, accent: "border-indigo-400" },
     { id: "playoffs", label: "Playoffs", icon: <Trophy className="h-4 w-4 text-yellow-400" />, accent: "border-yellow-400" },
     { id: "predictions", label: "Predictions", icon: <Eye className="h-4 w-4 text-emerald-400" />, accent: "border-emerald-400" },
-    { id: "analyst", label: "Analyst Desk", icon: <Newspaper className="h-4 w-4 text-sky-400" />, accent: "border-sky-400" },
   ];
 
   return (
@@ -325,9 +323,6 @@ export default function App() {
             )}
             {activeTab === "predictions" && (
               <PredictionsTab matches={matches} teams={teamArray} models={analyzedModels} modelPlayoffPredictions={modelPlayoffPredictions} />
-            )}
-            {activeTab === "analyst" && (
-              <AnalystDeskTab models={analyzedModels} matches={matches} />
             )}
           </div>
         </section>

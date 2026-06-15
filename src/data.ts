@@ -1,6 +1,7 @@
-import { Team, Match, AIModel, ModelJSON, ModelPlayoffPrediction, PlayoffMatch } from "./types";
+import { Team, Match, AIModel, ModelJSON, ModelPlayoffPrediction, PlayoffMatch, Goal } from "./types";
 
-const API_URL = "https://n8n.stack.victorbusque.com/webhook/get-wc-data";
+const WORLDCUP_JSON_URL =
+  "https://raw.githubusercontent.com/openfootball/worldcup.json/refs/heads/master/2026/worldcup.json";
 
 // Hardcoded model registry with metadata — add new entries when you drop a new JSON
 const MODEL_FILES: { id: string; name: string; provider: string; avatarColor: string; persona: string }[] = [
@@ -81,24 +82,43 @@ const MODEL_FILES: { id: string; name: string; provider: string; avatarColor: st
     avatarColor: "from-lime-500 to-green-600",
     persona: "The hybrid innovator. Nemotron 3 Super is NVIDIA's 120B-parameter hybrid Mamba-Transformer MoE — a novel architecture that merges linear recurrence with attention for efficient long-context reasoning. The first model to use latent MoE and multi-token prediction, purpose-built for agentic planning and tool calling.",
   },
+  {
+    "id": "glm-5.2",
+    "name": "GLM 5.2",
+    "provider": "Zhipu AI",
+    "avatarColor": "from-gray-500 to-gray-700",
+    "persona": "The multilingual generalist. GLM 5.2 Z.ai latest model, released on the first days of the World Cup.",
+  }
 ];
 
-/** API match shape from the n8n webhook */
-interface ApiMatch {
-  team_a: string | null;
-  team_b: string | null;
-  score: string;
-  status: string; // "FINISHED" | "TIMED" | "IN_PLAY" | etc.
-  stage: string;  // "GROUP_STAGE" | "GROUP_STAGE GROUP_A"
-  started_at: string | null; // ISO datetime
-  referee_from: string | null;
-  match_id: string;
-  group?: string; // "GROUP_A" (newer API responses)
-  id: number;
+/** Raw match shape from openfootball worldcup.json */
+interface OFMatch {
+  round: string; // "Matchday 1" | "Round of 32" | "Round of 16" | "Quarter-final" | "Semi-final" | "Match for third place" | "Final"
+  num?: number; // only present for knockout matches (73–104)
+  date: string; // "2026-06-11"
+  time: string; // "13:00 UTC-6"
+  team1: string; // full name ("Mexico") or placeholder ("2A", "W74") for knockouts
+  team2: string;
+  score?: { ft: [number, number]; ht?: [number, number] };
+  goals1?: { name: string; minute: string; penalty?: boolean; owngoal?: boolean }[];
+  goals2?: { name: string; minute: string; penalty?: boolean; owngoal?: boolean }[];
+  group?: string; // "Group A"
+  ground?: string; // "Mexico City"
+}
+
+// The API now sends full team names that match tournament.json exactly, so the
+// only "translation" needed is normalizing case + diacritics (e.g. Curaçao → curacao).
+function normalizeTeamName(name: string): string {
+  return name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // strip diacritics (Curaçao → Curacao)
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 /**
- * Fetch teams from static JSON + all match data from the live API,
+ * Fetch teams from static JSON + match data from openfootball worldcup.json,
  * then hydrate into internal Match[] / AIModel[] shapes.
  */
 export async function loadData(): Promise<{
@@ -111,10 +131,10 @@ export async function loadData(): Promise<{
 }> {
   const baseUrl = import.meta.env.BASE_URL;
 
-  // Parallel fetch: teams + API matches + all models
-  const [teamsRes, apiRes, ...modelReses] = await Promise.all([
+  // Parallel fetch: teams + worldcup.json + all models
+  const [teamsRes, wcRes, ...modelReses] = await Promise.all([
     fetch(`${baseUrl}data/tournament.json`),
-    fetch(API_URL).catch(() => null),
+    fetch(WORLDCUP_JSON_URL).catch(() => null),
     ...MODEL_FILES.map(m => fetch(`${baseUrl}data/models/${m.id}.json`)),
   ]);
 
@@ -122,38 +142,34 @@ export async function loadData(): Promise<{
 
   const { teams }: { teams: Record<string, Team> } = await teamsRes.json();
 
-  // Build code → Team lookup (including alias mapping for known FIFA/IOC code differences)
-  const ALT_CODES: Record<string, string> = { "URY": "URU" }; // FIFA uses URY, IOC uses URU
-  const codeToTeam: Record<string, Team> = {};
+  // The openfootball worldcup.json uses full team names that match
+  // tournament.json exactly, so a normalized-name lookup is all that's needed
+  // to resolve a team string to a Team.
+  const nameToTeam: Record<string, Team> = {};
   for (const team of Object.values(teams)) {
-    codeToTeam[team.code] = team;
+    nameToTeam[normalizeTeamName(team.name)] = team;
   }
-  for (const [alias, canonical] of Object.entries(ALT_CODES)) {
-    if (codeToTeam[canonical]) codeToTeam[alias] = codeToTeam[canonical];
-  }
+  const resolveTeam = (raw: string | null | undefined): Team | undefined =>
+    raw ? nameToTeam[normalizeTeamName(raw)] : undefined;
 
-  // ── Parse API match data ──────────────────────────────────────────────
-  let apiMatches: ApiMatch[] = [];
-  if (apiRes && apiRes.ok) {
+  // ── Parse worldcup.json match data ───────────────────────────────────
+  let ofMatches: OFMatch[] = [];
+  if (wcRes && wcRes.ok) {
     try {
-      const data = await apiRes.json();
-      if (Array.isArray(data)) {
-        apiMatches = data;
-      } else if (data && typeof data === "object") {
-        // Handle { data: [...] } wrapper
-        if (Array.isArray(data.data)) {
-          apiMatches = data.data;
-        } else if (data.team_a !== undefined) {
-          apiMatches = [data];
-        }
+      const data = await wcRes.json();
+      if (data && Array.isArray(data.matches)) {
+        ofMatches = data.matches;
       }
     } catch {
-      console.warn("Failed to parse API response");
+      console.warn("Failed to parse worldcup.json");
     }
   }
 
-  // Filter out entries with null teams
-  apiMatches = apiMatches.filter(m => m.team_a && m.team_b);
+  // Keep only matches where BOTH teams resolve to real teams.
+  // Knockout placeholders (e.g. "2A", "W74") are dropped from the group view.
+  const resolvedMatches = ofMatches.filter(
+    m => resolveTeam(m.team1) && resolveTeam(m.team2)
+  );
 
   // ── Parse model predictions ──────────────────────────────────────────
   const models: AIModel[] = [];
@@ -189,13 +205,9 @@ export async function loadData(): Promise<{
     modelJsons.push(json);
   }
 
-  // ── Build prediction lookup by team code pair ─────────────────────────
-  // Key: "TEAMACODE-TEAMBCODE" (same order as model JSON entry)
-  // Value: { teamAScore, teamBScore, summary? }
-  const ALT_CODE_REVERSE: Record<string, string> = {}; // canonical → alias
-  for (const [alias, canonical] of Object.entries(ALT_CODES)) {
-    ALT_CODE_REVERSE[canonical] = alias;
-  }
+  // ── Build prediction lookup by team code pair ────────────────────────
+  // Key: "TEAMACODE-TEAMBCODE". Store both orderings (A-B and B-A) so the
+  // lookup works regardless of the order worldcup.json lists the teams in.
   const predLookup: Record<string, Record<string, { teamAScore: number; teamBScore: number; summary?: string }>> = {};
 
   for (let i = 0; i < models.length; i++) {
@@ -215,98 +227,92 @@ export async function loadData(): Promise<{
       const codes = Object.keys(pred).filter(k => typeof pred[k] === "number");
       if (codes.length !== 2) continue;
 
-      // Store both orderings so lookup works regardless of API order
       const entry = {
         teamAScore: pred[codes[0]] as number,
         teamBScore: pred[codes[1]] as number,
         ...(typeof pred["summary"] === "string" ? { summary: pred["summary"] as string } : {}),
       };
 
-      // Store with canonical codes (from model JSON)
-      const canonicalKey = `${codes[0]}-${codes[1]}`;
-      const reverseCanonicalKey = `${codes[1]}-${codes[0]}`;
-      predLookup[model.id][canonicalKey] = entry;
-      predLookup[model.id][reverseCanonicalKey] = {
+      predLookup[model.id][`${codes[0]}-${codes[1]}`] = entry;
+      predLookup[model.id][`${codes[1]}-${codes[0]}`] = {
         teamAScore: entry.teamBScore,
         teamBScore: entry.teamAScore,
         ...(entry.summary ? { summary: entry.summary } : {}),
       };
-
-      // Also add entries with alternate codes (e.g. URY→URU) so API lookups work
-      const altKey0 = ALT_CODE_REVERSE[codes[0]];
-      const altKey1 = ALT_CODE_REVERSE[codes[1]];
-      if (altKey0) {
-        predLookup[model.id][`${altKey0}-${codes[1]}`] = entry;
-        predLookup[model.id][`${codes[1]}-${altKey0}`] = {
-          teamAScore: entry.teamBScore,
-          teamBScore: entry.teamAScore,
-          ...(entry.summary ? { summary: entry.summary } : {}),
-        };
-      }
-      if (altKey1) {
-        predLookup[model.id][`${codes[0]}-${altKey1}`] = entry;
-        predLookup[model.id][`${altKey1}-${codes[0]}`] = {
-          teamAScore: entry.teamBScore,
-          teamBScore: entry.teamAScore,
-          ...(entry.summary ? { summary: entry.summary } : {}),
-        };
-      }
-      if (altKey0 && altKey1) {
-        predLookup[model.id][`${altKey0}-${altKey1}`] = entry;
-        predLookup[model.id][`${altKey1}-${altKey0}`] = {
-          teamAScore: entry.teamBScore,
-          teamBScore: entry.teamAScore,
-          ...(entry.summary ? { summary: entry.summary } : {}),
-        };
-      }
     }
   }
 
-  // ── Build Match objects from API data ─────────────────────────────────
-  const matches: Match[] = apiMatches.map(am => {
-    const teamA = codeToTeam[am.team_a!];
-    const teamB = codeToTeam[am.team_b!];
-    if (!teamA || !teamB) return null;
+  // ── Build Match objects from worldcup.json ───────────────────────────
+  // Parse a kickoff instant from "2026-06-11" + "13:00 UTC-6" into the user's
+  // local timezone, returning local {date, time} plus the UTC instant.
+  const parseKickoff = (
+    dateStr: string,
+    timeStr: string
+  ): { date: string; time: string; instant: Date | null } => {
+    const m = timeStr.match(/^(\d{2}):(\d{2})\s*UTC\s*([+-]?\d+)/i);
+    if (!m) return { date: dateStr || "", time: timeStr || "", instant: null };
+    const offsetNum = parseInt(m[3], 10);
+    const sign = offsetNum >= 0 ? "+" : "-";
+    const offsetStr = `${sign}${String(Math.abs(offsetNum)).padStart(2, "0")}:00`;
+    const iso = `${dateStr}T${m[1]}:${m[2]}:00${offsetStr}`;
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return { date: dateStr || "", time: timeStr || "", instant: null };
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    const hours = String(d.getHours()).padStart(2, "0");
+    const minutes = String(d.getMinutes()).padStart(2, "0");
+    return { date: `${year}-${month}-${day}`, time: `${hours}:${minutes}`, instant: d };
+  };
 
-    // Parse group: prefer direct "group" field, then fall back to stage
-    let group = "";
-    if (am.group) {
-      // "GROUP_A" → "Group A"
-      const g = am.group.replace(/^GROUP_/, "Group ");
-      group = g;
-    } else {
-      const stageMatch = am.stage?.match(/GROUP_([A-Z])/);
-      if (stageMatch) group = `Group ${stageMatch[1]}`;
-    }
+  // worldcup.json carries no explicit live/in-progress flag, but it gives us
+  // precise, timezone-aware kickoff times. Derive match status from those: a
+  // match is "live" while we're inside its play window and it has no full-time
+  // score yet. (Matches shown as live are best-effort; the source only records
+  // final scores.)
+  const now = Date.now();
+  const LIVE_WINDOW_MS = 2 * 60 * 60 * 1000; // ~2h covers 90' + HT + stoppage
 
-    // Parse actualScore: "2-0" → {teamA:2, teamB:0}, "-" → null
+  const matches: Match[] = resolvedMatches.map((om) => {
+    const teamA = resolveTeam(om.team1)!;
+    const teamB = resolveTeam(om.team2)!;
+
+    // Full-time + half-time scores (presence of score.ft means finished)
     let actualScore: { teamA: number; teamB: number } | null = null;
-    const isLiveOrFinished = am.status !== "TIMED";
-    if (am.score && am.score !== "-" && isLiveOrFinished) {
-      const parts = am.score.split("-");
-      if (parts.length === 2 && !isNaN(parseInt(parts[0])) && !isNaN(parseInt(parts[1]))) {
-        actualScore = { teamA: parseInt(parts[0]), teamB: parseInt(parts[1]) };
+    let halfTimeScore: { teamA: number; teamB: number } | null = null;
+    if (om.score && Array.isArray(om.score.ft)) {
+      actualScore = { teamA: om.score.ft[0], teamB: om.score.ft[1] };
+      if (Array.isArray(om.score.ht)) {
+        halfTimeScore = { teamA: om.score.ht[0], teamB: om.score.ht[1] };
       }
     }
 
-    // Parse date/time from started_at ISO string (API sends UTC)
-    // Convert to the user's local timezone
-    let date = "";
-    let time = "";
-    if (am.started_at) {
-      const d = new Date(am.started_at);
-      const year = d.getFullYear();
-      const month = String(d.getMonth() + 1).padStart(2, "0");
-      const day = String(d.getDate()).padStart(2, "0");
-      date = `${year}-${month}-${day}`;
-      const hours = String(d.getHours()).padStart(2, "0");
-      const minutes = String(d.getMinutes()).padStart(2, "0");
-      time = `${hours}:${minutes}`;
+    // Goal scorers: merge goals1 (team A) + goals2 (team B) into one timeline
+    const goals: Goal[] = [];
+    for (const g of om.goals1 ?? []) {
+      goals.push({ team: "A", name: g.name, minute: g.minute, penalty: g.penalty, ownGoal: g.owngoal });
     }
+    for (const g of om.goals2 ?? []) {
+      goals.push({ team: "B", name: g.name, minute: g.minute, penalty: g.penalty, ownGoal: g.owngoal });
+    }
+
+    const { date, time, instant } = parseKickoff(om.date, om.time);
+
+    // Derive live/finished/scheduled status from the kickoff instant.
+    const isLive =
+      actualScore === null &&
+      instant !== null &&
+      now >= instant.getTime() &&
+      now < instant.getTime() + LIVE_WINDOW_MS;
+    const status: Match["status"] = actualScore
+      ? "FINISHED"
+      : isLive
+        ? "IN_PLAY"
+        : "TIMED";
 
     // Look up predictions by team code pair
     const predictions: Match["predictions"] = {};
-    const predKey = `${am.team_a}-${am.team_b}`;
+    const predKey = `${teamA.code}-${teamB.code}`;
     for (const model of models) {
       const pred = predLookup[model.id]?.[predKey];
       if (pred) {
@@ -314,26 +320,25 @@ export async function loadData(): Promise<{
       }
     }
 
-    // Derive a readable match ID from the API match_id
-    // "GROUP_STAGE:GROUP_A:MEX-RSA" → keep as-is for uniqueness
-    const id = am.match_id || String(am.id);
+    const id = `${om.date}-${teamA.code}-${teamB.code}`;
 
-  const isLive = (status: string) => status !== "FINISHED" && status !== "TIMED";
-
-  return {
-    id,
-    group,
-    teamA,
-    teamB,
-    date,
-    time,
-    venue: "", // API doesn't provide venue yet
-    status: am.status || "TIMED",
-    isLive: isLive(am.status),
-    actualScore,
-    predictions,
-  };
-  }).filter(Boolean) as Match[];
+    return {
+      id,
+      group: om.group || "",
+      round: om.round || "",
+      teamA,
+      teamB,
+      date,
+      time,
+      venue: om.ground || "",
+      status,
+      isLive,
+      actualScore,
+      halfTimeScore,
+      goals,
+      predictions,
+    };
+  });
 
   // ── Parse playoff predictions (unchanged, uses model JSON keys directly) ──
   const PLAYOFF_MATCH_RANGES: Record<string, [number, number]> = {

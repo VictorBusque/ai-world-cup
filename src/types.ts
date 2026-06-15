@@ -45,9 +45,18 @@ export interface AIModel {
   avgPredictedGoals: number;
 }
 
+export interface Goal {
+  team: "A" | "B"; // which side scored
+  name: string;
+  minute: string;
+  penalty?: boolean;
+  ownGoal?: boolean;
+}
+
 export interface Match {
   id: string;
   group: string;
+  round: string; // "Matchday 1", "Round of 32", etc.
   teamA: Team;
   teamB: Team;
   date: string;
@@ -56,6 +65,8 @@ export interface Match {
   status: "FINISHED" | "IN_PLAY" | "PAUSED" | "TIMED" | string;
   isLive: boolean;
   actualScore: { teamA: number; teamB: number } | null;
+  halfTimeScore: { teamA: number; teamB: number } | null;
+  goals: Goal[];
   predictions: Record<string, { teamAScore: number; teamBScore: number; summary?: string }>;
 }
 

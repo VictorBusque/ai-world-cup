@@ -40,39 +40,6 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "healthy", time: new Date().toISOString() });
 });
 
-// Endpoint to generate full-leaderboard AI analysis
-app.post("/api/gemini/summarize", async (req, res) => {
-  try {
-    const { modelStandingText, matchSummaryText } = req.body;
-    
-    const client = getAiClient();
-    const prompt = `You are a world-class soccer analyst, statistician, and tech reporter. Your task is to analyze the current performance of several AI Models forecasting World Cup outcomes.
-
-Here is the current model rankings state:
-${modelStandingText}
-
-Here are the match prediction discrepancies or updates:
-${matchSummaryText}
-
-Please write a highly engaging, professional, and slightly witty newsletter-style sports brief (max 350 words). Focus on:
-1. Which AI model is currently leading the pack, what their predictive identity is, and if their "vibe" is actually paying off in the stats.
-2. An interesting insight about how these models disagree (e.g., DeepSeek's high upset rating vs. Opus's conservative draw bias, Fable's dramatic storylines).
-3. A punchy final headline statement.
-
-Use bullet-points where appropriate and format in neat Markdown syntax. Keep the tone friendly, objective, and highly engaging for both programmers and football fans!`;
-
-    const response = await client.models.generateContent({
-      model: "gemini-3.5-flash",
-      contents: prompt,
-    });
-
-    res.json({ text: response.text });
-  } catch (error: any) {
-    console.error("Gemini summarize error:", error);
-    res.status(500).json({ error: error.message || "Failed to generate AI analysis." });
-  }
-});
-
 // Endpoint to generate specific match forecasting explanation and comparison
 app.post("/api/gemini/explain-match", async (req, res) => {
   try {
