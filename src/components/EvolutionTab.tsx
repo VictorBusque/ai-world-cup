@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { motion } from "motion/react";
 import { AIModel, Match } from "../types";
 import { MODEL_COLORS } from "../constants";
+import { scorePrediction } from "../utils";
 import { TrendingUp } from "lucide-react";
 
 interface EvolutionTabProps {
@@ -31,18 +32,7 @@ function buildEvolutionData(models: AIModel[], matches: Match[]): {
     models.forEach(model => {
       const pred = match.predictions[model.id];
       if (!pred || !match.actualScore) return;
-
-      const actScore = match.actualScore;
-      const actDiff = actScore.teamA - actScore.teamB;
-      const predDiff = pred.teamAScore - pred.teamBScore;
-      const actOutcome = actDiff > 0 ? "A" : actDiff < 0 ? "B" : "D";
-      const predOutcome = predDiff > 0 ? "A" : predDiff < 0 ? "B" : "D";
-
-      const isExact = actScore.teamA === pred.teamAScore && actScore.teamB === pred.teamBScore;
-      const isCorrectOutcome = actOutcome === predOutcome;
-
-      if (isExact) cumulative[model.id] += 3;
-      else if (isCorrectOutcome) cumulative[model.id] += 1;
+      cumulative[model.id] += scorePrediction(pred, match.actualScore).points;
     });
 
     const label = `${match.teamA.code} ${match.actualScore!.teamA}-${match.actualScore!.teamB} ${match.teamB.code}`;

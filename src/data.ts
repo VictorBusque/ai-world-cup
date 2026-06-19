@@ -196,6 +196,7 @@ export async function loadData(): Promise<{
       points: 0,
       exactScores: 0,
       correctOutcomes: 0,
+      correctTeamScores: 0,
       accuracy: 0,
       avgGoalDeviation: 0,
       avgPredictedGoals: 0,

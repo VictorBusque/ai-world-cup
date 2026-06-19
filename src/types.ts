@@ -38,8 +38,9 @@ export interface AIModel {
   avatarColor: string;
   persona: string;
   points: number;
-  exactScores: number;
-  correctOutcomes: number;
+  exactScores: number;          // perfect scorelines (both team scores nailed)
+  correctOutcomes: number;       // correct result (winner/draw nailed)
+  correctTeamScores: number;     // individual team scores nailed (0-2 per match)
   accuracy: number;
   avgGoalDeviation: number;
   avgPredictedGoals: number;

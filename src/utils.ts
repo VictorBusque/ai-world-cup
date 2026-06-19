@@ -1,11 +1,50 @@
 import { Match, AIModel, GroupStanding, Team } from "./types";
 
+/**
+ * Per-match scoring breakdown.
+ *
+ * Points system:
+ *  - 3 pts for nailing the result (winner / draw)
+ *  - 1 pt per correctly predicted team score (max 2)
+ *
+ * A single game can therefore yield up to 5 pts (correct result + both
+ * scores nailed) or as little as 3 (right winner, wrong scores) or 1
+ * (wrong result but one team score exact).
+ */
+export interface MatchScore {
+  points: number;
+  correctResult: boolean;
+  teamScoresNailed: number; // 0, 1, or 2
+  exactScoreline: boolean;  // both team scores nailed (implies correctResult)
+}
+
+export function scorePrediction(
+  pred: { teamAScore: number; teamBScore: number },
+  actual: { teamA: number; teamB: number },
+): MatchScore {
+  const actDiff = actual.teamA - actual.teamB;
+  const predDiff = pred.teamAScore - pred.teamBScore;
+  const actOutcome = actDiff > 0 ? "A" : actDiff < 0 ? "B" : "D";
+  const predOutcome = predDiff > 0 ? "A" : predDiff < 0 ? "B" : "D";
+
+  const aNailed = actual.teamA === pred.teamAScore;
+  const bNailed = actual.teamB === pred.teamBScore;
+
+  const correctResult = actOutcome === predOutcome;
+  const teamScoresNailed = (aNailed ? 1 : 0) + (bNailed ? 1 : 0);
+  const exactScoreline = aNailed && bNailed;
+  const points = (correctResult ? 3 : 0) + teamScoresNailed;
+
+  return { points, correctResult, teamScoresNailed, exactScoreline };
+}
+
 export function analyzePredictions(matches: Match[], models: AIModel[]): AIModel[] {
   const updatedModels = models.map(m => ({
     ...m,
     points: 0,
     exactScores: 0,
     correctOutcomes: 0,
+    correctTeamScores: 0,
     accuracy: 0,
     avgGoalDeviation: 0
   }));
@@ -28,23 +67,12 @@ export function analyzePredictions(matches: Match[], models: AIModel[]): AIModel
 
       if (match.status === "FINISHED" && match.actualScore && pred) {
         const actScore = match.actualScore;
-        const actDiff = actScore.teamA - actScore.teamB;
-        const predDiff = pred.teamAScore - pred.teamBScore;
+        const score = scorePrediction(pred, actScore);
 
-        const actOutcome = actDiff > 0 ? "A" : actDiff < 0 ? "B" : "D";
-        const predOutcome = predDiff > 0 ? "A" : predDiff < 0 ? "B" : "D";
-
-        const isExactScore = actScore.teamA === pred.teamAScore && actScore.teamB === pred.teamBScore;
-        const isCorrectOutcome = actOutcome === predOutcome;
-
-        if (isExactScore) {
-          model.points += 3;
-          model.exactScores += 1;
-          model.correctOutcomes += 1;
-        } else if (isCorrectOutcome) {
-          model.points += 1;
-          model.correctOutcomes += 1;
-        }
+        model.points += score.points;
+        if (score.correctResult) model.correctOutcomes += 1;
+        if (score.exactScoreline) model.exactScores += 1;
+        model.correctTeamScores += score.teamScoresNailed;
 
         totalGoalDeviation += Math.abs(pred.teamAScore - actScore.teamA) + Math.abs(pred.teamBScore - actScore.teamB);
         completedWithPred += 1;

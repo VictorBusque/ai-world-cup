@@ -20,7 +20,7 @@ An interactive dashboard that pits the world's top AI models against each other 
 
 ## ✨ Features
 
-- **Leaderboard** — Rank 12 AI models by prediction accuracy (exact score = 3 pts, correct outcome = 1 pt).
+- **Leaderboard** — Rank 12 AI models by prediction accuracy (correct result = 3 pts, each nailed team score = 1 pt; max 5 pts/match).
 - **Match-by-Match** — Drill into every game to see how each model predicted vs. reality.
 - **Standings Comparison** — Compare real group standings vs. each model's projected standings.
 - **Evolution Chart** — Track how models rise and fall over the course of the tournament.

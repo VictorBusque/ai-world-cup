@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { motion } from "motion/react";
 import { Match, AIModel, Team, ModelPlayoffPrediction } from "../types";
 import { BRACKET_ORDER, ROUND_ORDER, ROUND_META, buildTeamByCodeMap } from "../constants";
+import { scorePrediction } from "../utils";
 import { X, Award, Target, Sparkles, BookOpen, Clock, Activity, AlertCircle, Trophy } from "lucide-react";
 
 interface ModelDetailModalProps {
@@ -88,10 +89,10 @@ export default React.memo(function ModelDetailModal({ model, matches, teams, mod
               <span className="text-xl sm:text-2xl font-black font-mono text-emerald-400 mt-1">{model.accuracy}%</span>
             </div>
 
-            {/* Exact Scores */}
+            {/* Results (correct winner/draw) */}
             <div className="bg-zinc-900 border-2 border-zinc-800 rounded-none p-2.5 sm:p-3.5 text-center flex flex-col justify-between">
-              <span className="text-[9px] sm:text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Exact (3pts)</span>
-              <span className="text-xl sm:text-2xl font-black font-mono text-white mt-1">{model.exactScores}</span>
+              <span className="text-[9px] sm:text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Results (3pt)</span>
+              <span className="text-xl sm:text-2xl font-black font-mono text-white mt-1">{model.correctOutcomes}</span>
             </div>
 
             {/* Goal Deviation */}
@@ -100,10 +101,16 @@ export default React.memo(function ModelDetailModal({ model, matches, teams, mod
               <span className={`text-xl sm:text-2xl font-black font-mono mt-1 ${model.avgGoalDeviation <= 1 ? "text-emerald-400" : model.avgGoalDeviation <= 2 ? "text-yellow-400" : "text-rose-400"}`}>{model.avgGoalDeviation.toFixed(2)}</span>
             </div>
 
-            {/* Outcomes Only */}
+            {/* Perfect Scorelines (both goals nailed) */}
+            <div className="bg-zinc-900 border-2 border-zinc-800 rounded-none p-2.5 sm:p-3.5 text-center flex flex-col justify-between">
+              <span className="text-[9px] sm:text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Perfect (5pt)</span>
+              <span className="text-xl sm:text-2xl font-black font-mono text-emerald-400 mt-1">{model.exactScores}</span>
+            </div>
+
+            {/* Goals Nailed (1pt each) */}
             <div className="bg-zinc-900 border-2 border-zinc-800 rounded-none p-2.5 sm:p-3.5 text-center flex flex-col justify-between col-span-2 sm:col-span-1">
-              <span className="text-[9px] sm:text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Outcome (1pt)</span>
-              <span className="text-xl sm:text-2xl font-black font-mono text-zinc-400 mt-1">{model.correctOutcomes - model.exactScores}</span>
+              <span className="text-[9px] sm:text-[10px] text-zinc-500 uppercase font-mono tracking-wider block">Goals (1pt)</span>
+              <span className="text-xl sm:text-2xl font-black font-mono text-zinc-400 mt-1">{model.correctTeamScores}</span>
             </div>
           </div>
 
@@ -127,26 +134,30 @@ export default React.memo(function ModelDetailModal({ model, matches, teams, mod
                     </span>
                   );
                 } else if (isCompleted) {
-                  const actScore = match.actualScore!;
-                  const actDiff = actScore.teamA - actScore.teamB;
-                  const predDiff = pred.teamAScore - pred.teamBScore;
+                  const { points, correctResult, teamScoresNailed, exactScoreline } = scorePrediction(pred, match.actualScore!);
 
-                  const actOutcome = actDiff > 0 ? "A" : actDiff < 0 ? "B" : "D";
-                  const predOutcome = predDiff > 0 ? "A" : predDiff < 0 ? "B" : "D";
-
-                  const isExact = actScore.teamA === pred.teamAScore && actScore.teamB === pred.teamBScore;
-                  const isOutcome = actOutcome === predOutcome;
-
-                  if (isExact) {
+                  if (exactScoreline) {
                     evaluationBadge = (
                       <span className="ml-auto px-2 py-1 text-[9px] uppercase font-black font-mono bg-emerald-400 text-black">
-                        Exact Score (+3 pts)
+                        Perfect (+5 pts)
                       </span>
                     );
-                  } else if (isOutcome) {
+                  } else if (correctResult && teamScoresNailed === 1) {
+                    evaluationBadge = (
+                      <span className="ml-auto px-2 py-1 text-[9px] uppercase font-black font-mono bg-emerald-500/80 text-black">
+                        Result + Goal (+4 pts)
+                      </span>
+                    );
+                  } else if (correctResult) {
                     evaluationBadge = (
                       <span className="ml-auto px-2 py-1 text-[9px] uppercase font-black font-mono bg-yellow-400 text-black">
-                        Outcome (+1 pt)
+                        Result (+3 pts)
+                      </span>
+                    );
+                  } else if (teamScoresNailed === 1) {
+                    evaluationBadge = (
+                      <span className="ml-auto px-2 py-1 text-[9px] uppercase font-black font-mono bg-sky-500/80 text-white">
+                        Goal (+1 pt)
                       </span>
                     );
                   } else {

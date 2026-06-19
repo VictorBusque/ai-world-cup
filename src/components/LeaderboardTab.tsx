@@ -25,18 +25,21 @@ export default React.memo(function LeaderboardTab({ models, matches, totalGroupM
               <h3 className="text-xs uppercase tracking-widest font-bold">Forecasting Rules</h3>
             </div>
             <p className="text-[11px] sm:text-xs text-zinc-400 leading-relaxed mb-3 sm:mb-4">
-              AI models predict the exact final scoreline. High accuracy is rewarded through a professional points pool.
+              AI models predict every final scoreline. Points reward both reading the result and reading the goals.
             </p>
           </div>
           <div className="grid grid-cols-2 gap-3 text-xs bg-zinc-950 p-2.5 sm:p-3 border border-zinc-800">
             <div>
               <div className="text-yellow-400 font-bold font-mono uppercase tracking-wider text-[11px]">3 Points</div>
-              <div className="text-[10px] text-zinc-500 uppercase">Exact Score (e.g. 2-1)</div>
+              <div className="text-[10px] text-zinc-500 uppercase">Correct Result (W/D)</div>
             </div>
             <div>
               <div className="text-emerald-400 font-bold font-mono uppercase tracking-wider text-[11px]">1 Point</div>
-              <div className="text-[10px] text-zinc-500 uppercase">Winner/Draw Outcome</div>
+              <div className="text-[10px] text-zinc-500 uppercase">Each Nailed Score</div>
             </div>
+          </div>
+          <div className="mt-2 text-[9px] text-zinc-600 uppercase font-mono tracking-wider">
+            Max 5 pts / match
           </div>
         </div>
 
@@ -147,18 +150,16 @@ export default React.memo(function LeaderboardTab({ models, matches, totalGroupM
                     <div className="text-emerald-400 font-black font-mono">{model.accuracy}%</div>
                   </div>
                   <div>
-                    <div className="text-zinc-500 uppercase font-mono text-[9px]">Exact</div>
-                    <div className="text-yellow-500 font-black font-mono">{model.exactScores}</div>
+                    <div className="text-zinc-500 uppercase font-mono text-[9px]">Results</div>
+                    <div className="text-yellow-500 font-black font-mono">{model.correctOutcomes}</div>
                   </div>
                   <div>
-                    <div className="text-zinc-500 uppercase font-mono text-[9px]">Outcome</div>
-                    <div className="text-zinc-300 font-black font-mono">{model.correctOutcomes - model.exactScores}</div>
+                    <div className="text-zinc-500 uppercase font-mono text-[9px]">Perfect</div>
+                    <div className="text-emerald-400 font-black font-mono">{model.exactScores}</div>
                   </div>
                   <div>
-                    <div className="text-zinc-500 uppercase font-mono text-[9px]">GoalDev</div>
-                    <div className={`font-black font-mono ${model.avgGoalDeviation <= 1 ? "text-emerald-400" : model.avgGoalDeviation <= 2 ? "text-yellow-400" : "text-rose-400"}`}>
-                      {model.avgGoalDeviation.toFixed(2)}
-                    </div>
+                    <div className="text-zinc-500 uppercase font-mono text-[9px]">Goals</div>
+                    <div className="text-zinc-300 font-black font-mono">{model.correctTeamScores}</div>
                   </div>
                 </div>
               </motion.div>
@@ -174,9 +175,10 @@ export default React.memo(function LeaderboardTab({ models, matches, totalGroupM
                 <th className="py-4 px-5 text-center w-16 font-black">Rank</th>
                 <th className="py-4 px-4 font-black">AI Model</th>
                 <th className="py-4 px-4 text-center font-black">PTS</th>
-                <th className="py-4 px-4 text-center font-black">Outcome Acc %</th>
-                <th className="py-4 px-4 text-center font-black">Exact (3pt)</th>
-                <th className="py-4 px-4 text-center font-black">Outcome (1pt)</th>
+                <th className="py-4 px-4 text-center font-black">Result Acc %</th>
+                <th className="py-4 px-4 text-center font-black">Results (3pt)</th>
+                <th className="py-4 px-4 text-center font-black">Perfect (5pt)</th>
+                <th className="py-4 px-4 text-center font-black">Goals (1pt)</th>
                 <th className="py-4 px-4 text-center font-black">Avg Goals</th>
                 <th className="py-4 px-4 text-center font-black">Goal Dev</th>
                 <th className="py-4 px-5 font-black">Provider</th>
@@ -246,14 +248,19 @@ export default React.memo(function LeaderboardTab({ models, matches, totalGroupM
                       </div>
                     </td>
 
-                    {/* Exact Scores */}
+                    {/* Results (correct winner/draw) */}
                     <td className="py-4 px-4 text-center font-mono text-sm text-yellow-500 font-bold">
+                      {model.correctOutcomes}
+                    </td>
+
+                    {/* Perfect Scorelines */}
+                    <td className="py-4 px-4 text-center font-mono text-sm text-emerald-400 font-bold">
                       {model.exactScores}
                     </td>
 
-                    {/* Correct Outcomes */}
+                    {/* Goals Nailed (1pt each) */}
                     <td className="py-4 px-4 text-center font-mono text-sm text-zinc-300">
-                      {model.correctOutcomes - model.exactScores}
+                      {model.correctTeamScores}
                     </td>
 
                     {/* Avg Goals */}

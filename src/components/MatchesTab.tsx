@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Match, AIModel } from "../types";
+import { scorePrediction } from "../utils";
 import {
   Calendar,
   MapPin,
@@ -78,39 +79,28 @@ export default React.memo(function MatchesTab({
     });
   };
 
-  // Helper to get scoring class and label
+  // Helper to get scoring class and label based on the new points system
+  // (3 pts for result, 1 pt per nailed team score → max 5/game).
   const getPredictionEvaluation = (match: Match, modelId: string) => {
     if (!match.actualScore) return null;
     const pred = match.predictions[modelId];
     if (!pred) return null;
 
-    const actScore = match.actualScore;
-    const actDiff = actScore.teamA - actScore.teamB;
-    const predDiff = pred.teamAScore - pred.teamBScore;
+    const { points, correctResult, teamScoresNailed, exactScoreline } = scorePrediction(pred, match.actualScore);
 
-    const actOutcome = actDiff > 0 ? "A" : actDiff < 0 ? "B" : "D";
-    const predOutcome = predDiff > 0 ? "A" : predDiff < 0 ? "B" : "D";
-
-    const isExact =
-      actScore.teamA === pred.teamAScore && actScore.teamB === pred.teamBScore;
-    const isOutcome = actOutcome === predOutcome;
-
-    if (isExact) {
-      return {
-        label: "Exact Score! (+3 PTS)",
-        bg: "bg-emerald-500/10 border-emerald-500 text-emerald-400",
-      };
-    } else if (isOutcome) {
-      return {
-        label: "Outcome Only (+1 PT)",
-        bg: "bg-yellow-500/10 border-yellow-500 text-yellow-400",
-      };
-    } else {
-      return {
-        label: "Incorrect (0 PTS)",
-        bg: "bg-zinc-950 border-zinc-800 text-zinc-600",
-      };
+    if (exactScoreline) {
+      return { label: "Perfect Score! (+5 PTS)", bg: "bg-emerald-500/10 border-emerald-500 text-emerald-400" };
     }
+    if (correctResult && teamScoresNailed === 1) {
+      return { label: "Result + Goal (+4 PTS)", bg: "bg-emerald-500/10 border-emerald-500 text-emerald-400" };
+    }
+    if (correctResult) {
+      return { label: "Result Only (+3 PTS)", bg: "bg-yellow-500/10 border-yellow-500 text-yellow-400" };
+    }
+    if (teamScoresNailed === 1) {
+      return { label: "Goal Only (+1 PT)", bg: "bg-sky-500/10 border-sky-500 text-sky-400" };
+    }
+    return { label: "Incorrect (0 PTS)", bg: "bg-zinc-950 border-zinc-800 text-zinc-600" };
   };
 
   return (
